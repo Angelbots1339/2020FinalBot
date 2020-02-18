@@ -14,6 +14,7 @@ public class DriveSubsystem extends SubsystemBase {
   private WPI_TalonFX m_talonLeft1 = new WPI_TalonFX(DriveConstants.kLeftMotor1Port);
   private WPI_TalonFX m_talonLeft2 = new WPI_TalonFX(DriveConstants.kLeftMotor2Port);
                          
+
   // The motors on the right side of the drive.
   private WPI_TalonSRX m_talonRight1 = new WPI_TalonSRX(DriveConstants.kRightMotor1Port);
   private WPI_TalonSRX m_talonRight2 = new WPI_TalonSRX(DriveConstants.kRightMotor2Port);
