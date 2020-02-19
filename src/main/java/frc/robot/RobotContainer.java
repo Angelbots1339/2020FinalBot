@@ -13,9 +13,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.subsystems.*;
-import frc.robot.Constants.*;
-import frc.robot.commands.*;
+import frc.robot.Constants.OIconstants;
+import frc.robot.Constants.ShooterConstants;
+import frc.robot.commands.CameraAlign;
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.IndexerSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.LoaderSubsystem;
+import frc.robot.subsystems.ShooterPID;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -29,11 +35,13 @@ public class RobotContainer {
   private final DriveSubsystem m_drive = new DriveSubsystem();
   private final IntakeSubsystem m_intake = new IntakeSubsystem();
   private final LoaderSubsystem m_loader = new LoaderSubsystem();
+  private final LimelightSubsystem m_limelight = new LimelightSubsystem();
   private final ShooterPID m_rightShooterPID = new ShooterPID(ShooterConstants.kRightShooter,"Right Shooter");
   private final ShooterPID m_leftShooterPID = new ShooterPID(ShooterConstants.kLeftShooter,"Left Shooter");
 
   XboxController m_driverController = new XboxController(OIconstants.kDriverControllerPort);
   XboxController m_operatorController = new XboxController(OIconstants.kOperatorControllerPort);
+  XboxController m_testController = new XboxController(OIconstants.kTestControllerPort);
 
 
   /**
@@ -61,6 +69,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    new JoystickButton(m_testController, XboxController.Button.kX.value).whenHeld(new CameraAlign(m_drive, m_limelight, 60));
   }
 
 

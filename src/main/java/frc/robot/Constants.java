@@ -25,6 +25,8 @@ public final class Constants {
         public final static int kRightBackMotor = 1;
 
         public final static double kMaxDriveSpeed = 0.5; // speed
+
+        public final static double kMinPower = 0.2; // speed
     }
 
     public final class IntakeConstants{
@@ -135,6 +137,7 @@ public final class Constants {
          // Main Joystick USB Port
          public static final int kDriverControllerPort = 1;
          public static final int kOperatorControllerPort = 0;
+         public static final int kTestControllerPort = 2;
          
          public final static int leftYAxis = 1;      // speed 
          public final static int leftXAxis = 0;      //
@@ -150,6 +153,17 @@ public final class Constants {
          public final static int backButton = 7;     //
          public final static int leftButton = 9;     //
          public final static int rightButton = 10;   //
+
+    }
+    public static final class LimelightConstants {
+        // Ensure that the limelight hostname is just "limelight", otherwise there will be nothing
+        // on networktable for data.  Check network table data in Shuffleboard when troubleshooting
+        public final static String kLimeTable = "limelight";
+        public final static int kDefaultPipeline = 0;
+        public static final double kXAlignTolerance = 1;
+        public static final double kP = 0.02;
+        public static final double kDriveP = 0.02;
+        public static final double kDriveTolerance = 0.02;
 
     }
 

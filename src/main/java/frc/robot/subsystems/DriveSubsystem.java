@@ -70,7 +70,9 @@ public class DriveSubsystem extends SubsystemBase {
     // speed limiting accomplished in Constructor
     m_drive.arcadeDrive(fwd, rot);
   }
-
+  public void tankDrive(double left, double right) {
+    m_drive.tankDrive(left, right);
+  }
   /**
    * Resets the drive encoders to currently read a position of 0.
    */
