@@ -9,13 +9,14 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import frc.robot.Constants.IndexerConstants;
+import frc.robot.Constants.OIconstants;
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.IndexerSubsystem;
+import frc.robot.subsystems.ServoTest;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.subsystems.*;
-import frc.robot.Constants.*;
-import frc.robot.commands.*;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -27,11 +28,8 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final IndexerSubsystem m_indexer = new IndexerSubsystem();
   private final DriveSubsystem m_drive = new DriveSubsystem();
-  private final IntakeSubsystem m_intake = new IntakeSubsystem();
-  private final LoaderSubsystem m_loader = new LoaderSubsystem();
-  private final ShooterPID m_rightShooterPID = new ShooterPID(ShooterConstants.kRightShooter,"Right Shooter");
-  private final ShooterPID m_leftShooterPID = new ShooterPID(ShooterConstants.kLeftShooter,"Left Shooter");
-
+ // private final ExampleCommand m_autoCommand = new ExampleCommand(m_indexer);
+  
   XboxController m_driverController = new XboxController(OIconstants.kDriverControllerPort);
   XboxController m_operatorController = new XboxController(OIconstants.kOperatorControllerPort);
 
@@ -71,6 +69,12 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    return new InstantCommand();
+    try {
+      throw new Exception();
+    } catch(Exception e){
+      System.out.println("No Auto Command");
+      e.printStackTrace();
+    }
+    return null;
   }
 }

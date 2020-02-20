@@ -87,6 +87,8 @@ public final class Constants {
     public final static class ClimberConstants{
         public final static int kLeftClimberMotor = 10;
         public final static int kRightClimberMotor = 11;
+        public final static int kLeftServo = -1;
+        public final static int kRightServo = -1;
 
         public final static int[] kLeftEncoder = new int[]{1,2}; //TODO find the ports
         public final static int[] kRightEncoder = new int[]{3, 4};
