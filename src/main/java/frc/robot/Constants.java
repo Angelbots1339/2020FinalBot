@@ -126,6 +126,9 @@ public final class Constants {
         public final static double kI = 0.01;
         public final static double kD = 0;
 
+        public final static double minEncoderValue = 1;
+        public final static double maxEncoderValue = 100;
+
         public final static double positionTolerance = 0.075;
     }
 

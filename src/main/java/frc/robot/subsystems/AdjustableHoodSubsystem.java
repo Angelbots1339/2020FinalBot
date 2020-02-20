@@ -36,8 +36,15 @@ public class AdjustableHoodSubsystem extends SubsystemBase {
   }
 
   public void setMotorVelo(double velocity) {
-    SmartDashboard.putNumber("Hood input", velocity);
-    m_hoodMotor.set(velocity);
+    if(HoodedShooterConstants.maxEncoderValue >= getEncoderPos() && velocity < 0) {
+      SmartDashboard.putNumber("Hood input", velocity);
+      m_hoodMotor.set(velocity);
+    } else if (HoodedShooterConstants.minEncoderValue <= getEncoderPos() && velocity > 0) {
+      SmartDashboard.putNumber("Hood input", velocity);
+      m_hoodMotor.set(velocity);
+    } else {
+      SmartDashboard.putNumber("Hood input", 0);
+    }
 
   }
 
