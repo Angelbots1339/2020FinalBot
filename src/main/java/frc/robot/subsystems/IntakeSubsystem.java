@@ -35,7 +35,7 @@ public class IntakeSubsystem extends SubsystemBase {
     m_leftMoveIntake.set(IntakeConstants.kMaxIntakeMoverSpeed);
   }
 
-  public void moveMover(double d){
+  public void rotateIntake(double d){
     m_rightMoveIntake.set(d);
     m_leftMoveIntake.set(d);
   }

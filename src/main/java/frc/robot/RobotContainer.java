@@ -13,7 +13,9 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.IndexerConstants;
 import frc.robot.Constants.OIconstants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.commands.HoodPID;
 import frc.robot.commands.RunShooter;
+import frc.robot.subsystems.AdjustableHoodSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -39,6 +41,7 @@ public class RobotContainer {
   private final LoaderSubsystem m_loader = new LoaderSubsystem();
   private final ShooterPID m_rightShooterPID = new ShooterPID(ShooterConstants.kRightShooter, "Right Shooter");
   private final ShooterPID m_leftShooterPID = new ShooterPID(ShooterConstants.kLeftShooter, "Left Shooter");
+  private AdjustableHoodSubsystem m_hoodSubsystem = new AdjustableHoodSubsystem();
 
   // private final ExampleCommand m_autoCommand = new ExampleCommand(m_indexer);
 
@@ -85,8 +88,8 @@ public class RobotContainer {
     // Intake on right bumper
     new JoystickButton(m_testController, Button.kBumperRight.value).whenPressed(() -> m_intake.enableIntake())
         .whenReleased(() -> m_intake.disableIntake());
-    // moving loader mover on right Y axis
-    new RunCommand(() -> m_intake.moveMover(m_testController.getRawAxis(OIconstants.rightYAxis)));
+    // moving intake mover on right Y axis
+    new RunCommand(() -> m_intake.rotateIntake(m_testController.getRawAxis(OIconstants.rightYAxis)));
     // moving loader on B button
     new JoystickButton(m_testController, Button.kB.value).whenPressed(() -> m_loader.enable())
         .whenReleased(() -> m_loader.disable());
@@ -94,6 +97,7 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, Button.kA.value)
         .whenHeld(new RunShooter(m_leftShooterPID, m_rightShooterPID));
     // align camera on X button TODO
+    new JoystickButton(m_testController, Button.kX.value).whenPressed(() -> new HoodPID(m_hoodSubsystem, 100));
 
   }
 

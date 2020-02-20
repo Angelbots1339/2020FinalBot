@@ -7,29 +7,39 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.HoodedShooterConstants;
 
-
-public class AdjustableHoodSubsystem extends PIDSubsystem {
+public class AdjustableHoodSubsystem extends SubsystemBase {
+  private CANSparkMax m_hoodMotor;
+  private CANEncoder m_hoodEncoder;
   /**
    * Creates a new AdjustableHoodSubsystem.
    */
   public AdjustableHoodSubsystem() {
-    super(
-        // The PIDController used by the subsystem
-        new PIDController(0, 0, 0));
+    m_hoodMotor = new CANSparkMax(HoodedShooterConstants.kHoodPort, MotorType.kBrushless);
+    m_hoodEncoder = new CANEncoder(m_hoodMotor);
+  }
+
+  public double getEncoderPos(){
+    return m_hoodEncoder.getPosition();
+  }
+
+  public void setEncoderZeroPos(){
+    m_hoodEncoder.setPosition(0);
+  }
+
+  public void setMotorVelo(double velocity) {
+    m_hoodMotor.set(velocity);
   }
 
   @Override
-  public void useOutput(double output, double setpoint) {
-    // Use the output here
-  }
-
-  @Override
-  public double getMeasurement() {
-    // Return the process variable measurement here
-    return 0;
+  public void periodic() {
+    // This method will be called once per scheduler run
   }
 }
