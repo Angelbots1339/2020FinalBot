@@ -19,10 +19,10 @@ public final class Constants {
     
     public final class DriveConstants{
         // TalonFX Motors
-        public final static int kLeftFrontMotor = 3;
-        public final static int kLeftBackMotor = 4;
-        public final static int kRightFrontMotor = 2;
-        public final static int kRightBackMotor = 1;
+        public final static int kLeftFrontMotor = 13; // 3
+        public final static int kLeftBackMotor = 14; // 4
+        public final static int kRightFrontMotor = 12; // 2
+        public final static int kRightBackMotor = 15; // 1
 
         public final static double kMaxDriveSpeed = 0.5; // speed
     }

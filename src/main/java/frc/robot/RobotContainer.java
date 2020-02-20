@@ -44,11 +44,11 @@ public class RobotContainer {
     // Configure default commands
     // Set the default drive command to split-stick arcade drive
     m_drive.setDefaultCommand(
-        (Command) // A split-stick arcade command, with forward/backward controlled by the left
+        // A split-stick arcade command, with forward/backward controlled by the left
         // hand, and turning controlled by the right.
         // Left Y Axis needs to be inverted for driving forward
         new RunCommand(() -> m_drive.arcadeDrive(-1 * m_driverController.getRawAxis(OIconstants.leftYAxis),
-            m_driverController.getRawAxis(OIconstants.rightXAxis))));
+            m_driverController.getRawAxis(OIconstants.rightXAxis)), m_drive));
           
   }
 
@@ -59,6 +59,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    
   }
 
 
