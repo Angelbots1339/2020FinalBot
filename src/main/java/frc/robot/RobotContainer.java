@@ -95,12 +95,9 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, Button.kA.value)
         .whenHeld(new RunShooter(m_leftShooterPID, m_rightShooterPID));
     // align camera on X button TODO
-<<<<<<< HEAD
     new JoystickButton(m_testController, Button.kX.value).whenPressed(() -> new HoodPID(m_hoodSubsystem, 100));
-=======
     // new JoystickButton(m_driverController, XboxController.Button.kA.value).whenHeld(new RunCommand(() -> m_intake.moveIntakeUp(), m_intake));
     // new JoystickButton(m_driverController, XboxController.Button.kB.value).whenHeld(new RunCommand(() -> m_intake.moveIntakeDown(), m_intake));
->>>>>>> 094bf321f7408c33aabd2aa08e4efef6016249a9
 
   }
 
