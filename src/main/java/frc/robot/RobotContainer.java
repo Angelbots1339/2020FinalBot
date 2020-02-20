@@ -53,6 +53,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+    m_hoodSubsystem.setEncoderZeroPos();
 
     // Configure default commands
     // Set the default drive command to split-stick arcade drive
@@ -95,21 +96,15 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, Button.kA.value)
         .whenHeld(new RunShooter(m_leftShooterPID, m_rightShooterPID));
     // align camera on X button TODO
+
+    //lets PID take over moving hood to test value on X button
     new JoystickButton(m_testController, Button.kX.value).whenPressed(() -> new HoodPID(m_hoodSubsystem, 100));
+
+    //sets the speed of hood to right Y axis;
+    new RunCommand(() -> m_hoodSubsystem.setMotorVelo(m_testController.getRawAxis(OIconstants.leftYAxis)));
+    
     // new JoystickButton(m_driverController, XboxController.Button.kA.value).whenHeld(new RunCommand(() -> m_intake.moveIntakeUp(), m_intake));
     // new JoystickButton(m_driverController, XboxController.Button.kB.value).whenHeld(new RunCommand(() -> m_intake.moveIntakeDown(), m_intake));
-
-    // DRIVER CONTROLLER
-    // overall driving
-
-    // OPERATOR CONTROLLER
-    // B button shooter
-    // left bumper indexer
-    // right bumper loader
-    // Y button moves indexer and intake
-    // left y-axis for hood
-    // right y-axis for rotating intake
-    // A reverse everything
 
   }
 
