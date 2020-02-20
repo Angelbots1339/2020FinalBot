@@ -163,7 +163,6 @@ public final class Constants {
         public static final double kXAlignTolerance = 1;
         public static final double kP = 0.02;
         public static final double kDriveP = 0.02;
-        public static final double kDriveTolerance = 0.02;
 
     }
 

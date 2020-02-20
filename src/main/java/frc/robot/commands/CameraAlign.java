@@ -45,16 +45,12 @@ public class CameraAlign extends CommandBase {
     m_turn = 0;
     double driveError = m_limeLight.getArea() - m_targetDistance;
 
-    if (m_limeLight.seesTarget())
-      if (Math.abs(m_limeLight.getXTargetOffset()) > Constants.LimelightConstants.kXAlignTolerance)
-        m_turn = Constants.LimelightConstants.kP * m_limeLight.getXTargetOffset()
-            + Math.copySign(Constants.DriveConstants.kMinPower, m_limeLight.getXTargetOffset());
+    if (m_limeLight.seesTarget()) {
+      m_turn += Constants.LimelightConstants.kP * m_limeLight.getXTargetOffset();
+      m_drive += -driveError * Constants.LimelightConstants.kDriveP;
+    }
 
-      else if (Math.abs(driveError) > Constants.LimelightConstants.kDriveTolerance)
-        m_drive = Math.copySign(m_limeLight.getArea() * Constants.LimelightConstants.kDriveP + Constants.DriveConstants.kMinPower,
-            -driveError);
-
-    m_driveSubsystem.tankDrive(m_drive + m_turn, m_drive - m_turn);
+    m_driveSubsystem.tankDrive(m_drive + m_turn, m_drive - m_turn, Constants.LimelightConstants.kXAlignTolerance);
   }
 
   // Called once the command ends or is interrupted.

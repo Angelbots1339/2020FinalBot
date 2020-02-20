@@ -73,6 +73,10 @@ public class DriveSubsystem extends SubsystemBase {
   public void tankDrive(double left, double right) {
     m_drive.tankDrive(left, right);
   }
+
+  public void tankDrive(double left, double right, double threshold) {
+    m_drive.tankDrive(Math.abs(left)>threshold?left:0, Math.abs(right)>threshold?right:0);
+  }
   /**
    * Resets the drive encoders to currently read a position of 0.
    */
