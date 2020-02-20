@@ -53,6 +53,13 @@ public class IntakeSubsystem extends SubsystemBase {
     m_leftIntakeMotor.set(0);
   }
 
+  public void moveIntakeUp(){
+    m_leftMoveIntake.set(IntakeConstants.kMaxIntakeMoverSpeed);
+  }
+  public void moveIntakeDown(){
+    m_leftMoveIntake.set(-IntakeConstants.kMaxIntakeMoverSpeed);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
