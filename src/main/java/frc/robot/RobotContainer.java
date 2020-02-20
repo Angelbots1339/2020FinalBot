@@ -9,33 +9,45 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.IndexerConstants;
 import frc.robot.Constants.OIconstants;
+import frc.robot.Constants.ShooterConstants;
+import frc.robot.commands.RunShooter;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LoaderSubsystem;
 import frc.robot.subsystems.ServoTest;
+import frc.robot.subsystems.ShooterPID;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 /**
- * This class is where the bulk of the robot should be declared.  Since Command-based is a
- * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
- * periodic methods (other than the scheduler calls).  Instead, the structure of the robot
- * (including subsystems, commands, and button mappings) should be declared here.
+ * This class is where the bulk of the robot should be declared. Since
+ * Command-based is a "declarative" paradigm, very little robot logic should
+ * actually be handled in the {@link Robot} periodic methods (other than the
+ * scheduler calls). Instead, the structure of the robot (including subsystems,
+ * commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final IndexerSubsystem m_indexer = new IndexerSubsystem();
   private final DriveSubsystem m_drive = new DriveSubsystem();
- // private final ExampleCommand m_autoCommand = new ExampleCommand(m_indexer);
-  
+  private final IntakeSubsystem m_intake = new IntakeSubsystem();
+  private final LoaderSubsystem m_loader = new LoaderSubsystem();
+  private final ShooterPID m_rightShooterPID = new ShooterPID(ShooterConstants.kRightShooter, "Right Shooter");
+  private final ShooterPID m_leftShooterPID = new ShooterPID(ShooterConstants.kLeftShooter, "Left Shooter");
+
+  // private final ExampleCommand m_autoCommand = new ExampleCommand(m_indexer);
+
   XboxController m_driverController = new XboxController(OIconstants.kDriverControllerPort);
   XboxController m_operatorController = new XboxController(OIconstants.kOperatorControllerPort);
-
+  XboxController m_testController = new XboxController(OIconstants.kTestControllerPort);
 
   /**
-   * The container for the robot.  Contains subsystems, OI devices, and commands.
+   * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     // Configure the button bindings
@@ -47,21 +59,43 @@ public class RobotContainer {
         // A split-stick arcade command, with forward/backward controlled by the left
         // hand, and turning controlled by the right.
         // Left Y Axis needs to be inverted for driving forward
-        new RunCommand(() -> m_drive.arcadeDrive(-1 * m_driverController.getRawAxis(OIconstants.leftYAxis),
-            m_driverController.getRawAxis(OIconstants.rightXAxis)), m_drive));
-          
+        new RunCommand(() -> m_drive.arcadeDrive(-1 * m_testController.getRawAxis(OIconstants.leftYAxis),
+            m_testController.getRawAxis(OIconstants.rightXAxis)), m_drive));
+
   }
 
   /**
-   * Use this method to define your button->command mappings.  Buttons can be created by
-   * instantiating a {@link GenericHID} or one of its subclasses ({@link
-   * edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then passing it to a
-   * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
+   * Use this method to define your button->command mappings. Buttons can be
+   * created by instantiating a {@link GenericHID} or one of its subclasses
+   * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
+   * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    
-  }
+    /*
+     * example new JoystickButton(m_operatorController,
+     * Button.kBumperLeft.value).whenPressed(() ->
+     * m_powerCell.enableIntakeAndIndexer()) .whenReleased(() ->
+     * m_powerCell.disable());
+     */
 
+    // TEST CONTROLLER
+    // Indexer on left bumper
+    new JoystickButton(m_testController, Button.kBumperLeft.value).whenPressed(() -> m_indexer.enable())
+        .whenReleased(() -> m_indexer.disable());
+    // Intake on right bumper
+    new JoystickButton(m_testController, Button.kBumperRight.value).whenPressed(() -> m_intake.enableIntake())
+        .whenReleased(() -> m_intake.disableIntake());
+    // moving loader mover on right Y axis
+    new RunCommand(() -> m_intake.moveMover(m_testController.getRawAxis(OIconstants.rightYAxis)));
+    // moving loader on B button
+    new JoystickButton(m_testController, Button.kB.value).whenPressed(() -> m_loader.enable())
+        .whenReleased(() -> m_loader.disable());
+    // moving shooter on A button
+    new JoystickButton(m_operatorController, Button.kA.value)
+        .whenHeld(new RunShooter(m_leftShooterPID, m_rightShooterPID));
+    // align camera on X button TODO
+
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -72,7 +106,7 @@ public class RobotContainer {
     // An ExampleCommand will run in autonomous
     try {
       throw new Exception();
-    } catch(Exception e){
+    } catch (Exception e) {
       System.out.println("No Auto Command");
       e.printStackTrace();
     }

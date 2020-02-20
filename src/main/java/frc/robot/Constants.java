@@ -33,8 +33,8 @@ public final class Constants {
         public final static int kLeftIntakeMoverMotor = 9;
         public final static int kRightIntakeMoverMotor = 8;
 
-        public final static double kMaxIntakeSpeed = 0; // speed
-        public final static double kMaxIntakeMoverSpeed = 0;
+        public final static double kMaxIntakeSpeed = 0.5; // speed
+        public final static double kMaxIntakeMoverSpeed = 0.5;
     }
 
     public final class IndexerConstants{
@@ -42,13 +42,13 @@ public final class Constants {
         public final static int kLeftIndexerMotor = 7;
         public final static int kRightIndexMotor = 6;
 
-        public final static double kMaxIndexSpeed = 0; // speed
+        public final static double kMaxIndexSpeed = 0.5; // speed
 
     }
 
     public final class LoaderConstants{
         public final static int kLoaderMotor = 2; // SparkMAX
-        public final static double kMaxLoaderSpeed = 0; // speed
+        public final static double kMaxLoaderSpeed = 0.5; // speed
     }
 
     public final static class ShooterConstants{
@@ -80,7 +80,7 @@ public final class Constants {
         public final static double KVVoltSecondsPerRotation = 12.0 / kShooterFreeRPS;
         public final static double kSpeed = 0.5;
 
-        public final static double kMaxShooterSpeed = 0;
+        public final static double kMaxShooterSpeed = 0.5;
 
     }
         
@@ -137,6 +137,7 @@ public final class Constants {
          // Main Joystick USB Port
          public static final int kDriverControllerPort = 1;
          public static final int kOperatorControllerPort = 0;
+         public static final int kTestControllerPort = 2;
          
          public final static int leftYAxis = 1;      // speed 
          public final static int leftXAxis = 0;      //

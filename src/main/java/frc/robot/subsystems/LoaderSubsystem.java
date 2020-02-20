@@ -7,16 +7,12 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.LoaderConstants;
-import frc.robot.Constants.SensorConstants;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.PWMSparkMax;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.LoaderConstants;
 
 public class LoaderSubsystem extends SubsystemBase {
 
@@ -62,6 +58,7 @@ public class LoaderSubsystem extends SubsystemBase {
   */
 
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("loader", m_loader.get());
   }
 
   public boolean isTopBeamBroken(){

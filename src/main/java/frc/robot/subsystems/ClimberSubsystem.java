@@ -7,7 +7,9 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.PWMSparkMax;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
 
@@ -16,12 +18,12 @@ public class ClimberSubsystem extends SubsystemBase {
    * Creates a new ClimberSubsystem.
    */
 
-  private PWMSparkMax m_leftClimberMotor;
-  private PWMSparkMax m_rightClimberMotor;
+  private CANSparkMax m_leftClimberMotor;
+  private CANSparkMax m_rightClimberMotor;
 
   public ClimberSubsystem() {
-    m_leftClimberMotor = new PWMSparkMax(ClimberConstants.kLeftClimberMotor);
-    m_rightClimberMotor = new PWMSparkMax(ClimberConstants.kRightClimberMotor);
+    m_leftClimberMotor = new CANSparkMax(ClimberConstants.kLeftClimberMotor, MotorType.kBrushless);
+    m_rightClimberMotor = new CANSparkMax(ClimberConstants.kRightClimberMotor, MotorType.kBrushless);
   }
 
   public void enable(){

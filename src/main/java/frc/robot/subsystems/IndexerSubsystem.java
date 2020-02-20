@@ -7,22 +7,25 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IndexerConstants;
-import edu.wpi.first.wpilibj.PWMSparkMax;
 
 public class IndexerSubsystem extends SubsystemBase {
 
-  private PWMSparkMax m_leftIndexer;
-  private PWMSparkMax m_rightIndexer;
+  private CANSparkMax m_leftIndexer;
+  private CANSparkMax m_rightIndexer;
 
   /**
    * Creates a new IndexerSubsystem.
    */
 
   public IndexerSubsystem() {
-    m_leftIndexer = new PWMSparkMax(IndexerConstants.kLeftIndexerMotor);
-    m_rightIndexer = new PWMSparkMax(IndexerConstants.kRightIndexMotor);
+    m_leftIndexer = new CANSparkMax(IndexerConstants.kLeftIndexerMotor, MotorType.kBrushless);
+    m_rightIndexer = new CANSparkMax(IndexerConstants.kRightIndexMotor, MotorType.kBrushless);
   }
 
   public void enable(){
@@ -38,5 +41,7 @@ public class IndexerSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("right indexer", m_rightIndexer.get());
+    SmartDashboard.putNumber("left indexer", m_leftIndexer.get());
   }
 }

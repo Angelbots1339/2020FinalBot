@@ -7,29 +7,37 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.PWMSparkMax;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
 public class IntakeSubsystem extends SubsystemBase {
-  private PWMSparkMax m_rightMoveIntake;
-  private PWMSparkMax m_leftMoveIntake;
-  private PWMSparkMax m_leftIntakeMotor;
+  private CANSparkMax m_rightMoveIntake;
+  private CANSparkMax m_leftMoveIntake;
+  private CANSparkMax m_leftIntakeMotor;
   
   /**
    * Creates a new IntakeSubsystem.
    */
   public IntakeSubsystem() {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_rightMoveIntake = new PWMSparkMax(IntakeConstants.kRightIntakeMoverMotor);
-    m_leftMoveIntake = new PWMSparkMax(IntakeConstants.kLeftIntakeMoverMotor);
+    m_rightMoveIntake = new CANSparkMax(IntakeConstants.kRightIntakeMoverMotor, MotorType.kBrushless);
+    m_leftMoveIntake = new CANSparkMax(IntakeConstants.kLeftIntakeMoverMotor, MotorType.kBrushless);
     
-    m_leftIntakeMotor = new PWMSparkMax(IntakeConstants.kIntakeMotor);
+    m_leftIntakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotor, MotorType.kBrushless);
   }
 
   public void enableMover(){
     m_rightMoveIntake.set(IntakeConstants.kMaxIntakeMoverSpeed);
     m_leftMoveIntake.set(IntakeConstants.kMaxIntakeMoverSpeed);
+  }
+
+  public void moveMover(double d){
+    m_rightMoveIntake.set(d);
+    m_leftMoveIntake.set(d);
   }
 
   public void disableDisableMover(){
@@ -48,5 +56,8 @@ public class IntakeSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("intake", m_leftIntakeMotor.get());
+    SmartDashboard.putNumber("left move intake", m_leftMoveIntake.get());
+    SmartDashboard.putNumber("right move intake", m_rightMoveIntake.get());
   }
 }
