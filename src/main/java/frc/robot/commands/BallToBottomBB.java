@@ -10,7 +10,7 @@ import frc.robot.subsystems.*;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-
+// add an if bb is triggered only the indexer and loader runs 
 public class BallToBottomBB extends CommandBase {
 
   //private final PowerCellMovement m_PowerCellMovement;

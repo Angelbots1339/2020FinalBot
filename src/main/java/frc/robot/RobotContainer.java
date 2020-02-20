@@ -99,6 +99,18 @@ public class RobotContainer {
     // new JoystickButton(m_driverController, XboxController.Button.kA.value).whenHeld(new RunCommand(() -> m_intake.moveIntakeUp(), m_intake));
     // new JoystickButton(m_driverController, XboxController.Button.kB.value).whenHeld(new RunCommand(() -> m_intake.moveIntakeDown(), m_intake));
 
+    // DRIVER CONTROLLER
+    // overall driving
+
+    // OPERATOR CONTROLLER
+    // B button shooter
+    // left bumper indexer
+    // right bumper loader
+    // Y button moves indexer and intake
+    // left y-axis for hood
+    // right y-axis for rotating intake
+    // A reverse everything
+
   }
 
   /**
