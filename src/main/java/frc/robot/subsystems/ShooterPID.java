@@ -35,13 +35,16 @@ public class ShooterPID extends PIDSubsystem {
   /**
    * The shooter subsystem for the robot.
    */
-  public ShooterPID(int motorID, String name) {
+  public ShooterPID(int motorID, String name, boolean inverted) {
     super(new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD));
     m_motor = new CANSparkMax(motorID, MotorType.kBrushless);
     m_hoodMotor = new CANSparkMax(HoodedShooterConstants.kHoodPort, MotorType.kBrushless);
     m_Encoder = new CANEncoder(m_motor);
     m_hoodEncoder = new CANEncoder(m_hoodMotor);
     m_name = name;
+    // Spark 1 - Inverted - Not 
+    // Spark 3 - Inverted - Yes
+    m_motor.setInverted(inverted);
 
     getController().setTolerance(ShooterConstants.kShooterToleranceRPS);
     setSetpoint(ShooterConstants.kShooterTargetRPS);

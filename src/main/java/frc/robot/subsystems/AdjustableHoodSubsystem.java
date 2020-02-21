@@ -26,10 +26,15 @@ public class AdjustableHoodSubsystem extends SubsystemBase {
     m_hoodMotor = new CANSparkMax(HoodedShooterConstants.kHoodPort, MotorType.kBrushless);
     m_hoodMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
     m_hoodEncoder = new CANEncoder(m_hoodMotor);
+    m_hoodMotor.setInverted(false);
   }
 
   public double getEncoderPos(){
     return m_hoodEncoder.getPosition();
+  }
+
+  public void resetEncoder(){
+    m_hoodEncoder.setPosition(0);
   }
 
   public double getMotorCurrent() {
@@ -41,7 +46,6 @@ public class AdjustableHoodSubsystem extends SubsystemBase {
   }
 
   public void setMotorVelo(double velocity) {
-
     // preventing the velocity from exceeding a limit
     // if greater or less than limit, set to respective limit
     if(velocity > HoodedShooterConstants.maxVeloValue) {
@@ -51,9 +55,8 @@ public class AdjustableHoodSubsystem extends SubsystemBase {
     }
     SmartDashboard.putNumber("Hood input", velocity);
 
-    //check stalling. If so, set velocity to 0 and adjust encoders TODO
+    //check stalling. If so, set velocity to 0 
     if(getMotorCurrent() > HoodedShooterConstants.maxNormalCurrent) {
-      setEncoderZeroPos(velocity > 0 ? HoodedShooterConstants.maxEncoderValue : 0); //conditional lol
       velocity = 0;
     }
 
