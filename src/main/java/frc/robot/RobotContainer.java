@@ -53,7 +53,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    m_hoodSubsystem.setEncoderZeroPos();
+    m_hoodSubsystem.setEncoderZeroPos(0);
 
     // Configure default commands
     // Set the default drive command to split-stick arcade drive

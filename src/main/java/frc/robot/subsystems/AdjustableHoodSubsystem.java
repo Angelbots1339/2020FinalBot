@@ -24,6 +24,7 @@ public class AdjustableHoodSubsystem extends SubsystemBase {
    */
   public AdjustableHoodSubsystem() {
     m_hoodMotor = new CANSparkMax(HoodedShooterConstants.kHoodPort, MotorType.kBrushless);
+    m_hoodMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
     m_hoodEncoder = new CANEncoder(m_hoodMotor);
   }
 
@@ -31,27 +32,50 @@ public class AdjustableHoodSubsystem extends SubsystemBase {
     return m_hoodEncoder.getPosition();
   }
 
-  public void setEncoderZeroPos(){
-    m_hoodEncoder.setPosition(0);
+  public double getMotorCurrent() {
+    return m_hoodMotor.getOutputCurrent();
+  }
+
+  public void setEncoderZeroPos(double subtractable){
+    m_hoodEncoder.setPosition(0 - subtractable);
   }
 
   public void setMotorVelo(double velocity) {
+
+    // preventing the velocity from exceeding a limit
+    // if greater or less than limit, set to respective limit
+    if(velocity > HoodedShooterConstants.maxVeloValue) {
+      velocity = HoodedShooterConstants.maxVeloValue;
+    } else if (velocity < HoodedShooterConstants.minVeloValue) {
+      velocity = HoodedShooterConstants.minVeloValue;
+    }
     SmartDashboard.putNumber("Hood input", velocity);
-    if(HoodedShooterConstants.maxEncoderValue >= getEncoderPos() && velocity < 0) {
+
+    //check stalling. If so, set velocity to 0 and adjust encoders TODO
+    if(getMotorCurrent() > HoodedShooterConstants.maxNormalCurrent) {
+      setEncoderZeroPos(velocity > 0 ? HoodedShooterConstants.maxEncoderValue : 0); //conditional lol
+      velocity = 0;
+    }
+
+    // Preventing the hood from moving past max and min points
+    // Positive Velocity moves towards...... max?
+    // Negative Velocity moves towards min
+    if(getEncoderPos() >= HoodedShooterConstants.minEncoderValue  && velocity < 0) {
       SmartDashboard.putNumber("Hood output", velocity);
       m_hoodMotor.set(velocity);
-    } else if (HoodedShooterConstants.minEncoderValue <= getEncoderPos() && velocity > 0) {
+    } else if (HoodedShooterConstants.maxEncoderValue >= getEncoderPos() && velocity > 0) {
       SmartDashboard.putNumber("Hood output", velocity);
       m_hoodMotor.set(velocity);
     } else {
       SmartDashboard.putNumber("Hood output", 0);
+      m_hoodMotor.set(0);
     }
-
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Hood Motor current:", m_hoodMotor.getOutputCurrent());
     SmartDashboard.putNumber("Hood Encoder: ", m_hoodEncoder.getPosition());
   }
 }

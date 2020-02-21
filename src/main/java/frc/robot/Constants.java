@@ -128,6 +128,9 @@ public final class Constants {
 
         public final static double minEncoderValue = 1;
         public final static double maxEncoderValue = 100;
+        public final static double minVeloValue = -0.1;
+        public final static double maxVeloValue = 0.1;
+        public final static double maxNormalCurrent = 20;
 
         public final static double positionTolerance = 0.075;
     }
