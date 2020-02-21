@@ -26,6 +26,9 @@ public class LimelightSubsystem extends SubsystemBase {
   /**
    * Creates a new Limelight.
    */
+  public double getDistanceToVisionTarget() {
+    return Constants.LimelightConstants.kLimelightCameraToVisionRetroreflectiveTargetHeight / Math.tan(Math.toRadians(getYTargetOffset()));
+  }
   public LimelightSubsystem() {
     mNetworkTable = NetworkTableInstance.getDefault().getTable(Constants.LimelightConstants.kLimeTable);
   }

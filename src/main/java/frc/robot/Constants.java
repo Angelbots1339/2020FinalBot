@@ -160,9 +160,12 @@ public final class Constants {
         // on networktable for data.  Check network table data in Shuffleboard when troubleshooting
         public final static String kLimeTable = "limelight";
         public final static int kDefaultPipeline = 0;
-        public static final double kXAlignTolerance = 1;
-        public static final double kP = 0.02;
-        public static final double kDriveP = 0.02;
+        public static final double kAngleP = 0.01;
+        public static final double kDriveP = 0.01;
+        public static final double kDriveTolerance = 0.02;
+        public static final double kLimelightCameraToVisionRetroreflectiveTargetHeight = 0.06;//TODO in meters
+        public static final double kVerticalFOV = 49.7;
+        public static final double kHorizontalFOV = 59.6;
 
     }
 
