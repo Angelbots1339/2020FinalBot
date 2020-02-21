@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.OIconstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.HoodPID;
@@ -22,6 +23,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LoaderSubsystem;
+import frc.robot.subsystems.ServoTest;
 import frc.robot.subsystems.ShooterPID;
 
 /**
@@ -40,12 +42,27 @@ public class RobotContainer {
   private final ShooterPID m_rightShooterPID = new ShooterPID(ShooterConstants.kRightShooter, "Right Shooter");
   private final ShooterPID m_leftShooterPID = new ShooterPID(ShooterConstants.kLeftShooter, "Left Shooter");
   private AdjustableHoodSubsystem m_hoodSubsystem = new AdjustableHoodSubsystem();
+  private final ServoTest m_servo = new ServoTest();
 
   // private final ExampleCommand m_autoCommand = new ExampleCommand(m_indexer);
 
   XboxController m_driverController = new XboxController(OIconstants.kDriverControllerPort);
   XboxController m_operatorController = new XboxController(OIconstants.kOperatorControllerPort);
   XboxController m_testController = new XboxController(OIconstants.kTestControllerPort);
+
+  public static enum Mode{
+    AUTO(false), COLLECTION(true), ALIGN(true), SHOOTING(true), DEFENSE(false);
+
+    private boolean m_isShootCycle;
+
+    private Mode(boolean isShootCycle){
+      m_isShootCycle = isShootCycle;
+    }
+
+    //public boolean isShootCycle(){
+
+    //}
+  }
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -105,6 +122,19 @@ public class RobotContainer {
     
     // new JoystickButton(m_driverController, XboxController.Button.kA.value).whenHeld(new RunCommand(() -> m_intake.moveIntakeUp(), m_intake));
     // new JoystickButton(m_driverController, XboxController.Button.kB.value).whenHeld(new RunCommand(() -> m_intake.moveIntakeDown(), m_intake));
+    // Servo test on Y button
+    new JoystickButton(m_testController, Button.kB.value).whenPressed(() -> m_servo.setBothAngle(ClimberConstants.degrees));
+    // DRIVER CONTROLLER
+    // overall driving
+
+    // OPERATOR CONTROLLER
+    // B button shooter
+    // left bumper indexer
+    // right bumper loader
+    // Y button moves indexer and intake
+    // left y-axis for hood
+    // right y-axis for rotating intake or X button
+    // A reverse everything
 
   }
 

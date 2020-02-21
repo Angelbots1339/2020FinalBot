@@ -112,6 +112,8 @@ public final class Constants {
         public final static double kClimberToleranceRPS = 0;
         public final static double kEncoderDistancePerPulse = 0;
         public final static double kClimberTargetRPS = 0;
+
+        public final static double degrees = 25;
     }
 
     public final class BuddyClimbConstants{
@@ -167,5 +169,7 @@ public final class Constants {
          public final static int rightButton = 10;   //
 
     }
+
+    
 
 }
