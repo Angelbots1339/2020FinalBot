@@ -33,8 +33,8 @@ public final class Constants {
         public final static int kLeftIntakeMoverMotor = 9;
         public final static int kRightIntakeMoverMotor = 8;
 
-        public final static double kMaxIntakeSpeed = 0.5; // speed
-        public final static double kMaxIntakeMoverSpeed = 0.5;
+        public final static double kMaxIntakeSpeed = 0.75; // speed
+        public final static double kMaxIntakeMoverSpeed = 0.75;
     }
 
     public final class IndexerConstants{
