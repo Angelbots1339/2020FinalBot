@@ -33,7 +33,7 @@ public final class Constants {
         public final static int kLeftIntakeMoverMotor = 9;
         public final static int kRightIntakeMoverMotor = 8;
 
-        public final static double kMaxIntakeSpeed = 0.5; // speed
+        public final static double kMaxIntakeSpeed = 0.45; // speed
         public final static double kMaxIntakeArmSpeed = 0.25;
     }
 
@@ -48,7 +48,7 @@ public final class Constants {
 
     public final class LoaderConstants{
         public final static int kLoaderMotor = 2; // SparkMAX
-        public final static double kMaxLoaderSpeed = 0.5; // speed
+        public final static double kMaxLoaderSpeed = 0.35; // speed
     }
 
     public final static class ShooterConstants{
