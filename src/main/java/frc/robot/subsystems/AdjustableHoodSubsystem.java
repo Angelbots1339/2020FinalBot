@@ -7,29 +7,78 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.HoodedShooterConstants;
 
-
-public class AdjustableHoodSubsystem extends PIDSubsystem {
+public class AdjustableHoodSubsystem extends SubsystemBase {
+  private CANSparkMax m_hoodMotor;
+  private CANEncoder m_hoodEncoder;
   /**
    * Creates a new AdjustableHoodSubsystem.
    */
   public AdjustableHoodSubsystem() {
-    super(
-        // The PIDController used by the subsystem
-        new PIDController(0, 0, 0));
+    m_hoodMotor = new CANSparkMax(HoodedShooterConstants.kHoodPort, MotorType.kBrushless);
+    m_hoodMotor.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    m_hoodEncoder = new CANEncoder(m_hoodMotor);
+    m_hoodMotor.setInverted(false);
+  }
+
+  public double getEncoderPos(){
+    return m_hoodEncoder.getPosition();
+  }
+
+  public void resetEncoder(){
+    m_hoodEncoder.setPosition(0);
+  }
+
+  public double getMotorCurrent() {
+    return m_hoodMotor.getOutputCurrent();
+  }
+
+  public void setEncoderZeroPos(double subtractable){
+    m_hoodEncoder.setPosition(0 - subtractable);
+  }
+
+  public void setMotorVelo(double velocity) {
+    // preventing the velocity from exceeding a limit
+    // if greater or less than limit, set to respective limit
+    if(velocity > HoodedShooterConstants.maxVeloValue) {
+      velocity = HoodedShooterConstants.maxVeloValue;
+    } else if (velocity < HoodedShooterConstants.minVeloValue) {
+      velocity = HoodedShooterConstants.minVeloValue;
+    }
+    SmartDashboard.putNumber("Hood input", velocity);
+
+    //check stalling. If so, set velocity to 0 
+    if(getMotorCurrent() > HoodedShooterConstants.maxNormalCurrent) {
+      velocity = 0;
+    }
+
+    // Preventing the hood from moving past max and min points
+    // Positive Velocity moves towards...... max?
+    // Negative Velocity moves towards min
+    if(getEncoderPos() >= HoodedShooterConstants.minEncoderValue  && velocity < 0) {
+      SmartDashboard.putNumber("Hood output", velocity);
+      m_hoodMotor.set(velocity);
+    } else if (HoodedShooterConstants.maxEncoderValue >= getEncoderPos() && velocity > 0) {
+      SmartDashboard.putNumber("Hood output", velocity);
+      m_hoodMotor.set(velocity);
+    } else {
+      SmartDashboard.putNumber("Hood output", 0);
+      m_hoodMotor.set(0);
+    }
   }
 
   @Override
-  public void useOutput(double output, double setpoint) {
-    // Use the output here
-  }
-
-  @Override
-  public double getMeasurement() {
-    // Return the process variable measurement here
-    return 0;
+  public void periodic() {
+    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Hood Motor current:", m_hoodMotor.getOutputCurrent());
+    SmartDashboard.putNumber("Hood Encoder: ", m_hoodEncoder.getPosition());
   }
 }

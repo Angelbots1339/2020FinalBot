@@ -29,6 +29,7 @@ public class LoaderSubsystem extends SubsystemBase {
    */
   public LoaderSubsystem() {
     m_loader = new CANSparkMax(LoaderConstants.kLoaderMotor, MotorType.kBrushless);
+    m_loader.setInverted(true);
     /*
     m_topEmitter = new DigitalInput(SensorConstants.topEmitter);
     m_topReceiver = new DigitalInput(SensorConstants.topReciever);

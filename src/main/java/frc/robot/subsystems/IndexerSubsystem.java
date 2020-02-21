@@ -26,11 +26,18 @@ public class IndexerSubsystem extends SubsystemBase {
   public IndexerSubsystem() {
     m_leftIndexer = new CANSparkMax(IndexerConstants.kLeftIndexerMotor, MotorType.kBrushless);
     m_rightIndexer = new CANSparkMax(IndexerConstants.kRightIndexMotor, MotorType.kBrushless);
+    m_leftIndexer.setInverted(true);
+    m_rightIndexer.setInverted(false);
   }
 
   public void enable(){
-    m_leftIndexer.set(IndexerConstants.kLeftIndexerMotor);
-    m_rightIndexer.set(IndexerConstants.kRightIndexMotor);
+    m_leftIndexer.set(IndexerConstants.kMaxIndexSpeed);
+    m_rightIndexer.set(IndexerConstants.kMaxIndexSpeed);
+  }
+
+  public void reverse(){
+    m_leftIndexer.set(IndexerConstants.kMaxIndexSpeed * -1);
+    m_rightIndexer.set(IndexerConstants.kMaxIndexSpeed * -1);
   }
 
   public void disable(){

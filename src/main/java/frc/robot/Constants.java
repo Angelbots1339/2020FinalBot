@@ -33,8 +33,8 @@ public final class Constants {
         public final static int kLeftIntakeMoverMotor = 9;
         public final static int kRightIntakeMoverMotor = 8;
 
-        public final static double kMaxIntakeSpeed = 0.75; // speed
-        public final static double kMaxIntakeMoverSpeed = 0.75;
+        public final static double kMaxIntakeSpeed = 0.45; // speed
+        public final static double kMaxIntakeArmSpeed = 0.25;
     }
 
     public final class IndexerConstants{
@@ -42,13 +42,13 @@ public final class Constants {
         public final static int kLeftIndexerMotor = 7;
         public final static int kRightIndexMotor = 6;
 
-        public final static double kMaxIndexSpeed = 0.5; // speed
+        public final static double kMaxIndexSpeed = 0.22; // speed, was 0.5
 
     }
 
     public final class LoaderConstants{
         public final static int kLoaderMotor = 2; // SparkMAX
-        public final static double kMaxLoaderSpeed = 0.5; // speed
+        public final static double kMaxLoaderSpeed = 0.35; // speed
     }
 
     public final static class ShooterConstants{
@@ -57,29 +57,28 @@ public final class Constants {
 
         // PID values
         // TODO have to be tuned to current robot values
-        public final static double kP = 1.4;
-        public final static double kI = 0.01;
+        public final static double kP = 0.000;//0.00008;
+        public final static double kI = 0.0;
         public final static double kD = 0;
         public final static double kff = 0;
 
         // setting up encoder
         public final static int[] kEncoderPorts = new int[]{4, 5}; //TODO
         public final static boolean kEnocderReversed = true;
-        public final static int kEncoderCPR = 1024; // clicks per rotation
+        public final static int kEncoderCPR = 4096; // clicks per rotation
 
         // distance units int rotations
         public final static double kEncoderDistancePerPulse = 1.0 / (double) kEncoderCPR;
 
-        public final static double kShooterFreeRPS = 5300; 
-        public final static double kShooterTargetRPS = 4000; // rotations per second
-        public final static double kShooterToleranceRPS = 50;
+        public final static double kShooterFreeRPS = 5676; 
+        public final static double kShooterTargetRPS = 5600; // rotations per second, 3 to 2 gear ratio  
+        public final static double kShooterToleranceRPS = 10;
 
         // TODO need to be empirically determined, these are reasonable guesses
-        public final static double KSVolts = 0.05;
+        public final static double KSVolts = 0.4; // 0.1
         // should have value 12V at free speed...
-        public final static double KVVoltSecondsPerRotation = 12.0 / kShooterFreeRPS;
-        public final static double kSpeed = 0.5;
-
+        // This 
+        public final static double KVVoltSecondsPerRotation = 12 / kShooterFreeRPS;
         public final static double kMaxShooterSpeed = 0.5;
 
     }
@@ -87,8 +86,8 @@ public final class Constants {
     public final static class ClimberConstants{
         public final static int kLeftClimberMotor = 10;
         public final static int kRightClimberMotor = 11;
-        public final static int kLeftServo = -1;
-        public final static int kRightServo = -1;
+        public final static int kLeftServo = 0; // TODO double check
+        public final static int kRightServo = 1; // TODO doulbe check
 
         public final static int[] kLeftEncoder = new int[]{1,2}; //TODO find the ports
         public final static int[] kRightEncoder = new int[]{3, 4};
@@ -112,6 +111,8 @@ public final class Constants {
         public final static double kClimberToleranceRPS = 0;
         public final static double kEncoderDistancePerPulse = 0;
         public final static double kClimberTargetRPS = 0;
+
+        public final static double degrees = 25;
     }
 
     public final class BuddyClimbConstants{
@@ -121,6 +122,18 @@ public final class Constants {
 
     public final class HoodedShooterConstants{
         public final static int kHoodPort = 4;
+
+        public final static double kP = 1.4;
+        public final static double kI = 0.01;
+        public final static double kD = 0;
+
+        public final static double minEncoderValue = 1;
+        public final static double maxEncoderValue = 100;
+        public final static double minVeloValue = -0.1;
+        public final static double maxVeloValue = 0.1;
+        public final static double maxNormalCurrent = 20;
+
+        public final static double positionTolerance = 0.075;
     }
 
     public final class SensorConstants{
@@ -155,5 +168,7 @@ public final class Constants {
          public final static int rightButton = 10;   //
 
     }
+
+    
 
 }

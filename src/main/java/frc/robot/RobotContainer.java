@@ -13,13 +13,18 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.OIconstants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.commands.HoodPID;
+import frc.robot.commands.RunIntakeIndex;
 import frc.robot.commands.RunShooter;
+import frc.robot.subsystems.AdjustableHoodSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LoaderSubsystem;
+import frc.robot.subsystems.ServoTest;
 import frc.robot.subsystems.ShooterPID;
 
 /**
@@ -35,8 +40,10 @@ public class RobotContainer {
   private final IntakeSubsystem m_intake = new IntakeSubsystem();
   private final DriveSubsystem m_drive = new DriveSubsystem();
   private final LoaderSubsystem m_loader = new LoaderSubsystem();
-  private final ShooterPID m_rightShooterPID = new ShooterPID(ShooterConstants.kRightShooter, "Right Shooter");
-  private final ShooterPID m_leftShooterPID = new ShooterPID(ShooterConstants.kLeftShooter, "Left Shooter");
+  private final ShooterPID m_rightShooterPID = new ShooterPID(ShooterConstants.kRightShooter, "Right Shooter", true);
+  private final ShooterPID m_leftShooterPID = new ShooterPID(ShooterConstants.kLeftShooter, "Left Shooter", false);
+  private final AdjustableHoodSubsystem m_hoodSubsystem = new AdjustableHoodSubsystem();
+  private final ServoTest m_servo = new ServoTest();
 
   // private final ExampleCommand m_autoCommand = new ExampleCommand(m_indexer);
 
@@ -44,12 +51,28 @@ public class RobotContainer {
   XboxController m_operatorController = new XboxController(OIconstants.kOperatorControllerPort);
   XboxController m_testController = new XboxController(OIconstants.kTestControllerPort);
 
+  public static enum Mode{
+    AUTO(false), COLLECTION(true), ALIGN(true), SHOOTING(true), DEFENSE(false);
+
+    private boolean m_isShootCycle;
+
+    private Mode(boolean isShootCycle){
+      m_isShootCycle = isShootCycle;
+    }
+
+    public boolean isShootCycle(){
+      //return COLLECTION || ALIGN || SHOOTING;
+      return false;
+    }
+  }
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
+    m_hoodSubsystem.resetEncoder();
 
     // Configure default commands
     // Set the default drive command to split-stick arcade drive
@@ -57,10 +80,10 @@ public class RobotContainer {
         // A split-stick arcade command, with forward/backward controlled by the left
         // hand, and turning controlled by the right.
         // Left Y Axis needs to be inverted for driving forward
-        new RunCommand(() -> m_drive.arcadeDrive(-1 * m_testController.getRawAxis(OIconstants.leftYAxis),
-            m_testController.getRawAxis(OIconstants.rightXAxis)), m_drive));
+        new RunCommand(() -> m_drive.arcadeDrive(-1 * m_operatorController.getRawAxis(OIconstants.leftYAxis),
+            m_operatorController.getRawAxis(OIconstants.rightXAxis)), m_drive));
 
-  }
+  }//comment
 
   /**
    * Use this method to define your button->command mappings. Buttons can be
@@ -76,25 +99,108 @@ public class RobotContainer {
      * m_powerCell.disable());
      */
 
-    // TEST CONTROLLER
-    // Indexer on left bumper
-    new JoystickButton(m_testController, Button.kBumperLeft.value).whenPressed(() -> m_indexer.enable())
+    /**
+     * TEST CONTROLLER
+     * 
+     */
+
+     /*
+    // Left Bumper - Intake and Indexer
+    new JoystickButton(m_testController, Button.kBumperLeft.value).whenHeld(new RunIntakeIndex(m_indexer, m_intake));
+    //new JoystickButton(m_testController, Button.kBumperLeft.value).whenPressed(() -> m_indexer.enable())
+    //    .whenReleased(() -> m_indexer.disable());
+
+    // Right Bumper - Reverse Indexer
+    new JoystickButton(m_testController, Button.kBumperRight.value).whenPressed(() -> m_indexer.reverse())
         .whenReleased(() -> m_indexer.disable());
-    // Intake on right bumper
-    new JoystickButton(m_testController, Button.kBumperRight.value).whenPressed(() -> m_intake.enableIntake())
-        .whenReleased(() -> m_intake.disableIntake());
-    // moving loader mover on right Y axis
-    new RunCommand(() -> m_intake.moveMover(m_testController.getRawAxis(OIconstants.rightYAxis)));
-    // moving loader on B button
-    new JoystickButton(m_testController, Button.kB.value).whenPressed(() -> m_loader.enable())
+    //new JoystickButton(m_testController, Button.kBumperRight.value).whenPressed(() -> m_intake.enableIntake())
+    //    .whenReleased(() -> m_intake.disableIntake());
+
+    // A button - moving loader 
+    new JoystickButton(m_testController, Button.kA.value).whenPressed(() -> m_loader.enable())
         .whenReleased(() -> m_loader.disable());
-    // moving shooter on A button
-    new JoystickButton(m_operatorController, Button.kA.value)
+
+    // B button - Shooter
+    new JoystickButton(m_testController, Button.kB.value)
         .whenHeld(new RunShooter(m_leftShooterPID, m_rightShooterPID));
+    // X button - 
+    // Y button - Servo Test - NOT TESTED 
+    //new JoystickButton(m_testController, Button.kB.value).whenPressed(() -> m_servo.setBothAngle(ClimberConstants.degrees));
+    // Left Y Axis - sets the hood angle 
+    m_hoodSubsystem.setDefaultCommand(
+      new RunCommand(() -> m_hoodSubsystem.setMotorVelo(-1*m_testController.getRawAxis(OIconstants.leftYAxis)),m_hoodSubsystem));
+
     // align camera on X button TODO
+    //lets PID take over moving hood to test value on X button
+    //new JoystickButton(m_testController, Button.kX.value).whenPressed(() -> new HoodPID(m_hoodSubsystem, 100));
+
+    // moving intake mover on right Y axis
+    //new RunCommand(() -> m_intake.rotateIntake(m_testController.getRawAxis(OIconstants.rightYAxis)));
+  
     // new JoystickButton(m_driverController, XboxController.Button.kA.value).whenHeld(new RunCommand(() -> m_intake.moveIntakeUp(), m_intake));
     // new JoystickButton(m_driverController, XboxController.Button.kB.value).whenHeld(new RunCommand(() -> m_intake.moveIntakeDown(), m_intake));
+    */
+    /**
+     * DRIVER CONTROLLER
+     */
+    
 
+    /**
+     * OPERATOR CONTROLLER
+     */
+    // Left Bumper - Indexer
+    new JoystickButton(m_operatorController, Button.kBumperLeft.value).whenPressed(() -> m_indexer.enable())
+        .whenReleased(() -> m_indexer.disable());
+    // Right Bumper - Loader
+    new JoystickButton(m_operatorController, Button.kBumperRight.value).whenPressed(() -> m_loader.enable())
+        .whenReleased(() -> m_loader.disable());
+    // A button - reverse everything
+    new JoystickButton(m_operatorController, Button.kA.value).whenPressed(() -> m_intake.enableIntake())
+      .whenReleased(() -> m_intake.disableIntake());
+    // B button - shooter
+    new JoystickButton(m_operatorController, Button.kB.value)
+      .whenHeld(new RunShooter(m_leftShooterPID, m_rightShooterPID));
+    // X button - 
+    new JoystickButton(m_operatorController, Button.kX.value).whenPressed(() -> m_indexer.reverse())
+        .whenReleased(() -> m_indexer.disable());
+
+    // Y button - moves indexer and intake
+    //new JoystickButton(m_testController, Button.kY.value).whenHeld(new RunIntakeIndex(m_indexer, m_intake));
+    
+    // Left Y-axis - for hood - this works, but can only be assigned to one controller
+    //m_hoodSubsystem.setDefaultCommand(
+      //new RunCommand(() -> m_hoodSubsystem.setMotorVelo(-1*m_operatorController.getRawAxis(OIconstants.leftYAxis)),m_hoodSubsystem));
+    
+    // Right y-axis for rotating intake or X button
+
+    /**
+     * DRIVER CONTROLLER
+     */
+ // Left Bumper - Indexer
+ /*
+ new JoystickButton(m_driverController, Button.kBumperLeft.value).whenPressed(() -> m_indexer.enable())
+ .whenReleased(() -> m_indexer.disable());
+// Right Bumper - Loader
+new JoystickButton(m_driverController, Button.kBumperRight.value).whenPressed(() -> m_loader.enable())
+ .whenReleased(() -> m_loader.disable());
+// A button - reverse everything
+new JoystickButton(m_driverController, Button.kA.value).whenPressed(() -> m_indexer.reverse())
+.whenReleased(() -> m_indexer.disable());
+// B button - shooter
+new JoystickButton(m_driverController, Button.kB.value)
+.whenHeld(new RunShooter(m_leftShooterPID, m_rightShooterPID));
+// X button - 
+
+// Y button - moves indexer and intake
+new JoystickButton(m_testController, Button.kY.value).whenHeld(new RunIntakeIndex(m_indexer, m_intake));
+
+// Left Y-axis - for hood - this works, but can only be assigned to one controller
+//m_hoodSubsystem.setDefaultCommand(
+//new RunCommand(() -> m_hoodSubsystem.setMotorVelo(-1*m_operatorController.getRawAxis(OIconstants.leftYAxis)),m_hoodSubsystem));
+
+// Right y-axis for rotating intake or X button
+*/
+    
   }
 
   /**
