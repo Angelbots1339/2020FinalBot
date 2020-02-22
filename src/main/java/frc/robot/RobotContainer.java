@@ -16,9 +16,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.OIconstants;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.commands.HoodPID;
-import frc.robot.commands.RunIntakeIndex;
-import frc.robot.commands.RunShooter;
+import frc.robot.commands.ballmovement.*;
+import frc.robot.commands.testcommands.*;
+import frc.robot.commands.climbing.*;
 import frc.robot.subsystems.AdjustableHoodSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
@@ -104,8 +104,8 @@ public class RobotContainer {
      * 
      */
 
-     /*
-    // Left Bumper - Intake and Indexer
+     
+    // Left Bumper - Intake and Indexer --- TEST THIS ONE
     new JoystickButton(m_testController, Button.kBumperLeft.value).whenHeld(new RunIntakeIndex(m_indexer, m_intake));
     //new JoystickButton(m_testController, Button.kBumperLeft.value).whenPressed(() -> m_indexer.enable())
     //    .whenReleased(() -> m_indexer.disable());
@@ -123,8 +123,12 @@ public class RobotContainer {
     // B button - Shooter
     new JoystickButton(m_testController, Button.kB.value)
         .whenHeld(new RunShooter(m_leftShooterPID, m_rightShooterPID));
-    // X button - 
-    // Y button - Servo Test - NOT TESTED 
+    // X button - TEST THIS ONE
+    new JoystickButton(m_testController, Button.kX.value).whenHeld(new LoaderToMiddleBB(m_loader, m_intake, m_indexer));
+
+    // Y button - TEST THIS ONE --- its angry
+    // new JoystickButton(m_testController, Button.kY.value).whenHeld(new LoaderToTopBB(m_intake, m_indexer, m_intake, m_leftShooterPID, m_rightShooterPID));
+    //Servo Test - NOT TESTED 
     //new JoystickButton(m_testController, Button.kB.value).whenPressed(() -> m_servo.setBothAngle(ClimberConstants.degrees));
     // Left Y Axis - sets the hood angle 
     m_hoodSubsystem.setDefaultCommand(
@@ -139,7 +143,7 @@ public class RobotContainer {
   
     // new JoystickButton(m_driverController, XboxController.Button.kA.value).whenHeld(new RunCommand(() -> m_intake.moveIntakeUp(), m_intake));
     // new JoystickButton(m_driverController, XboxController.Button.kB.value).whenHeld(new RunCommand(() -> m_intake.moveIntakeDown(), m_intake));
-    */
+  
     /**
      * DRIVER CONTROLLER
      */

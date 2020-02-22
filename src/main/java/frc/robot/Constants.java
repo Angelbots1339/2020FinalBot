@@ -44,6 +44,8 @@ public final class Constants {
 
         public final static double kMaxIndexSpeed = 0.22; // speed, was 0.5
 
+        public final static double kAcceptableCurrentSpike = 0;
+
     }
 
     public final class LoaderConstants{

@@ -5,52 +5,45 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.climbing;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.LoaderSubsystem;
 
-public class Reverse extends CommandBase {
+// climbing subsystem
+
+public class FullSendClimb extends CommandBase {
+
+  // can probably be deleted once FullSendPowerCells works
+
+  private final LoaderSubsystem m_LoaderSubsystem;
   /**
-   * Creates a new Reverse.
+   * Creates a new FullSend.
    */
-  private final DriveSubsystem m_drive;
-  private double m_startTime, m_currentTime;
-
-  public Reverse(DriveSubsystem drive) {
+  public FullSendClimb(LoaderSubsystem subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_drive = drive;
-    addRequirements(m_drive);
+    m_LoaderSubsystem = subsystem;
+    addRequirements(m_LoaderSubsystem);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_startTime = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drive.arcadeDrive(-0.5, 0);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drive.arcadeDrive(0, 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // ends command after 2 seconds of starting
-    m_currentTime = Timer.getFPGATimestamp();
-    if(m_currentTime - m_startTime >= 2){
-      m_drive.arcadeDrive(0, 0);
-      return true;
-    }
     return false;
   }
 }

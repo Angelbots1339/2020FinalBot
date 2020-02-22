@@ -5,48 +5,53 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.testcommands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.LoaderSubsystem;
+import frc.robot.subsystems.DriveSubsystem;
 
-// brings the ball to the shooter
-
-public class LoaderToTopBB extends CommandBase {
-  // brings the ball from the loader to the 
+public class Forward extends CommandBase {
   /**
-   * Creates a new LoaderToShooter.
+   * Creates a new Forward.
    */
+  private double m_startTime, m_currentTime;
+  private final DriveSubsystem m_drive;
 
-   // uses loader, shooter, 
-  private final LoaderSubsystem m_loader;
-
-  public LoaderToTopBB(LoaderSubsystem subsystem) {
+  public Forward(DriveSubsystem drive) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_loader = subsystem;
-    addRequirements(m_loader);
+    m_drive = drive;
+    addRequirements(m_drive);
+  
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_startTime = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_loader.enable();
+    m_drive.arcadeDrive(0.5, 0);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_loader.disable();
+    m_drive.arcadeDrive(0, 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_loader.isTopBeamBroken();
+    //after two seconds of starting, command stops
+    m_currentTime = Timer.getFPGATimestamp();
+    if (m_currentTime - m_startTime >= 2) {
+      m_drive.arcadeDrive(0, 0);
+      return true;
+    }
+    return false;
   }
 }

@@ -51,4 +51,10 @@ public class IndexerSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("right indexer", m_rightIndexer.get());
     SmartDashboard.putNumber("left indexer", m_leftIndexer.get());
   }
+  //returns true if the current spikes in the indexer
+  public boolean isCurrentSpike(){
+    return (m_leftIndexer.getOutputCurrent() > IndexerConstants.kAcceptableCurrentSpike) || 
+           (m_rightIndexer.getOutputCurrent() > IndexerConstants.kAcceptableCurrentSpike);
+  }
+
 }

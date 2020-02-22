@@ -5,50 +5,52 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
-import frc.robot.subsystems.*;
+package frc.robot.commands.testcommands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.DriveSubsystem;
 
-// add an if bb is triggered only the indexer and loader runs 
-public class RunIntakeIndex extends CommandBase {
+public class Reverse extends CommandBase {
+  /**
+   * Creates a new Reverse.
+   */
+  private final DriveSubsystem m_drive;
+  private double m_startTime, m_currentTime;
 
-  private final IndexerSubsystem m_indexer;
-  private final IntakeSubsystem m_intake;
-
-  public RunIntakeIndex(IndexerSubsystem indexer, IntakeSubsystem intake){
+  public Reverse(DriveSubsystem drive) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_indexer = indexer;
-    addRequirements(indexer);
-    m_intake = intake;
-    addRequirements(intake);
+    m_drive = drive;
+    addRequirements(m_drive);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_indexer.enable();
-    m_intake.enableIntake();
+    m_startTime = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
+    m_drive.arcadeDrive(-0.5, 0);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_indexer.disable();
-    m_intake.disableIntake();
+    m_drive.arcadeDrive(0, 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-
+    // ends command after 2 seconds of starting
+    m_currentTime = Timer.getFPGATimestamp();
+    if(m_currentTime - m_startTime >= 2){
+      m_drive.arcadeDrive(0, 0);
+      return true;
+    }
     return false;
-  
   }
 }
