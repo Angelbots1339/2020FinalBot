@@ -25,6 +25,8 @@ public final class Constants {
         public final static int kRightBackMotor = 15; // 1
 
         public final static double kMaxDriveSpeed = 0.5; // speed
+
+        public final static double kMinPower = 0.2; // speed
     }
 
     public final class IntakeConstants{
@@ -174,6 +176,19 @@ public final class Constants {
          public final static int backButton = 7;     //
          public final static int leftButton = 9;     //
          public final static int rightButton = 10;   //
+
+    }
+    public static final class LimelightConstants {
+        // Ensure that the limelight hostname is just "limelight", otherwise there will be nothing
+        // on networktable for data.  Check network table data in Shuffleboard when troubleshooting
+        public final static String kLimeTable = "limelight";
+        public final static int kDefaultPipeline = 0;
+        public static final double kAngleP = 0.01;
+        public static final double kDriveP = 0.01;
+        public static final double kDriveTolerance = 0.02;
+        public static final double kLimelightCameraToVisionRetroreflectiveTargetHeight = 0.06;//TODO in meters
+        public static final double kVerticalFOV = 49.7;
+        public static final double kHorizontalFOV = 59.6;
 
     }
 
