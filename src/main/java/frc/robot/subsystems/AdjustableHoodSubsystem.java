@@ -76,7 +76,7 @@ public class AdjustableHoodSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Hood Motor current:", m_hoodMotor.getOutputCurrent());
-    SmartDashboard.putNumber("Hood Encoder: ", m_hoodEncoder.getPosition());
+   // SmartDashboard.putNumber("Hood Motor current:", m_hoodMotor.getOutputCurrent());
+   // SmartDashboard.putNumber("Hood Encoder: ", m_hoodEncoder.getPosition());
   }
 }

@@ -84,8 +84,8 @@ public class IntakeSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("intake", m_leftIntakeMotor.get());
-    SmartDashboard.putNumber("left move intake", m_leftIntakeArm.getOutputCurrent());
-    SmartDashboard.putNumber("right move intake", m_rightIntakeArm.getOutputCurrent());
+    //SmartDashboard.putNumber("intake", m_leftIntakeMotor.get());
+    //SmartDashboard.putNumber("left move intake", m_leftIntakeArm.getOutputCurrent());
+    //SmartDashboard.putNumber("right move intake", m_rightIntakeArm.getOutputCurrent());
   }
 }

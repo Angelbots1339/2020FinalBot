@@ -52,7 +52,8 @@ public final class Constants {
 
     public final class LoaderConstants{
         public final static int kLoaderMotor = 2; // SparkMAX
-        public final static double kMaxLoaderSpeed = 0.65; // speed
+        public final static double kMaxLoaderSpeed = 0.55; // speed
+        public final static double kInitLoaderSpeed = 0.2; // speed
     }
 
     public final static class ShooterConstants{
@@ -97,7 +98,8 @@ public final class Constants {
         public final static int[] kRightEncoder = new int[]{3, 4};
         public final static boolean kLeftEncoderReversed = false; //TODO 
         public final static boolean krightEncoderReversed = false; //TODOs
-        public final static double kClimberSpeed = 0.0;
+
+        public final static double kClimberSpeed = 0.10;
 
         public final static double kDownP = 0;
         public final static double kDownI = 0;
@@ -146,12 +148,12 @@ public final class Constants {
         public final static int topEmitter = 1;
         public final static int middleReciever = 2;
         public final static int middleEmitter = 3;
-        /* these still need to be installed to the robot, code not yet written for them
+        // these still need to be installed to the robot, code not yet written for them
         public final static int bottomLeftReciever = 4;
         public final static int bottomLeftEmitter = 5;
-        public final static int bottomRightReciever = 6;
-        public final static int bottomRightEmitter = 7;
-        */
+        public final static int bottomRightReciever = 6; // counters
+        public final static int bottomRightEmitter = 7; // counters
+        
     }
 
     public final class OIconstants{

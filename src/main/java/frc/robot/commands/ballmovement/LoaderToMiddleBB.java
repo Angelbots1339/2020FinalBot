@@ -6,6 +6,7 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.commands.ballmovement;
+import frc.robot.Constants.LoaderConstants;
 import frc.robot.subsystems.*;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
@@ -36,7 +37,7 @@ public class LoaderToMiddleBB extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_loader.enable();
+    m_loader.enable(LoaderConstants.kInitLoaderSpeed);
     m_indexer.enable();
     m_intake.enableIntake();
   }
@@ -46,9 +47,16 @@ public class LoaderToMiddleBB extends CommandBase {
   public void execute() {
 
     // stops the loader when the middle beam break is broken
-    if(m_loader.isMiddleBeamBroken()){
+    
+    if(m_loader.isMiddleBeamBroken() && !m_loader.isTopBeamBroken()){
       m_loader.disable();
     }
+    else if(m_loader.isTopBeamBroken()){
+      m_loader.reverse(LoaderConstants.kInitLoaderSpeed);
+    }
+
+    // if top broken, then reverse
+    // if top not broken and middle broken stop
 
     // if the indexer stales reverse until its good - may need to add a counter to see if the current spike is happening for longer 
     /*

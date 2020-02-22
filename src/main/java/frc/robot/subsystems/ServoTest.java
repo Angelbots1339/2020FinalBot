@@ -43,7 +43,7 @@ public class ServoTest extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Left angle:", getLeftAngle());
-    SmartDashboard.putNumber("Right angle:", getRightAngle());
+    //SmartDashboard.putNumber("Left angle:", getLeftAngle());
+    //SmartDashboard.putNumber("Right angle:", getRightAngle());
   }
 }

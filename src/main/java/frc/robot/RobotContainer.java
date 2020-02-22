@@ -20,6 +20,7 @@ import frc.robot.commands.ballmovement.*;
 import frc.robot.commands.testcommands.*;
 import frc.robot.commands.climbing.*;
 import frc.robot.subsystems.AdjustableHoodSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -44,6 +45,7 @@ public class RobotContainer {
   private final ShooterPID m_leftShooterPID = new ShooterPID(ShooterConstants.kLeftShooter, "Left Shooter", false);
   private final AdjustableHoodSubsystem m_hoodSubsystem = new AdjustableHoodSubsystem();
   private final ServoTest m_servo = new ServoTest();
+  private final ClimberSubsystem m_climber = new ClimberSubsystem();
 
   // private final ExampleCommand m_autoCommand = new ExampleCommand(m_indexer);
 
@@ -121,28 +123,39 @@ public class RobotContainer {
         .whenReleased(() -> m_loader.disable());
 
     // B button - Shooter
+    /*
     new JoystickButton(m_testController, Button.kB.value)
         .whenHeld(new RunShooter(m_leftShooterPID, m_rightShooterPID));
+        */
+        new JoystickButton(m_testController, Button.kB.value)
+        .whenPressed(() -> m_climber.enable()).whenReleased(() -> m_climber.disable()); // needs to be inverted
+
     // X button - TEST THIS ONE
     new JoystickButton(m_testController, Button.kX.value).whenHeld(new LoaderToMiddleBB(m_loader, m_intake, m_indexer));
 
     // Y button - TEST THIS ONE --- its angry
+    new JoystickButton(m_testController, Button.kY.value).whenHeld(new ShootAllBalls(m_intake, m_indexer, m_loader, m_rightShooterPID, m_leftShooterPID));
     // new JoystickButton(m_testController, Button.kY.value).whenHeld(new LoaderToTopBB(m_intake, m_indexer, m_intake, m_leftShooterPID, m_rightShooterPID));
     //Servo Test - NOT TESTED 
     //new JoystickButton(m_testController, Button.kB.value).whenPressed(() -> m_servo.setBothAngle(ClimberConstants.degrees));
     // Left Y Axis - sets the hood angle 
     m_hoodSubsystem.setDefaultCommand( // works well
       new RunCommand(() -> m_hoodSubsystem.setMotorVelo(-1*m_testController.getRawAxis(OIconstants.leftYAxis)),m_hoodSubsystem));
-    m_intake.setDefaultCommand(
-      new RunCommand(() -> m_intake.rotateIntakeArms(-m_testController.getRawAxis(OIconstants.rightYAxis)),m_intake));
-    // align camera on X button TODO
     
+    //  m_intake.setDefaultCommand(
+    //  new RunCommand(() -> m_intake.rotateIntakeArms(-m_testController.getRawAxis(OIconstants.rightYAxis)),m_intake));
+    // align camera on X button TODO
+
     //lets PID take over moving hood to test value on X button
     //new JoystickButton(m_testController, Button.kX.value).whenPressed(() -> new HoodPID(m_hoodSubsystem, 100));
 
     // moving intake mover on right Y axis
     //new RunCommand(() -> m_intake.rotateIntake(m_testController.getRawAxis(OIconstants.rightYAxis)));
+    m_climber.setDefaultCommand(
+      new RunCommand(() -> m_climber.enable(0.5 * -1 * m_testController.getRawAxis(OIconstants.rightYAxis)),m_climber));
+    
   
+
     // new JoystickButton(m_driverController, XboxController.Button.kA.value).whenHeld(new RunCommand(() -> m_intake.moveIntakeUp(), m_intake));
     // new JoystickButton(m_driverController, XboxController.Button.kB.value).whenHeld(new RunCommand(() -> m_intake.moveIntakeDown(), m_intake));
   

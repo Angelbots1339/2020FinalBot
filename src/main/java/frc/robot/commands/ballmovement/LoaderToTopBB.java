@@ -49,6 +49,7 @@ public class LoaderToTopBB extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    // stage so PID goes first
     m_loader.enable();
     m_indexer.enable();
     m_intake.enableIntake();
@@ -62,14 +63,12 @@ public class LoaderToTopBB extends CommandBase {
 
     // stops the shooter when top bb is broken
     if(m_loader.isTopBeamBroken()){
-      m_leftPID.disable();
-      m_rightPID.disable();
+      m_loader.disable();
     }
 
     // when PID has recovered moves the loader
     if(m_leftPID.atSetpoint() && m_rightPID.atSetpoint()){
-      m_leftPID.enable();
-    m_rightPID.enable();
+      m_loader.enable();
     }
 
     // if the indexer stales reverse until its good
