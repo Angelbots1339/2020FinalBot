@@ -32,12 +32,15 @@ public class RunIntakeIndex extends CommandBase {
   }
 
   // Called every time the scheduler runs while the command is scheduled.
-  @Override
+  //@Override
+  /*
   public void execute() {
     if(m_indexer.isCurrentSpike()){
       m_indexer.reverse(); //TODO
     }
+    
   }
+  */
 
   // Called once the command ends or is interrupted.
   @Override

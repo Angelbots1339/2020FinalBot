@@ -131,11 +131,12 @@ public class RobotContainer {
     //Servo Test - NOT TESTED 
     //new JoystickButton(m_testController, Button.kB.value).whenPressed(() -> m_servo.setBothAngle(ClimberConstants.degrees));
     // Left Y Axis - sets the hood angle 
-    m_hoodSubsystem.setDefaultCommand(
+    m_hoodSubsystem.setDefaultCommand( // works well
       new RunCommand(() -> m_hoodSubsystem.setMotorVelo(-1*m_testController.getRawAxis(OIconstants.leftYAxis)),m_hoodSubsystem));
     m_intake.setDefaultCommand(
       new RunCommand(() -> m_intake.rotateIntakeArms(-m_testController.getRawAxis(OIconstants.rightYAxis)),m_intake));
     // align camera on X button TODO
+    
     //lets PID take over moving hood to test value on X button
     //new JoystickButton(m_testController, Button.kX.value).whenPressed(() -> new HoodPID(m_hoodSubsystem, 100));
 

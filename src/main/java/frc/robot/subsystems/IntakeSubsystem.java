@@ -30,7 +30,7 @@ public class IntakeSubsystem extends SubsystemBase {
     m_rightIntakeArm = new CANSparkMax(IntakeConstants.kRightIntakeMoverMotor, MotorType.kBrushless);
     m_leftIntakeArm = new CANSparkMax(IntakeConstants.kLeftIntakeMoverMotor, MotorType.kBrushless);
     m_rightIntakeArm.setInverted(true);
-    m_rightIntakeArm.setInverted(false);
+    m_rightIntakeArm.setInverted(true);
     m_rightIntakeArm.setIdleMode(CANSparkMax.IdleMode.kBrake);
     m_leftIntakeArm.setIdleMode(CANSparkMax.IdleMode.kBrake);
 
@@ -44,11 +44,19 @@ public class IntakeSubsystem extends SubsystemBase {
 
   public void rotateIntakeArms(double velocity){
 
+    //stall check
+    if(m_leftIntakeArm.getOutputCurrent() > IntakeConstants.kMaxNormalVoltage ||
+    m_rightIntakeArm.getOutputCurrent() > IntakeConstants.kMaxNormalVoltage) {
+      velocity = 0;
+    }
+
+    //velocity cap
     if(velocity > IntakeConstants.kMaxIntakeArmSpeed) {
       velocity = IntakeConstants.kMaxIntakeArmSpeed;
     } else if(velocity < -IntakeConstants.kMaxIntakeArmSpeed) {
       velocity = -IntakeConstants.kMaxIntakeArmSpeed;
     }
+
     m_rightIntakeArm.set(velocity);
     m_leftIntakeArm.set(velocity);
   }
@@ -77,7 +85,7 @@ public class IntakeSubsystem extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("intake", m_leftIntakeMotor.get());
-    SmartDashboard.putNumber("left move intake", m_leftIntakeArm.get());
-    SmartDashboard.putNumber("right move intake", m_rightIntakeArm.get());
+    SmartDashboard.putNumber("left move intake", m_leftIntakeArm.getOutputCurrent());
+    SmartDashboard.putNumber("right move intake", m_rightIntakeArm.getOutputCurrent());
   }
 }

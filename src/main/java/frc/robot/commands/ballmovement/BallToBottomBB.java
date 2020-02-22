@@ -53,7 +53,7 @@ public class BallToBottomBB extends CommandBase {
     // checks to see if Bottom beam break is broken
     // may need a filter
     // may need to add a timeout
-    return m_loader.isBottomBeamBroken();
+    return m_loader.isBottomBroken();
   
   }
 }

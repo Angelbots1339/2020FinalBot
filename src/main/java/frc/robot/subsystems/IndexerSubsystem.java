@@ -48,8 +48,12 @@ public class IndexerSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    /*
     SmartDashboard.putNumber("right indexer", m_rightIndexer.get());
     SmartDashboard.putNumber("left indexer", m_leftIndexer.get());
+    SmartDashboard.putNumber("Right Indexer Amps", m_rightIndexer.getOutputCurrent());
+    SmartDashboard.putNumber("Left Indexer Amps", m_leftIndexer.getOutputCurrent());*/
+    
   }
   //returns true if the current spikes in the indexer
   public boolean isCurrentSpike(){

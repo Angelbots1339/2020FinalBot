@@ -25,7 +25,7 @@ public class LoaderSubsystem extends SubsystemBase {
   private DigitalInput m_bottomRightEmitter;
   private DigitalInput m_bottomRightReceiver;
   */
-  
+
   private DigitalInput m_middleEmitter;
   private DigitalInput m_middleReceiver;
   private DigitalInput m_topEmitter;
@@ -86,6 +86,10 @@ public class LoaderSubsystem extends SubsystemBase {
   public boolean isMiddleBeamBroken(){
    return!(m_middleReceiver).get();
    //return false;
+  }
+
+  public boolean isBottomBroken(){
+    return false; //TODO needs to be corrected
   }
 
 }
