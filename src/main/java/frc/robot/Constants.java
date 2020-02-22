@@ -36,7 +36,7 @@ public final class Constants {
         public final static double kMaxIntakeSpeed = 1; // speed was 0.45 , set slower for testing
         public final static double kMaxIntakeArmSpeed = 0.05; // was mixed up in the intake class
 
-        public final static double kMaxNormalVoltage = 2; // needed to be a bit lower 5;
+        public final static double kMaxNormalVoltage = 3; // needed to be a bit lower 5;
     }
 
     public final class IndexerConstants{
@@ -44,7 +44,7 @@ public final class Constants {
         public final static int kLeftIndexerMotor = 7;
         public final static int kRightIndexMotor = 6;
 
-        public final static double kMaxIndexSpeed = 0.35; // speed, was 0.5
+        public final static double kMaxIndexSpeed = 0.45; // speed, was 0.5
 
         public final static double kAcceptableCurrentSpike = 0;
 
@@ -52,7 +52,7 @@ public final class Constants {
 
     public final class LoaderConstants{
         public final static int kLoaderMotor = 2; // SparkMAX
-        public final static double kMaxLoaderSpeed = 0.35; // speed
+        public final static double kMaxLoaderSpeed = 0.65; // speed
     }
 
     public final static class ShooterConstants{
