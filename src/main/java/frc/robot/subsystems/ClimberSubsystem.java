@@ -52,8 +52,8 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void enable(){
-    m_rightClimber.set(ClimberConstants.kClimberSpeed);
-    m_leftClimber.set(ClimberConstants.kClimberSpeed);
+    m_rightClimber.set(-1 * ClimberConstants.kClimberSpeed);
+    m_leftClimber.set(-1 * ClimberConstants.kClimberSpeed);
   }
   @Override
   public void periodic() {

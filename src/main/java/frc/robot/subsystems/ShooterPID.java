@@ -29,9 +29,11 @@ public class ShooterPID extends PIDSubsystem {
   private CANEncoder m_hoodEncoder;
   
   private String m_name;
+  
   private final SimpleMotorFeedforward m_shooterFeedforward =
       new SimpleMotorFeedforward(ShooterConstants.KSVolts,
                                  ShooterConstants.KVVoltSecondsPerRotation);
+
   /**
    * The shooter subsystem for the robot.
    */
@@ -64,21 +66,14 @@ public class ShooterPID extends PIDSubsystem {
     return m_controller.atSetpoint();
   }
 
-  public void runShooterMax() {
-    m_motor.set(ShooterConstants.kMaxShooterSpeed);
-  }
-
-  public void runShooterReverse(){
-    m_motor.set(ShooterConstants.kMaxShooterSpeed * -1);
-  }
-
   public void stopShooter() {
     m_motor.set(0);
   }
-
-
+  
   public void periodic() {
     super.periodic();
     SmartDashboard.putNumber(m_name + " RPM", getMeasurement());
+    SmartDashboard.putNumber(m_name + " Set", m_controller.getSetpoint());
   }
+
 }

@@ -34,7 +34,7 @@ public final class Constants {
         public final static int kRightIntakeMoverMotor = 8;
 
         public final static double kMaxIntakeSpeed = 1; // speed was 0.45 , set slower for testing
-        public final static double kMaxIntakeArmSpeed = 0.05; // was mixed up in the intake class
+        public final static double kMaxIntakeArmSpeed = 0.15; // was mixed up in the intake class
 
         public final static double kMaxNormalVoltage = 3; // needed to be a bit lower 5;
     }
@@ -62,7 +62,7 @@ public final class Constants {
 
         // PID values
         // TODO have to be tuned to current robot values
-        public final static double kP = 0.000;//0.00008;
+        public final static double kP = 0.001;//0.00008;
         public final static double kI = 0.0;
         public final static double kD = 0;
         public final static double kff = 0;
@@ -76,11 +76,11 @@ public final class Constants {
         public final static double kEncoderDistancePerPulse = 1.0 / (double) kEncoderCPR;
 
         public final static double kShooterFreeRPS = 5676; 
-        public final static double kShooterTargetRPS = 5600; // rotations per second, 3 to 2 gear ratio  
-        public final static double kShooterToleranceRPS = 10;
+        public final static double kShooterTargetRPS = 4000; // rotations per second, 3 to 2 gear ratio  
+        public final static double kShooterToleranceRPS = 100;
 
         // TODO need to be empirically determined, these are reasonable guesses
-        public final static double KSVolts = 0.4; // 0.1
+        public final static double KSVolts = 0.5; // 0.1
         // should have value 12V at free speed...
         // This 
         public final static double KVVoltSecondsPerRotation = 12 / kShooterFreeRPS;
@@ -99,7 +99,7 @@ public final class Constants {
         public final static boolean kLeftEncoderReversed = false; //TODO 
         public final static boolean krightEncoderReversed = false; //TODOs
 
-        public final static double kClimberSpeed = 0.10;
+        public final static double kClimberSpeed = 0.7;
 
         public final static double kDownP = 0;
         public final static double kDownI = 0;
@@ -157,6 +157,7 @@ public final class Constants {
     }
 
     public final class OIconstants{
+        
          // Main Joystick USB Port
          public static final int kDriverControllerPort = 1;
          public static final int kOperatorControllerPort = 0;

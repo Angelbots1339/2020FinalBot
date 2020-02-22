@@ -74,6 +74,10 @@ public class IntakeSubsystem extends SubsystemBase {
     m_leftIntakeMotor.set(0);
   }
 
+  public void reverseIntake(){
+    m_leftIntakeMotor.set(-1 * IntakeConstants.kMaxIntakeSpeed);
+  }
+
   public void moveIntakeUp(){
     m_leftIntakeArm.set(IntakeConstants.kMaxIntakeArmSpeed);
   }
