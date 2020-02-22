@@ -33,7 +33,7 @@ public final class Constants {
         public final static int kLeftIntakeMoverMotor = 9;
         public final static int kRightIntakeMoverMotor = 8;
 
-        public final static double kMaxIntakeSpeed = 0.45; // speed
+        public final static double kMaxIntakeSpeed = 0.05; // speed was 0.45 , set slower for testing
         public final static double kMaxIntakeArmSpeed = 0.25;
     }
 
@@ -42,7 +42,7 @@ public final class Constants {
         public final static int kLeftIndexerMotor = 7;
         public final static int kRightIndexMotor = 6;
 
-        public final static double kMaxIndexSpeed = 0.22; // speed, was 0.5
+        public final static double kMaxIndexSpeed = 0.3; // speed, was 0.5
 
         public final static double kAcceptableCurrentSpike = 0;
 
@@ -129,11 +129,11 @@ public final class Constants {
         public final static double kI = 0.01;
         public final static double kD = 0;
 
-        public final static double minEncoderValue = 1;
-        public final static double maxEncoderValue = 100;
+        public final static double minEncoderValue = 0;
+        public final static double maxEncoderValue = 17.5;
         public final static double minVeloValue = -0.1;
         public final static double maxVeloValue = 0.1;
-        public final static double maxNormalCurrent = 20;
+        public final static double maxNormalCurrent = 5;
 
         public final static double positionTolerance = 0.075;
     }

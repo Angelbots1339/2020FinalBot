@@ -64,10 +64,8 @@ public class AdjustableHoodSubsystem extends SubsystemBase {
     // Positive Velocity moves towards...... max?
     // Negative Velocity moves towards min
     if(getEncoderPos() >= HoodedShooterConstants.minEncoderValue  && velocity < 0) {
-      SmartDashboard.putNumber("Hood output", velocity);
       m_hoodMotor.set(velocity);
     } else if (HoodedShooterConstants.maxEncoderValue >= getEncoderPos() && velocity > 0) {
-      SmartDashboard.putNumber("Hood output", velocity);
       m_hoodMotor.set(velocity);
     } else {
       SmartDashboard.putNumber("Hood output", 0);

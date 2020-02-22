@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -18,6 +19,8 @@ public class IntakeSubsystem extends SubsystemBase {
   private CANSparkMax m_rightIntakeArm;
   private CANSparkMax m_leftIntakeArm;
   private CANSparkMax m_leftIntakeMotor;
+  private CANEncoder m_leftIntakeArmEncoder;
+  private CANEncoder m_rightIntakeArmEncoder;
   
   /**
    * Creates a new IntakeSubsystem.
@@ -26,7 +29,11 @@ public class IntakeSubsystem extends SubsystemBase {
     // Use addRequirements() here to declare subsystem dependencies.
     m_rightIntakeArm = new CANSparkMax(IntakeConstants.kRightIntakeMoverMotor, MotorType.kBrushless);
     m_leftIntakeArm = new CANSparkMax(IntakeConstants.kLeftIntakeMoverMotor, MotorType.kBrushless);
-    
+    m_rightIntakeArm.setInverted(true);
+    m_rightIntakeArm.setInverted(false);
+    m_rightIntakeArm.setIdleMode(CANSparkMax.IdleMode.kBrake);
+    m_leftIntakeArm.setIdleMode(CANSparkMax.IdleMode.kBrake);
+
     m_leftIntakeMotor = new CANSparkMax(IntakeConstants.kIntakeMotor, MotorType.kBrushless);
   }
 
@@ -35,9 +42,15 @@ public class IntakeSubsystem extends SubsystemBase {
     m_leftIntakeArm.set(IntakeConstants.kMaxIntakeArmSpeed);
   }
 
-  public void rotateIntake(double d){
-    m_rightIntakeArm.set(d);
-    m_leftIntakeArm.set(d);
+  public void rotateIntakeArms(double velocity){
+
+    if(velocity > IntakeConstants.kMaxIntakeArmSpeed) {
+      velocity = IntakeConstants.kMaxIntakeArmSpeed;
+    } else if(velocity < -IntakeConstants.kMaxIntakeArmSpeed) {
+      velocity = -IntakeConstants.kMaxIntakeArmSpeed;
+    }
+    m_rightIntakeArm.set(velocity);
+    m_leftIntakeArm.set(velocity);
   }
 
   public void disableDisableMover(){
