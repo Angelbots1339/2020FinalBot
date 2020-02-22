@@ -144,8 +144,12 @@ public final class Constants {
         public final static int topEmitter = 1;
         public final static int middleReciever = 2;
         public final static int middleEmitter = 3;
-        public final static int bottomReciever = 4;
-        public final static int bottomEmitter = 5;
+        /* these still need to be installed to the robot, code not yet written for them
+        public final static int bottomLeftReciever = 4;
+        public final static int bottomLeftEmitter = 5;
+        public final static int bottomRightReciever = 6;
+        public final static int bottomRightEmitter = 7;
+        */
     }
 
     public final class OIconstants{

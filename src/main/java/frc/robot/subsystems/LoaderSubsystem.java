@@ -19,8 +19,13 @@ import frc.robot.Constants.SensorConstants;
 public class LoaderSubsystem extends SubsystemBase {
 
   private CANSparkMax m_loader;
-  private DigitalInput m_bottomEmitter;
-  private DigitalInput m_bottomReceiver;
+  /*
+  private DigitalInput m_bottomLeftEmitter;
+  private DigitalInput m_bottomLeftReceiver;
+  private DigitalInput m_bottomRightEmitter;
+  private DigitalInput m_bottomRightReceiver;
+  */
+  
   private DigitalInput m_middleEmitter;
   private DigitalInput m_middleReceiver;
   private DigitalInput m_topEmitter;
@@ -39,8 +44,12 @@ public class LoaderSubsystem extends SubsystemBase {
     m_middleEmitter = new DigitalInput(SensorConstants.middleEmitter);
     m_middleReceiver = new DigitalInput(SensorConstants.middleReciever);
 
-    m_topEmitter = new DigitalInput(SensorConstants.topEmitter);
-    m_topReceiver = new DigitalInput(SensorConstants.topReciever);
+    /*
+    m_bottomLeftEmitter = new DigitalInput(SensorConstants.bottomLeftEmitter);
+    m_bottomLeftReceiver = new DigitalInput(SensorConstants.bottomLeftReciever);
+    m_bottomRightEmitter = new DigitalInput(SensorConstants.bottomRightEmitter);
+    m_bottomRightReceiver = new DigitalInput(SensorConstants.bottomRightReciever);
+    */
   }
 
   public void enable(){
@@ -56,8 +65,13 @@ public class LoaderSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("Top Reciever", m_topReceiver.get());
     SmartDashboard.putBoolean("Middle Emitter", m_middleEmitter.get());
     SmartDashboard.putBoolean("Middle Reciever", m_middleReceiver.get());
-    SmartDashboard.putBoolean("Bottom Emitter", m_bottomEmitter.get());
-    SmartDashboard.putBoolean("Bottom Reciever", m_bottomReceiver.get());
+
+    /*
+    SmartDashboard.putBoolean("Bottom Right Emitter", m_bottomRightEmitter.get());
+    SmartDashboard.putBoolean("Bottom Right Reciever", m_bottomRightReceiver.get());
+    SmartDashboard.putBoolean("Bottom Left Emitter", m_bottomLeftEmitter.get());
+    SmartDashboard.putBoolean("Bottom Left Reciever", m_bottomLeftReceiver.get());
+    */
   
 
     // This method will be called once per scheduler run
@@ -72,11 +86,6 @@ public class LoaderSubsystem extends SubsystemBase {
   public boolean isMiddleBeamBroken(){
    return!(m_middleReceiver).get();
    //return false;
-  }
-
-  public boolean isBottomBeamBroken(){
-    return!(m_bottomReceiver).get();
-    //return false;
   }
 
 }
