@@ -50,8 +50,8 @@ public class AdjustableHoodSubsystem extends SubsystemBase {
     // if greater or less than limit, set to respective limit
     if(velocity > HoodedShooterConstants.maxVeloValue) {
       velocity = HoodedShooterConstants.maxVeloValue;
-    } else if (velocity < HoodedShooterConstants.minVeloValue) {
-      velocity = HoodedShooterConstants.minVeloValue;
+    } else if (velocity < (-1*HoodedShooterConstants.maxVeloValue)) {
+      velocity = -1*HoodedShooterConstants.maxVeloValue;
     }
     SmartDashboard.putNumber("Hood input", velocity);
 
@@ -59,6 +59,7 @@ public class AdjustableHoodSubsystem extends SubsystemBase {
     if(getMotorCurrent() > HoodedShooterConstants.maxNormalCurrent) {
       velocity = 0;
     }
+  
 
     // Preventing the hood from moving past max and min points
     // Positive Velocity moves towards...... max?
@@ -76,7 +77,7 @@ public class AdjustableHoodSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-   // SmartDashboard.putNumber("Hood Motor current:", m_hoodMotor.getOutputCurrent());
-   // SmartDashboard.putNumber("Hood Encoder: ", m_hoodEncoder.getPosition());
+   SmartDashboard.putNumber("Hood Motor current:", m_hoodMotor.getOutputCurrent());
+   SmartDashboard.putNumber("Hood Encoder: ", m_hoodEncoder.getPosition());
   }
 }

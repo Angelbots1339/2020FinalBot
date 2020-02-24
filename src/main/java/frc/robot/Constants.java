@@ -43,16 +43,18 @@ public final class Constants {
         // SparkMAX Motors
         public final static int kLeftIndexerMotor = 7;
         public final static int kRightIndexMotor = 6;
-
-        public final static double kMaxIndexSpeed = 0.45; // speed, was 0.5
-
+        // Speed was at 0.45 for Scrimmage
+        public final static double kMaxIndexSpeed = 0.75; // speed, was 0.5
         public final static double kAcceptableCurrentSpike = 0;
 
     }
 
     public final class LoaderConstants{
         public final static int kLoaderMotor = 2; // SparkMAX
-        public final static double kMaxLoaderSpeed = 0.55; // speed
+        // Changed by Ender, was 0.55 for Scrimmage
+        // This speed is used when feeding balls to shooter
+        public final static double kMaxLoaderSpeed = 1; // speed
+        // This speed is used when loading first ball
         public final static double kInitLoaderSpeed = 0.2; // speed
     }
 
@@ -62,8 +64,8 @@ public final class Constants {
 
         // PID values
         // TODO have to be tuned to current robot values
-        public final static double kP = 0.001;//0.00008;
-        public final static double kI = 0.0;
+        public final static double kP = 0.0008; //0.001;//0.00008;
+        public final static double kI = 0.00001;
         public final static double kD = 0;
         public final static double kff = 0;
 
@@ -74,16 +76,13 @@ public final class Constants {
 
         // distance units int rotations
         public final static double kEncoderDistancePerPulse = 1.0 / (double) kEncoderCPR;
-
         public final static double kShooterFreeRPS = 5676; 
-        public final static double kShooterTargetRPS = 4000; // rotations per second, 3 to 2 gear ratio  
-        public final static double kShooterToleranceRPS = 100;
+        public final static double kShooterTargetRPS = 5450; // ~5500 is max speed, rotations per second, 3 to 2 gear ratio  
+        public final static double kShooterToleranceRPS = 35;
 
-        // TODO need to be empirically determined, these are reasonable guesses
-        public final static double KSVolts = 0.5; // 0.1
-        // should have value 12V at free speed...
-        // This 
-        public final static double KVVoltSecondsPerRotation = 12 / kShooterFreeRPS;
+        // 0.18 to 0.23 seems to be a sweet spot, varies based on Battery?
+        public final static double KSVolts = 0.23; // ~0.23 was found empirically, working well
+        public final static double KVVoltSecondsPerRotation = 12 / kShooterFreeRPS;  // 12 V is working well
         public final static double kMaxShooterSpeed = 0.5;
 
     }
@@ -129,15 +128,14 @@ public final class Constants {
     public final class HoodedShooterConstants{
         public final static int kHoodPort = 4;
 
-        public final static double kP = 1.4;
-        public final static double kI = 0.01;
+        public final static double kP = 0;
+        public final static double kI = 0;
         public final static double kD = 0;
 
-        public final static double minEncoderValue = 0;
-        public final static double maxEncoderValue = 17.5;
-        public final static double minVeloValue = -0.1;
-        public final static double maxVeloValue = 0.1;
-        public final static double maxNormalCurrent = 5;
+        public final static double minEncoderValue = 0.1;
+        public final static double maxEncoderValue = 17.5;;
+        public final static double maxVeloValue = 0.2;
+        public final static double maxNormalCurrent = 18;
 
         public final static double positionTolerance = 0.075;
     }
@@ -157,7 +155,7 @@ public final class Constants {
     }
 
     public final class OIconstants{
-        
+
          // Main Joystick USB Port
          public static final int kDriverControllerPort = 1;
          public static final int kOperatorControllerPort = 0;

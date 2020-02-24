@@ -153,9 +153,11 @@ public class DriveSubsystem extends SubsystemBase {
   */
 
   public void periodic(){
+    /*
     SmartDashboard.putNumber("left front speed", m_leftFront.get());
-    SmartDashboard.putNumber("left bak speed", m_rightBack.get());
+    SmartDashboard.putNumber("left back speed", m_rightBack.get());
     SmartDashboard.putNumber("right front speed", m_rightFront.get());
     SmartDashboard.putNumber("right back speed", m_rightFront.get());
+    */
   }
 }

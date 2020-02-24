@@ -45,11 +45,14 @@ public class ClimberSubsystem extends SubsystemBase {
     m_rightClimber.setIdleMode(IdleMode.kBrake);
   }
 
+  /*
+  TODO - Needs to be verified for direction, enable() uses a negative value
   public void enable(double speed){
     m_rightClimber.set(speed);
     m_leftClimber.set(speed);
     m_speed = speed;
   }
+  */
 
   public void enable(){
     m_rightClimber.set(-1 * ClimberConstants.kClimberSpeed);

@@ -70,10 +70,16 @@ public class ShooterPID extends PIDSubsystem {
     m_motor.set(0);
   }
   
+  public void setMotorVoltage(double volts) {
+    m_motor.setVoltage(volts);
+  }
+
   public void periodic() {
     super.periodic();
     SmartDashboard.putNumber(m_name + " RPM", getMeasurement());
     SmartDashboard.putNumber(m_name + " Set", m_controller.getSetpoint());
+    SmartDashboard.putBoolean(m_name + " OnT", atSetpoint());
+    
   }
 
 }

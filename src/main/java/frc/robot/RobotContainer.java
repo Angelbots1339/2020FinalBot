@@ -43,6 +43,7 @@ public class RobotContainer {
   private final LoaderSubsystem m_loader = new LoaderSubsystem();
   private final ShooterPID m_rightShooterPID = new ShooterPID(ShooterConstants.kRightShooter, "Right Shooter", true);
   private final ShooterPID m_leftShooterPID = new ShooterPID(ShooterConstants.kLeftShooter, "Left Shooter", false);
+  //private final ShooterPIDSubsystem m_shooterPID = new ShooterPIDSubsystem(ShooterConstants.kRightShooter, ShooterConstants.kLeftShooter);
   private final AdjustableHoodSubsystem m_hoodSubsystem = new AdjustableHoodSubsystem();
   private final ServoTest m_servo = new ServoTest();
   private final ClimberSubsystem m_climber = new ClimberSubsystem();
@@ -165,8 +166,8 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kBumperLeft.value).whenHeld(new LoaderToMiddleBB(m_loader, m_intake, m_indexer));
     // Right Bumper - Shoots
     new JoystickButton(m_driverController, Button.kBumperRight.value).whenHeld(new ShootAllBalls(m_intake, m_indexer, m_loader));
-    // A Button - Reeve up Shooter at Slower speed
-    new JoystickButton(m_driverController, Button.kA.value).whenHeld(new RunShooter(m_rightShooterPID, m_leftShooterPID, 5500));
+    // A Button - Reeve up Shooter at Slower speed (2500)
+    new JoystickButton(m_driverController, Button.kA.value).whenHeld(new RunShooter(m_rightShooterPID, m_leftShooterPID, 2500));
     // X Button - Reverse indexer
     new JoystickButton(m_driverController, Button.kX.value).whenPressed(() -> m_indexer.reverse())
         .whenReleased(() -> m_indexer.disable());
@@ -181,7 +182,7 @@ public class RobotContainer {
      */
     
     // Left Bumper - Decrease
-    //new JoystickButton(m_operatorController, XboxController.Button.kBumperLeft.value).whenPressed(new DecreaseShooterSpeed(m_leftShooterPID, m_rightShooterPID));
+    //new JoystickButton(m_operatorController, XboxController.Button.kBumperLeft.value).whenPressed(shooterSpeed = shooterSpeed - 500);
     // Right Bumper - Increase
     //new JoystickButton(m_operatorController, XboxController.Button.kBumperRight.value).whenPressed(new IncreaseShooterSpeed(m_leftShooterPID, m_rightShooterPID));
     // X button climbs

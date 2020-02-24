@@ -45,10 +45,9 @@ public class ShooterPIDSubsystem extends PIDSubsystem {
 
     // Spark 1 - Inverted - Not 
     // Spark 3 - Inverted - Yes
+    m_motorLeft.follow(m_motorRight);
     m_motorRight.setInverted(true);
     m_motorLeft.setInverted(false);
-
-    m_motorLeft.follow(m_motorRight);
 
     getController().setTolerance(ShooterConstants.kShooterToleranceRPS);
     setSetpoint(ShooterConstants.kShooterTargetRPS);
