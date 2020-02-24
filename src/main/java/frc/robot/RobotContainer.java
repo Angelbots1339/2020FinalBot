@@ -26,6 +26,8 @@ import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LoaderSubsystem;
 import frc.robot.subsystems.ServoTest;
+import frc.robot.commands.CameraAlign;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.ShooterPID;
 
 /**
@@ -49,6 +51,7 @@ public class RobotContainer {
   private final ClimberSubsystem m_climber = new ClimberSubsystem();
 
   // private final ExampleCommand m_autoCommand = new ExampleCommand(m_indexer);
+  private final LimelightSubsystem m_limelight = new LimelightSubsystem();
 
   XboxController m_driverController = new XboxController(OIconstants.kDriverControllerPort);
   XboxController m_operatorController = new XboxController(OIconstants.kOperatorControllerPort);
@@ -112,6 +115,7 @@ public class RobotContainer {
     new JoystickButton(m_testController, Button.kBumperLeft.value).whenHeld(new RunIntakeIndex(m_indexer, m_intake));
     //new JoystickButton(m_testController, Button.kBumperLeft.value).whenPressed(() -> m_indexer.enable())
     //    .whenReleased(() -> m_indexer.disable());
+
 
     // Right Bumper - Reverse Indexer
     new JoystickButton(m_testController, Button.kBumperRight.value).whenPressed(() -> m_indexer.reverse())
