@@ -7,12 +7,14 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.PWMSparkMax;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.ClimberConstants;
-import edu.wpi.first.wpilibj.Encoder;
 
 // TODO needs lots of work !!!
 
@@ -26,8 +28,8 @@ public class ClimberPID extends PIDSubsystem {
   }
 
    // sets up the motors
-   private PWMSparkMax m_leftClimberMotor = new PWMSparkMax(ClimberConstants.kLeftClimberMotor);
-   private PWMSparkMax m_rightClimberMotor = new PWMSparkMax(ClimberConstants.kRightClimberMotor);
+   private CANSparkMax m_leftClimberMotor = new CANSparkMax(ClimberConstants.kLeftClimberMotor, MotorType.kBrushless);
+   private CANSparkMax m_rightClimberMotor = new CANSparkMax(ClimberConstants.kRightClimberMotor, MotorType.kBrushless);
    
    // sets up the encoders
    private Encoder m_leftClimbEncoder = new Encoder(ClimberConstants.kLeftEncoder[0], ClimberConstants.kLeftEncoder[1], ClimberConstants.kLeftEncoderReversed);

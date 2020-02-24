@@ -2,9 +2,9 @@ package frc.robot.subsystems;
 
 //import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 //import edu.wpi.first.wpilibj.Encoder;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
@@ -50,8 +50,8 @@ public class DriveSubsystem extends SubsystemBase {
     //m_leftEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
     //m_rightEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
 
-    m_leftBack.follow(m_leftFront);
-    m_rightBack.follow(m_rightBack);
+    //m_leftBack.follow(m_leftFront);
+    //m_rightBack.follow(m_rightBack);
 
     // Practice bot is wired and mounted in a way where nothing is inverted
     // Left Axis of joystick response needs to be inverted though
@@ -157,4 +157,13 @@ public class DriveSubsystem extends SubsystemBase {
     return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
   */
+
+  public void periodic(){
+    /*
+    SmartDashboard.putNumber("left front speed", m_leftFront.get());
+    SmartDashboard.putNumber("left back speed", m_rightBack.get());
+    SmartDashboard.putNumber("right front speed", m_rightFront.get());
+    SmartDashboard.putNumber("right back speed", m_rightFront.get());
+    */
+  }
 }

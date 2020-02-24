@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import frc.robot.Constants.HoodedShooterConstants;
 import frc.robot.Constants.ShooterConstants;
 //import edu.wpi.first.wpilibj.controller.PIDController;
 //import edu.wpi.first.wpilibj2.command.PIDSubsystem;
@@ -22,19 +24,29 @@ import frc.robot.Constants.ShooterConstants;
 public class ShooterPID extends PIDSubsystem {
   
   private final CANSparkMax m_motor;
-  private final CANEncoder m_Encoder; 
+  private final CANEncoder m_Encoder;
+  private CANSparkMax m_hoodMotor;
+  private CANEncoder m_hoodEncoder;
+  
   private String m_name;
+  
   private final SimpleMotorFeedforward m_shooterFeedforward =
       new SimpleMotorFeedforward(ShooterConstants.KSVolts,
                                  ShooterConstants.KVVoltSecondsPerRotation);
+
   /**
    * The shooter subsystem for the robot.
    */
-  public ShooterPID(int motorID, String name) {
+  public ShooterPID(int motorID, String name, boolean inverted) {
     super(new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD));
     m_motor = new CANSparkMax(motorID, MotorType.kBrushless);
+    m_hoodMotor = new CANSparkMax(HoodedShooterConstants.kHoodPort, MotorType.kBrushless);
     m_Encoder = new CANEncoder(m_motor);
+    m_hoodEncoder = new CANEncoder(m_hoodMotor);
     m_name = name;
+    // Spark 1 - Inverted - Not 
+    // Spark 3 - Inverted - Yes
+    m_motor.setInverted(inverted);
 
     getController().setTolerance(ShooterConstants.kShooterToleranceRPS);
     setSetpoint(ShooterConstants.kShooterTargetRPS);
@@ -54,21 +66,20 @@ public class ShooterPID extends PIDSubsystem {
     return m_controller.atSetpoint();
   }
 
-  public void runShooterMax() {
-    m_motor.set(ShooterConstants.kMaxShooterSpeed);
-  }
-
-  public void runShooterReverse(){
-    m_motor.set(ShooterConstants.kMaxShooterSpeed * -1);
-  }
-
   public void stopShooter() {
     m_motor.set(0);
   }
-
+  
+  public void setMotorVoltage(double volts) {
+    m_motor.setVoltage(volts);
+  }
 
   public void periodic() {
     super.periodic();
     SmartDashboard.putNumber(m_name + " RPM", getMeasurement());
+    SmartDashboard.putNumber(m_name + " Set", m_controller.getSetpoint());
+    SmartDashboard.putBoolean(m_name + " OnT", atSetpoint());
+    
   }
+
 }
