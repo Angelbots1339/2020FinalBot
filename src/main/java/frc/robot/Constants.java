@@ -156,10 +156,6 @@ public final class Constants {
         
     }
 
-    public final class controlConstants{
-
-    }
-
     public final class OIconstants{
 
          // Main Joystick USB Port
