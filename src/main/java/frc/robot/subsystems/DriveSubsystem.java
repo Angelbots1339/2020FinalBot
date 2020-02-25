@@ -1,14 +1,14 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
 //import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 //import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 public class DriveSubsystem extends SubsystemBase {
   // The motors on the left side of the drive.
@@ -70,6 +70,16 @@ public class DriveSubsystem extends SubsystemBase {
     // speed limiting accomplished in Constructor
     m_drive.arcadeDrive(fwd, rot);
   }
+  /**
+   * creates an arcade drive with a threshold for aliging 
+   * @param fwd 
+   * @param rot
+   * @param threshold
+   */
+  public void arcadeDrive(double fwd, double rot, double threshold){
+    m_drive.arcadeDrive(Math.abs(fwd)>threshold?fwd:0, Math.abs(rot)>threshold?rot:0);
+  }
+
   public void tankDrive(double left, double right) {
     m_drive.tankDrive(left, right);
   }

@@ -130,7 +130,7 @@ public final class Constants {
     public final class HoodedShooterConstants{
         public final static int kHoodPort = 4;
 
-        public final static double kP = 0;
+        public final static double kP = .01;
         public final static double kI = 0;
         public final static double kD = 0;
 
@@ -154,6 +154,10 @@ public final class Constants {
         public final static int bottomRightReciever = 6; // counters
         public final static int bottomRightEmitter = 7; // counters
         
+    }
+
+    public final class controlConstants{
+
     }
 
     public final class OIconstants{
@@ -187,9 +191,12 @@ public final class Constants {
         public static final double kAngleP = 0.01;
         public static final double kDriveP = 0.01;
         public static final double kDriveTolerance = 0.02;
-        public static final double kLimelightCameraToVisionRetroreflectiveTargetHeight = 0.06;//TODO in meters
+        public static final double kLimelightToTargetHeight = 0.06;//TODO in meters
         public static final double kVerticalFOV = 49.7;
         public static final double kHorizontalFOV = 59.6;
+        public static final double kLimeLightTilt = 10.5;//TODO
+        public static final double kAngleTolerance = 0; //TODO
+        public static final double kDistanceTolerance = 0; //TODO
 
     }
 
