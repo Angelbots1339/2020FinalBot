@@ -11,16 +11,19 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIconstants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.commands.RunHood;
 import frc.robot.commands.ballmovement.LoaderToMiddleBB;
 import frc.robot.commands.ballmovement.RunShooter;
 import frc.robot.commands.ballmovement.ShootAllBalls;
 import frc.robot.subsystems.AdjustableHoodSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.HoodPID;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -44,9 +47,10 @@ public class RobotContainer {
   private final ShooterPID m_rightShooterPID = new ShooterPID(ShooterConstants.kRightShooter, "Right Shooter", true);
   private final ShooterPID m_leftShooterPID = new ShooterPID(ShooterConstants.kLeftShooter, "Left Shooter", false);
   //private final ShooterPIDSubsystem m_shooterPID = new ShooterPIDSubsystem(ShooterConstants.kRightShooter, ShooterConstants.kLeftShooter);
-  private final AdjustableHoodSubsystem m_hoodSubsystem = new AdjustableHoodSubsystem();
-  private final ServoTest m_servo = new ServoTest();
+  //private final AdjustableHoodSubsystem m_hoodSubsystem = new AdjustableHoodSubsystem();
+  //private final ServoTest m_servo = new ServoTest();
   private final ClimberSubsystem m_climber = new ClimberSubsystem();
+  private final HoodPID m_hood = new HoodPID(8);
 
   // private final ExampleCommand m_autoCommand = new ExampleCommand(m_indexer);
   private final LimelightSubsystem m_limelight = new LimelightSubsystem();
@@ -76,7 +80,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    m_hoodSubsystem.resetEncoder();
+    //m_hoodSubsystem.resetEncoder();
 
     // Configure default commands
     // Set the default drive command to split-stick arcade drive
@@ -107,6 +111,15 @@ public class RobotContainer {
      * TEST CONTROLLER
      * 
      */
+
+     //new JoystickButton(m_testController, Button.kA.value).whenPressed(() -> m_hood.enable()).whenReleased(() -> m_hood.disable());
+     new JoystickButton(m_testController, Button.kA.value)
+      .whenPressed(new InstantCommand(m_hood::enable, m_hood))
+      .whenReleased(new InstantCommand(m_hood::disable, m_hood));
+
+    new JoystickButton(m_testController, Button.kB.value).whenHeld(new RunHood(m_hood, 17.5));
+    new JoystickButton(m_testController, Button.kX.value).whenHeld(new RunHood(m_hood, 0.1));
+    new JoystickButton(m_testController, Button.kY.value).whenHeld(new RunHood(m_hood, 5));
 
      /*
     // Left Bumper - Intake and Indexer --- TEST THIS ONE
@@ -193,8 +206,8 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, Button.kX.value)
     .whenPressed(() -> m_climber.enable()).whenReleased(() -> m_climber.disable()); // needs to be inverted
     // Right Y axis controls the hooded shooter
-    m_hoodSubsystem.setDefaultCommand( // works well
-      new RunCommand(() -> m_hoodSubsystem.setMotorVelo(-1*m_operatorController.getRawAxis(OIconstants.rightYAxis)),m_hoodSubsystem));
+    //m_hoodSubsystem.setDefaultCommand( // works well
+      //new RunCommand(() -> m_hoodSubsystem.setMotorVelo(-1*m_operatorController.getRawAxis(OIconstants.rightYAxis)),m_hoodSubsystem));
     // Left Y axis controls the intake roatater
     m_intake.setDefaultCommand(
       new RunCommand(() -> m_intake.rotateIntakeArms(m_operatorController.getRawAxis(OIconstants.leftYAxis)),m_intake));

@@ -130,16 +130,17 @@ public final class Constants {
     public final class HoodedShooterConstants{
         public final static int kHoodPort = 4;
 
-        public final static double kP = .01;
+        public final static double kP = .8;
         public final static double kI = 0;
         public final static double kD = 0;
+        public final static double kMaxHoodVolt = 8;
 
-        public final static double minEncoderValue = 0.1;
-        public final static double maxEncoderValue = 17.5;;
-        public final static double maxVeloValue = 0.2;
-        public final static double maxNormalCurrent = 18;
+        public final static double kminEncoderValue = 0;
+        public final static double kmaxEncoderValue = 17.5;
+        public final static double kmaxVeloValue = 0.2;
+        public final static double kmaxNormalCurrent = 18;
 
-        public final static double positionTolerance = 0.075;
+        public final static double positionTolerance = 1;
     }
 
     public final class SensorConstants{
@@ -153,7 +154,22 @@ public final class Constants {
         public final static int bottomLeftEmitter = 5;
         public final static int bottomRightReciever = 6; // counters
         public final static int bottomRightEmitter = 7; // counters
-        
+    }
+
+    public static final class LimelightConstants {
+        // Ensure that the limelight hostname is just "limelight", otherwise there will be nothing
+        // on networktable for data.  Check network table data in Shuffleboard when troubleshooting
+        public final static String kLimeTable = "limelight";
+        public final static int kDefaultPipeline = 0;
+        public static final double kAngleP = 0.01;
+        public static final double kDriveP = 0.01;
+        public static final double kDriveTolerance = 0.02;
+        public static final double kLimelightToTargetHeight = 0.06;//TODO in meters
+        public static final double kVerticalFOV = 49.7;
+        public static final double kHorizontalFOV = 59.6;
+        public static final double kLimeLightTilt = 10.5;//TODO
+        public static final double kAngleTolerance = 0; //TODO
+        public static final double kDistanceTolerance = 0; //TODO
     }
 
     public final class OIconstants{
@@ -179,23 +195,4 @@ public final class Constants {
          public final static int rightButton = 10;   //
 
     }
-    public static final class LimelightConstants {
-        // Ensure that the limelight hostname is just "limelight", otherwise there will be nothing
-        // on networktable for data.  Check network table data in Shuffleboard when troubleshooting
-        public final static String kLimeTable = "limelight";
-        public final static int kDefaultPipeline = 0;
-        public static final double kAngleP = 0.01;
-        public static final double kDriveP = 0.01;
-        public static final double kDriveTolerance = 0.02;
-        public static final double kLimelightToTargetHeight = 0.06;//TODO in meters
-        public static final double kVerticalFOV = 49.7;
-        public static final double kHorizontalFOV = 59.6;
-        public static final double kLimeLightTilt = 10.5;//TODO
-        public static final double kAngleTolerance = 0; //TODO
-        public static final double kDistanceTolerance = 0; //TODO
-
-    }
-
-    
-
 }
