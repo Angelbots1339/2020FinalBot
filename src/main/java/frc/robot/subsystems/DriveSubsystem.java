@@ -76,16 +76,17 @@ public class DriveSubsystem extends SubsystemBase {
    * @param rot
    * @param threshold
    */
-  public void arcadeDrive(double fwd, double rot, double threshold){
-    m_drive.arcadeDrive(Math.abs(fwd)>threshold?fwd:0, Math.abs(rot)>threshold?rot:0);
+  public boolean arcadeDrive(double fwd, double rot, double threshold){
+    return tankDrive(fwd+rot, fwd-rot, threshold);
   }
 
   public void tankDrive(double left, double right) {
     m_drive.tankDrive(left, right);
   }
 
-  public void tankDrive(double left, double right, double threshold) {
+  public boolean tankDrive(double left, double right, double threshold) {
     m_drive.tankDrive(Math.abs(left)>threshold?left:0, Math.abs(right)>threshold?right:0);
+    return Math.abs(left)<threshold && Math.abs(right)<threshold;
   }
   /**
    * Resets the drive encoders to currently read a position of 0.

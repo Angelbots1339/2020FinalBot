@@ -142,20 +142,6 @@ public final class Constants {
 
         public final static double positionTolerance = 1;
     }
-
-    public final class SensorConstants{
-        // Beam Brakes
-        public final static int topReciever = 0;
-        public final static int topEmitter = 1;
-        public final static int middleReciever = 2;
-        public final static int middleEmitter = 3;
-        // these still need to be installed to the robot, code not yet written for them
-        public final static int bottomLeftReciever = 4;
-        public final static int bottomLeftEmitter = 5;
-        public final static int bottomRightReciever = 6; // counters
-        public final static int bottomRightEmitter = 7; // counters
-    }
-
     public static final class LimelightConstants {
         // Ensure that the limelight hostname is just "limelight", otherwise there will be nothing
         // on networktable for data.  Check network table data in Shuffleboard when troubleshooting
@@ -164,12 +150,11 @@ public final class Constants {
         public static final double kAngleP = 0.01;
         public static final double kDriveP = 0.01;
         public static final double kDriveTolerance = 0.02;
-        public static final double kLimelightToTargetHeight = 0.06;//TODO in meters
+        public static final double kLimelightToTargetHeight = 1.5493999999999999;//TODO in meters
         public static final double kVerticalFOV = 49.7;
         public static final double kHorizontalFOV = 59.6;
-        public static final double kLimeLightTilt = 10.5;//TODO
-        public static final double kAngleTolerance = 0; //TODO
-        public static final double kDistanceTolerance = 0; //TODO
+        public static final double kLimeLightTilt = 8.8;//TODO
+
     }
 
     public final class OIconstants{
@@ -195,4 +180,7 @@ public final class Constants {
          public final static int rightButton = 10;   //
 
     }
+
+    
+
 }

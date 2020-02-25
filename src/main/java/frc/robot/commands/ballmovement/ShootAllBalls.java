@@ -8,19 +8,24 @@
 package frc.robot.commands.ballmovement;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.commands.util.ShootingProfiles;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LoaderSubsystem;
+import frc.robot.subsystems.ShooterPID;
 
 public class ShootAllBalls extends CommandBase {
 
   private IntakeSubsystem m_intake;
   private IndexerSubsystem m_indexer;
   private LoaderSubsystem m_loader;
+  private ShooterPID m_leftShooter;
+  private ShooterPID m_rightShooter;
   /**
    * Creates a new ShootAllBalls.
+   * @param m_targetProfile
    */
-  public ShootAllBalls(IntakeSubsystem intake, IndexerSubsystem index, LoaderSubsystem loader) {
+  public ShootAllBalls(IntakeSubsystem intake, IndexerSubsystem index, LoaderSubsystem loader, ShooterPID leftShooter, ShooterPID rightShooter) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_intake = intake;
     addRequirements(m_intake);
@@ -31,6 +36,8 @@ public class ShootAllBalls extends CommandBase {
     m_loader = loader;
     addRequirements(m_loader);
 
+    m_leftShooter = leftShooter;
+    m_rightShooter = rightShooter;
   }
 
   // Called when the command is initially scheduled.
@@ -42,10 +49,11 @@ public class ShootAllBalls extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if(m_leftShooter.atSetpoint() && m_rightShooter.atSetpoint()){
       m_intake.enableIntake();
       m_indexer.enable();
-      m_loader.enable();  
-  
+      m_loader.enable();
+    }
   }
 
   // Called once the command ends or is interrupted.

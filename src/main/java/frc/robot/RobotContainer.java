@@ -17,10 +17,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.OIconstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.RunHood;
+import frc.robot.commands.RunVision;
 import frc.robot.commands.ballmovement.LoaderToMiddleBB;
 import frc.robot.commands.ballmovement.RunShooter;
-import frc.robot.commands.ballmovement.ShootAllBalls;
-import frc.robot.subsystems.AdjustableHoodSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HoodPID;
@@ -28,7 +27,6 @@ import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.LoaderSubsystem;
-import frc.robot.subsystems.ServoTest;
 import frc.robot.subsystems.ShooterPID;
 
 /**
@@ -182,7 +180,7 @@ public class RobotContainer {
     // Left Bumper - Intakes
     new JoystickButton(m_driverController, Button.kBumperLeft.value).whenHeld(new LoaderToMiddleBB(m_loader, m_intake, m_indexer));
     // Right Bumper - Shoots
-    new JoystickButton(m_driverController, Button.kBumperRight.value).whenHeld(new ShootAllBalls(m_intake, m_indexer, m_loader));
+    new JoystickButton(m_driverController, Button.kBumperRight.value).whenHeld(new RunVision(m_limelight, m_drive, m_leftShooterPID, m_rightShooterPID, m_intake, m_indexer, m_loader));
     // A Button - Reeve up Shooter at Slower speed (2500)
     new JoystickButton(m_driverController, Button.kA.value).whenHeld(new RunShooter(m_rightShooterPID, m_leftShooterPID, 2500));
     // X Button - Reverse indexer
