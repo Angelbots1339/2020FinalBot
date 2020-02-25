@@ -14,22 +14,26 @@ public class RunShooter extends CommandBase {
 
   private final ShooterPID m_leftPID;
   private final ShooterPID m_rightPID;
-  
+  private double m_speed;
   /**
    * Creates a new RunShooter.
    */
-  public RunShooter(ShooterPID leftPID, ShooterPID rightPID) {
+  public RunShooter(ShooterPID leftPID, ShooterPID rightPID, double speed) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_leftPID = leftPID;
     addRequirements(m_leftPID);
 
     m_rightPID = rightPID;
     addRequirements(m_rightPID);
+
+    m_speed = speed;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_leftPID.setSetpoint(m_speed);
+    m_rightPID.setSetpoint(m_speed);
     m_leftPID.enable();
     m_rightPID.enable();
   }

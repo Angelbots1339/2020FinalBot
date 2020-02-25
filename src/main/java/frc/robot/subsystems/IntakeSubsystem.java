@@ -74,6 +74,10 @@ public class IntakeSubsystem extends SubsystemBase {
     m_leftIntakeMotor.set(0);
   }
 
+  public void reverseIntake(){
+    m_leftIntakeMotor.set(-1 * IntakeConstants.kMaxIntakeSpeed);
+  }
+
   public void moveIntakeUp(){
     m_leftIntakeArm.set(IntakeConstants.kMaxIntakeArmSpeed);
   }
@@ -84,8 +88,8 @@ public class IntakeSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("intake", m_leftIntakeMotor.get());
-    SmartDashboard.putNumber("left move intake", m_leftIntakeArm.getOutputCurrent());
-    SmartDashboard.putNumber("right move intake", m_rightIntakeArm.getOutputCurrent());
+    //SmartDashboard.putNumber("intake", m_leftIntakeMotor.get());
+    //SmartDashboard.putNumber("left move intake", m_leftIntakeArm.getOutputCurrent());
+    //SmartDashboard.putNumber("right move intake", m_rightIntakeArm.getOutputCurrent());
   }
 }
