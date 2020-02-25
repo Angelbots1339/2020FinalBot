@@ -157,6 +157,19 @@ public final class Constants {
 
     }
 
+    public final class SensorConstants{
+
+		public final static int topEmitter = 0;
+		public final static int topReciever = 1;
+		public final static int middleEmitter = 2;
+		public final static int middleReciever = 3;
+		public final static int bottomLeftEmitter = 4;
+		public final static int bottomLeftReciever = 5;
+		public final static int bottomRightEmitter = 6;
+		public final static int bottomRightReciever = 7;
+
+    }
+
     public final class OIconstants{
 
          // Main Joystick USB Port
