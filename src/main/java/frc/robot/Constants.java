@@ -93,7 +93,7 @@ public final class Constants {
         public final static int kLeftClimberMotor = 10;
         public final static int kRightClimberMotor = 11;
         public final static int kLeftServo = 0; // TODO double check
-        public final static int kRightServo = 1; // TODO doulbe check
+        public final static int kRightServo = 9; // TODO doulbe check
 
         public final static int[] kLeftEncoder = new int[]{1,2}; //TODO find the ports
         public final static int[] kRightEncoder = new int[]{3, 4};

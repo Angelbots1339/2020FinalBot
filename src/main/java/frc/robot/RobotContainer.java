@@ -25,7 +25,8 @@ import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.LoaderSubsystem;
-import frc.robot.subsystems.ServoTest;
+import frc.robot.subsystems.ServoSubsystem;
+import frc.robot.subsystems.ServoSubsystem;
 import frc.robot.subsystems.ShooterPID;
 
 /**
@@ -45,8 +46,8 @@ public class RobotContainer {
   private final ShooterPID m_leftShooterPID = new ShooterPID(ShooterConstants.kLeftShooter, "Left Shooter", false);
   //private final ShooterPIDSubsystem m_shooterPID = new ShooterPIDSubsystem(ShooterConstants.kRightShooter, ShooterConstants.kLeftShooter);
   private final AdjustableHoodSubsystem m_hoodSubsystem = new AdjustableHoodSubsystem();
-  private final ServoTest m_servo = new ServoTest();
   private final ClimberSubsystem m_climber = new ClimberSubsystem();
+  private final ServoSubsystem m_ServoSubsystem = new ServoSubsystem();
 
   // private final ExampleCommand m_autoCommand = new ExampleCommand(m_indexer);
   private final LimelightSubsystem m_limelight = new LimelightSubsystem();
@@ -163,6 +164,9 @@ public class RobotContainer {
     /**
      * DRIVER CONTROLLER
      */
+
+    //drives servos with Button 
+    //new JoystickButton(m_driverController, XboxController.Button.kB.value).whenPressed(new RunCommand(() -> m_ServoSubsystem.setBothAngle(25.0), m_ServoSubsystem));
 
     // Left Bumper - Intakes
     new JoystickButton(m_driverController, Button.kBumperLeft.value).whenHeld(new LoaderToMiddleBB(m_loader, m_intake, m_indexer));
