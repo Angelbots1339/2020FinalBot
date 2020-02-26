@@ -26,7 +26,6 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.LoaderSubsystem;
 import frc.robot.subsystems.ServoSubsystem;
-import frc.robot.subsystems.ServoSubsystem;
 import frc.robot.subsystems.ShooterPID;
 
 /**
@@ -166,8 +165,7 @@ public class RobotContainer {
      */
 
     //drives servos with Button 
-    //new JoystickButton(m_driverController, XboxController.Button.kB.value).whenPressed(new RunCommand(() -> m_ServoSubsystem.setBothAngle(25.0), m_ServoSubsystem));
-
+    new JoystickButton(m_driverController, XboxController.Button.kStart.value).whenReleased(new RunCommand(() -> m_ServoSubsystem.engage(), m_ServoSubsystem));
     // Left Bumper - Intakes
     new JoystickButton(m_driverController, Button.kBumperLeft.value).whenHeld(new LoaderToMiddleBB(m_loader, m_intake, m_indexer));
     // Right Bumper - Shoots

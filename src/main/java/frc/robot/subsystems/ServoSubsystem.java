@@ -21,7 +21,7 @@ public class ServoSubsystem extends SubsystemBase {
 
   private Servo leftServo;
   private Servo rightServo;
-  private int refreshCount = 0;
+  private boolean engageToggle;
 
   public ServoSubsystem() {
     leftServo = new Servo(ClimberConstants.kLeftServo);
@@ -42,6 +42,29 @@ public class ServoSubsystem extends SubsystemBase {
   public double getRightAngle(){
     return rightServo.get();
   }
+
+  public void engage() {
+    if(getEngageToggled()) { // if false (engaged) set to unlocked position
+      rightServo.setAngle(0.0);//TODO this ain't final someone check this
+      leftServo.setAngle(0.0);//TODO this ain't final someone check this
+      toggleEngage();
+    } else { // else sets to locked
+      rightServo.setAngle(90.0);//TODO this ain't final someone check this
+      leftServo.setAngle(90.0);//TODO this ain't final someone check this
+      toggleEngage();
+    }
+  }
+
+  public void toggleEngage() {
+    engageToggle = !engageToggle;
+  }
+
+  public boolean getEngageToggled() {
+    return engageToggle;
+  }
+
+
+
 
   /*public void crankDatSouljaBoy() {
     if(refreshCount < 50) {
