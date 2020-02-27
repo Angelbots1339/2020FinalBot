@@ -11,7 +11,6 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.HoodedShooterConstants;
@@ -48,15 +47,15 @@ public class AdjustableHoodSubsystem extends SubsystemBase {
   public void setMotorVelo(double velocity) {
     // preventing the velocity from exceeding a limit
     // if greater or less than limit, set to respective limit
-    if(velocity > HoodedShooterConstants.maxVeloValue) {
-      velocity = HoodedShooterConstants.maxVeloValue;
-    } else if (velocity < (-1*HoodedShooterConstants.maxVeloValue)) {
-      velocity = -1*HoodedShooterConstants.maxVeloValue;
+    if(velocity > HoodedShooterConstants.kmaxVeloValue) {
+      velocity = HoodedShooterConstants.kmaxVeloValue;
+    } else if (velocity < (-1*HoodedShooterConstants.kmaxVeloValue)) {
+      velocity = -1*HoodedShooterConstants.kmaxVeloValue;
     }
     SmartDashboard.putNumber("Hood input", velocity);
 
     //check stalling. If so, set velocity to 0 
-    if(getMotorCurrent() > HoodedShooterConstants.maxNormalCurrent) {
+    if(getMotorCurrent() > HoodedShooterConstants.kmaxNormalCurrent) {
       velocity = 0;
     }
   
@@ -64,9 +63,9 @@ public class AdjustableHoodSubsystem extends SubsystemBase {
     // Preventing the hood from moving past max and min points
     // Positive Velocity moves towards...... max?
     // Negative Velocity moves towards min
-    if(getEncoderPos() >= HoodedShooterConstants.minEncoderValue  && velocity < 0) {
+    if(getEncoderPos() >= HoodedShooterConstants.kminEncoderValue  && velocity < 0) {
       m_hoodMotor.set(velocity);
-    } else if (HoodedShooterConstants.maxEncoderValue >= getEncoderPos() && velocity > 0) {
+    } else if (HoodedShooterConstants.kmaxEncoderValue >= getEncoderPos() && velocity > 0) {
       m_hoodMotor.set(velocity);
     } else {
       SmartDashboard.putNumber("Hood output", 0);
@@ -77,7 +76,7 @@ public class AdjustableHoodSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-   SmartDashboard.putNumber("Hood Motor current:", m_hoodMotor.getOutputCurrent());
-   SmartDashboard.putNumber("Hood Encoder: ", m_hoodEncoder.getPosition());
+  //  SmartDashboard.putNumber("Hood Motor current:", m_hoodMotor.getOutputCurrent());
+  //  SmartDashboard.putNumber("Hood Encoder: ", m_hoodEncoder.getPosition());
   }
 }

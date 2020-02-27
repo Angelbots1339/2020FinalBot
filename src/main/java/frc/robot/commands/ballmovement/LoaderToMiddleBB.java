@@ -46,12 +46,21 @@ public class LoaderToMiddleBB extends CommandBase {
   @Override
   public void execute() {
     // Load the first ball, stops the loader when the middle beam break is broken
+
+    // stops the loader when the middle beam break is broken
+    
     if(m_loader.isMiddleBeamBroken() && !m_loader.isTopBeamBroken()){
       m_loader.disable();
     } // when the speed is too fast, the top BB will trip and we need to reverse it
     else if(m_loader.isTopBeamBroken()){
       m_loader.reverse(LoaderConstants.kInitLoaderSpeed);
     }
+    else if(m_loader.isTopBeamBroken()){
+      m_loader.reverse(LoaderConstants.kInitLoaderSpeed);
+    }
+
+    // if top broken, then reverse
+    // if top not broken and middle broken stop
 
     // if top broken, then reverse
     // if top not broken and middle broken stop

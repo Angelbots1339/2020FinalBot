@@ -17,28 +17,23 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIconstants;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.commands.vision.RunHood;
-import frc.robot.commands.vision.RunVision;
-import frc.robot.commands.vision.RunHood;
-import frc.robot.commands.vision.RunVision;
-import frc.robot.commands.ballmovement.HoodPID;
 import frc.robot.commands.ballmovement.LoaderToMiddleBB;
 import frc.robot.commands.ballmovement.RunIntakeArms;
-import frc.robot.commands.ballmovement.RunIntakeArms2;
 import frc.robot.commands.ballmovement.RunShooter;
 import frc.robot.commands.ballmovement.ShootAllBalls;
+import frc.robot.commands.vision.RunHood;
+import frc.robot.commands.vision.RunVision;
 import frc.robot.subsystems.AdjustableHoodSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.HoodPIDSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeArmPID;
-import frc.robot.subsystems.IntakeArmPID2;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.LoaderSubsystem;
 import frc.robot.subsystems.ServoSubsystem;
 import frc.robot.subsystems.ShooterPID;
-import frc.robot.subsystems.HoodPIDSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -94,7 +89,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    m_hoodSubsystem.resetEncoder();
+    //m_hoodSubsystem.resetEncoder();
 
     // Configure default commands
     // Set the default drive command to split-stick arcade drive
@@ -143,7 +138,27 @@ public class RobotContainer {
 
     // new JoystickButton(m_testController, Button.kBumperRight.value).whenHeld(new RunIntakeArms2(m_intakeArm, -5));
 
-     /*
+     // HOOD TESTING
+     //new JoystickButton(m_testController, Button.kA.value).whenPressed(() -> m_hood.enable()).whenReleased(() -> m_hood.disable());
+     //new JoystickButton(m_testController, Button.kA.value)
+     // .whenPressed(new InstantCommand(m_hood::enable, m_hood))
+     // .whenReleased(new InstantCommand(m_hood::disable, m_hood));
+    // new JoystickButton(m_testController, Button.kB.value).whenHeld(new RunHood(m_hood, 17.5));
+    // new JoystickButton(m_testController, Button.kX.value).whenHeld(new RunHood(m_hood, 0.1));
+    // new JoystickButton(m_testController, Button.kY.value).whenHeld(new RunHood(m_hood, 5));
+
+    // SHOOTER SETPOINT TESTING
+    // Left Bumper - Intakes
+    new JoystickButton(m_testController, Button.kBumperLeft.value).whenHeld(new LoaderToMiddleBB(m_loader, m_intake, m_indexer));
+    // Right Bumper - Shoots
+    new JoystickButton(m_testController, Button.kBumperRight.value).whenHeld(new ShootAllBalls(m_intake, m_indexer, m_loader, m_rightShooterPID, m_leftShooterPID));
+    // A Button - Reeve up Shooter at Slower speed (2500)
+    new JoystickButton(m_testController, Button.kA.value).whenHeld(new RunShooter(m_rightShooterPID, m_leftShooterPID, 3500));
+    new JoystickButton(m_testController, Button.kB.value).whenHeld(new RunShooter(m_rightShooterPID, m_leftShooterPID, 4000));
+    new JoystickButton(m_testController, Button.kX.value).whenHeld(new RunShooter(m_rightShooterPID, m_leftShooterPID, 4500));
+    new JoystickButton(m_testController, Button.kY.value).whenHeld(new RunShooter(m_rightShooterPID, m_leftShooterPID, 5300));
+
+    /*
     // Left Bumper - Intake and Indexer --- TEST THIS ONE
     new JoystickButton(m_testController, Button.kBumperLeft.value).whenHeld(new RunIntakeIndex(m_indexer, m_intake));
     //new JoystickButton(m_testController, Button.kBumperLeft.value).whenPressed(() -> m_indexer.enable())
@@ -192,6 +207,8 @@ public class RobotContainer {
     m_climber.setDefaultCommand(
       new RunCommand(() -> m_climber.enable(0.5 * -1 * m_testController.getRawAxis(OIconstants.rightYAxis)),m_climber));
     
+  
+
     // new JoystickButton(m_driverController, XboxController.Button.kA.value).whenHeld(new RunCommand(() -> m_intake.moveIntakeUp(), m_intake));
     // new JoystickButton(m_driverController, XboxController.Button.kB.value).whenHeld(new RunCommand(() -> m_intake.moveIntakeDown(), m_intake));
     */
@@ -204,7 +221,7 @@ public class RobotContainer {
     // Left Bumper - Intakes
     new JoystickButton(m_driverController, Button.kBumperLeft.value).whenHeld(new LoaderToMiddleBB(m_loader, m_intake, m_indexer));
     // Right Bumper - Shoots
-    new JoystickButton(m_driverController, Button.kBumperRight.value).whenHeld(new ShootAllBalls(m_intake, m_indexer, m_loader));
+    new JoystickButton(m_driverController, Button.kBumperRight.value).whenHeld(new RunVision(m_limelight, m_drive, m_leftShooterPID, m_rightShooterPID, m_intake, m_indexer, m_loader));
     // A Button - Reeve up Shooter at Slower speed (2500)
     new JoystickButton(m_driverController, Button.kA.value).whenHeld(new RunShooter(m_rightShooterPID, m_leftShooterPID, 2500));
     // X Button - Reverse indexer
@@ -228,8 +245,8 @@ public class RobotContainer {
     new JoystickButton(m_operatorController, Button.kX.value)
     .whenPressed(() -> m_climber.enable()).whenReleased(() -> m_climber.disable()); // needs to be inverted
     // Right Y axis controls the hooded shooter
-    m_hoodSubsystem.setDefaultCommand( // works well
-      new RunCommand(() -> m_hoodSubsystem.setMotorVelo(-1*m_operatorController.getRawAxis(OIconstants.rightYAxis)),m_hoodSubsystem));
+    //m_hoodSubsystem.setDefaultCommand( // works well
+      //new RunCommand(() -> m_hoodSubsystem.setMotorVelo(-1*m_operatorController.getRawAxis(OIconstants.rightYAxis)),m_hoodSubsystem));
     // Left Y axis controls the intake roatater
     m_intake.setDefaultCommand(
       new RunCommand(() -> m_intake.rotateIntakeArms(m_operatorController.getRawAxis(OIconstants.leftYAxis)),m_intake));

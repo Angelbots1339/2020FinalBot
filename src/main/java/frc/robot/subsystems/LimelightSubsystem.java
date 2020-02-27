@@ -9,28 +9,25 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard; 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.LimelightConstants;;
 
 public class LimelightSubsystem extends SubsystemBase {
 
-  private boolean mSeesTarget = false;
   private NetworkTable mNetworkTable;
-  private LedMode mLedMode = LedMode.PIPELINE;  // 0 - use pipeline mode, 1 - off, 2 - blink, 3 - on
-  private double mXOffset;
-  private double mYOffset;
-  private double mArea;
-  private double mLatency;
+  private LedMode mLedMode = LedMode.PIPELINE; // 0 - use pipeline mode, 1 - off, 2 - blink, 3 - on
 
   /**
    * Creates a new Limelight.
    */
   public double getDistanceToVisionTarget() {
-    return Constants.LimelightConstants.kLimelightCameraToVisionRetroreflectiveTargetHeight / Math.tan(Math.toRadians(getYTargetOffset()));
+    return LimelightConstants.kLimelightToTargetHeight
+        / Math.tan(Math.toRadians(getYTargetOffset() + LimelightConstants.kLimeLightTilt));
   }
+
   public LimelightSubsystem() {
-    mNetworkTable = NetworkTableInstance.getDefault().getTable(Constants.LimelightConstants.kLimeTable);
+    mNetworkTable = NetworkTableInstance.getDefault().getTable(LimelightConstants.kLimeTable);
   }
 
   public enum LedMode {
@@ -42,34 +39,45 @@ public class LimelightSubsystem extends SubsystemBase {
     mNetworkTable.getEntry("ledMode").setNumber(mode.ordinal());
   }
 
+  public double getLatency() {
+    return mNetworkTable.getEntry("tl").getDouble(0);
+  }
+
   public boolean seesTarget() {
-      return mSeesTarget;
+    return mNetworkTable.getEntry("tv").getDouble(0) == 1.0;
   }
-  public double getXTargetOffset(){
-    return mXOffset;
+
+  public double getXTargetOffset() {
+    return mNetworkTable.getEntry("tx").getDouble(0.0);
   }
-  public double getYTargetOffset(){
-    return mYOffset;
+
+  public double getYTargetOffset() {
+    return mNetworkTable.getEntry("ty").getDouble(0.0);
   }
-  public double getArea(){
-    return mArea;
+
+  public double getArea() {
+    return mNetworkTable.getEntry("ta").getDouble(0.0);
+  }
+
+  public void setPipeline(int index) {
+    mNetworkTable.getEntry("pipeline").setDouble(index);
+  }
+
+  public int getPipeline() {
+    return (int) mNetworkTable.getEntry("pipeline").getDouble(0.0);
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-
-    mLatency = mNetworkTable.getEntry("tl").getDouble(0);
-    mXOffset = mNetworkTable.getEntry("tx").getDouble(0.0);
-    mYOffset = mNetworkTable.getEntry("ty").getDouble(0.0);
-    mArea = mNetworkTable.getEntry("ta").getDouble(0.0);
-    mSeesTarget = mNetworkTable.getEntry("tv").getDouble(0) == 1.0;
-    
-
-    SmartDashboard.putBoolean(Constants.LimelightConstants.kLimeTable + ": Has Target", mSeesTarget);
-    SmartDashboard.putNumber(Constants.LimelightConstants.kLimeTable + ": Pipeline Latency (ms)", mLatency);
-    SmartDashboard.putNumber(Constants.LimelightConstants.kLimeTable + ": X ", mXOffset);
-    SmartDashboard.putNumber(Constants.LimelightConstants.kLimeTable + ": Y", mYOffset);
-     
+    if (LimelightConstants.kAutoZoom)
+      setPipeline(getDistanceToVisionTarget() > LimelightConstants.k2XZoomCutoff
+          ? getDistanceToVisionTarget() > LimelightConstants.k3XZoomCutoff ? 2 : 1
+          : 0);
+    if(!seesTarget()) setPipeline(0);
+    SmartDashboard.putBoolean(LimelightConstants.kLimeTable + ": Has Target", seesTarget());
+    SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Pipeline Latency (ms)", getLatency());
+    SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": X ", getXTargetOffset());
+    SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Y", getYTargetOffset());
+    SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Dist", getDistanceToVisionTarget());
   }
 }
