@@ -20,7 +20,7 @@ public class HoodPID extends PIDCommand {
    * Creates a new HoodPID.
    */
   private AdjustableHoodSubsystem m_adjHoodSub;
-  public HoodPID(AdjustableHoodSubsystem subsystem, int targetClicks) {
+  public HoodPID(AdjustableHoodSubsystem subsystem, double targetClicks) {
     super(
       // The controller that the command will use
       new PIDController(HoodedShooterConstants.kP, HoodedShooterConstants.kI, HoodedShooterConstants.kP),

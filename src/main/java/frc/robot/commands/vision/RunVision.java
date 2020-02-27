@@ -45,7 +45,7 @@ public class RunVision extends ParallelCommandGroup {
             new RunShooter(m_leftShooter, m_rightShooter, m_targetProfile.getShooterSpeed()), 
             new SequentialCommandGroup(
                 new CameraAlign(m_drive, m_limeLight), 
-                new ShootAllBalls(m_intake, m_indexer, m_loader, m_leftShooter, m_rightShooter)));
+                new ShootAllBalls(m_intake, m_indexer, m_loader)));
     }
 
     public static ArrayList<ShootingProfiles> getData() {

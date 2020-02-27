@@ -11,21 +11,17 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIconstants;
 import frc.robot.Constants.ShooterConstants;
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-=======
 import frc.robot.commands.vision.RunHood;
 import frc.robot.commands.vision.RunVision;
->>>>>>> Stashed changes
-=======
 import frc.robot.commands.vision.RunHood;
 import frc.robot.commands.vision.RunVision;
->>>>>>> Stashed changes
+import frc.robot.commands.ballmovement.HoodPID;
 import frc.robot.commands.ballmovement.LoaderToMiddleBB;
 import frc.robot.commands.ballmovement.RunIntakeArms;
 import frc.robot.commands.ballmovement.RunIntakeArms2;
@@ -42,6 +38,7 @@ import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.LoaderSubsystem;
 import frc.robot.subsystems.ServoSubsystem;
 import frc.robot.subsystems.ShooterPID;
+import frc.robot.subsystems.HoodPIDSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -62,6 +59,7 @@ public class RobotContainer {
   private final AdjustableHoodSubsystem m_hoodSubsystem = new AdjustableHoodSubsystem();
   private final ClimberSubsystem m_climber = new ClimberSubsystem();
   private final ServoSubsystem m_ServoSubsystem = new ServoSubsystem();
+  private final HoodPIDSubsystem m_hood = new HoodPIDSubsystem(8);
 
   // private final ExampleCommand m_autoCommand = new ExampleCommand(m_indexer);
   private final LimelightSubsystem m_limelight = new LimelightSubsystem();
@@ -127,9 +125,6 @@ public class RobotContainer {
      * TEST CONTROLLER
      * 
      */
-
-<<<<<<< Updated upstream
-=======
      //new JoystickButton(m_testController, Button.kA.value).whenPressed(() -> m_hood.enable()).whenReleased(() -> m_hood.disable());
      new JoystickButton(m_testController, Button.kA.value)
       .whenPressed(new InstantCommand(m_hood::enable, m_hood))
@@ -148,10 +143,6 @@ public class RobotContainer {
 
     // new JoystickButton(m_testController, Button.kBumperRight.value).whenHeld(new RunIntakeArms2(m_intakeArm, -5));
 
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
      /*
     // Left Bumper - Intake and Indexer --- TEST THIS ONE
     new JoystickButton(m_testController, Button.kBumperLeft.value).whenHeld(new RunIntakeIndex(m_indexer, m_intake));

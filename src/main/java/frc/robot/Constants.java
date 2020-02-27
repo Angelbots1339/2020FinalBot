@@ -146,11 +146,13 @@ public final class Constants {
         public final static double kD = 0;
 
         public final static double minEncoderValue = 0.1;
-        public final static double maxEncoderValue = 17.5;;
+        public final static double maxEncoderValue = 17.5;
         public final static double maxVeloValue = 0.2;
         public final static double maxNormalCurrent = 18;
 
         public final static double positionTolerance = 0.075;
+
+		public static final int kMaxHoodVolt = 7;
     }
 
     public final class SensorConstants{

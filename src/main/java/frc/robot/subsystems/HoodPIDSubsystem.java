@@ -17,13 +17,13 @@ import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Constants.HoodedShooterConstants;
 
-public class HoodPID extends PIDSubsystem {
+public class HoodPIDSubsystem extends PIDSubsystem {
   private final CANSparkMax m_hood;
   private final CANEncoder m_Encoder;
   /**
    * Creates a new HoodPID.
    */
-  public HoodPID(double setpoint) {
+  public HoodPIDSubsystem(double setpoint) {
     super(new PIDController(HoodedShooterConstants.kP, HoodedShooterConstants.kI, HoodedShooterConstants.kD));
     m_hood = new CANSparkMax(HoodedShooterConstants.kHoodPort, MotorType.kBrushless);
     m_Encoder = new CANEncoder(m_hood);
@@ -32,7 +32,7 @@ public class HoodPID extends PIDSubsystem {
     getController().setTolerance(HoodedShooterConstants.positionTolerance);
     
     // Regardless of what's passed in, clamp to the min and max
-    MathUtil.clamp(setpoint,HoodedShooterConstants.kminEncoderValue,HoodedShooterConstants.kmaxEncoderValue);
+    MathUtil.clamp(setpoint,HoodedShooterConstants.minEncoderValue, HoodedShooterConstants.maxEncoderValue);
     setSetpoint(setpoint);
   }
 
@@ -55,7 +55,7 @@ public class HoodPID extends PIDSubsystem {
 
   public void setSetpoint(double setpoint) {
     // Regardless of what's passed in, clamp to the min and max
-    setpoint = MathUtil.clamp(setpoint,HoodedShooterConstants.kminEncoderValue,HoodedShooterConstants.kmaxEncoderValue);
+    setpoint = MathUtil.clamp(setpoint, HoodedShooterConstants.minEncoderValue,HoodedShooterConstants.maxEncoderValue);
     super.setSetpoint(setpoint);
   }
 

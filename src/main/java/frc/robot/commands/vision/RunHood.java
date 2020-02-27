@@ -8,17 +8,17 @@
 package frc.robot.commands.vision;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.HoodPID;
+import frc.robot.subsystems.HoodPIDSubsystem;
 
 public class RunHood extends CommandBase {
 
-  private final HoodPID m_hoodPID;
+  private final HoodPIDSubsystem m_hoodPID;
   private double m_setpoint;
 
   /**
    * Creates a new RunHood.
    */
-  public RunHood(HoodPID hoodPID, double setpoint) {
+  public RunHood(HoodPIDSubsystem hoodPID, double setpoint) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_hoodPID = hoodPID;
     addRequirements(m_hoodPID);
