@@ -32,13 +32,24 @@ public final class Constants {
     public final class IntakeConstants{
         // SparkMAX Motors
         public final static int kIntakeMotor = 5;
-        public final static int kLeftIntakeMoverMotor = 9;
-        public final static int kRightIntakeMoverMotor = 8;
+        public final static int kLeftIntakeMoverMotor = 9; // not inverted in fireware
+        public final static int kRightIntakeMoverMotor = 8; // inverted in firmware
 
         public final static double kMaxIntakeSpeed = 1; // speed was 0.45 , set slower for testing
         public final static double kMaxIntakeArmSpeed = 0.15; // was mixed up in the intake class
 
         public final static double kMaxNormalVoltage = 3; // needed to be a bit lower 5;
+        public final static double kmaxVeloValue = 0.3;
+        public final static double kmaxNormalCurrent = 12;
+
+        // Intake Arm Constants
+        public final static double kP = 0.9;
+        public final static double kI = 0;
+        public final static double kD = 0;
+        public final static double kIntakeArmMotorVolt = 6;
+        public final static double kminEncoderValue = -10;
+        public final static double kmaxEncoderValue = 0;
+        public final static double positionTolerance = 1;
     }
 
     public final class IndexerConstants{
@@ -93,7 +104,7 @@ public final class Constants {
         public final static int kLeftClimberMotor = 10;
         public final static int kRightClimberMotor = 11;
         public final static int kLeftServo = 0; // TODO double check
-        public final static int kRightServo = 1; // TODO doulbe check
+        public final static int kRightServo = 9; // TODO doulbe check
 
         public final static int[] kLeftEncoder = new int[]{1,2}; //TODO find the ports
         public final static int[] kRightEncoder = new int[]{3, 4};
@@ -158,7 +169,14 @@ public final class Constants {
         public static final double k3XZoomCutoff = 5.436;//TODO
         public static final boolean kAutoZoom = true;
 
+        public final static double minEncoderValue = 0.1;
+        public final static double maxEncoderValue = 17.5;
+        public final static double maxVeloValue = 0.2;
+        public final static double maxNormalCurrent = 18;
 
+        public final static double positionTolerance = 0.075;
+
+		public static final int kMaxHoodVolt = 7;
     }
 
     public final class SensorConstants{

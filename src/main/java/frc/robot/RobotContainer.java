@@ -14,20 +14,25 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIconstants;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.commands.RunHood;
-import frc.robot.commands.RunVision;
 import frc.robot.commands.ballmovement.LoaderToMiddleBB;
+import frc.robot.commands.ballmovement.RunIntakeArms;
 import frc.robot.commands.ballmovement.RunShooter;
 import frc.robot.commands.ballmovement.ShootAllBalls;
+import frc.robot.commands.vision.RunHood;
+import frc.robot.commands.vision.RunVision;
+import frc.robot.subsystems.AdjustableHoodSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.HoodPID;
+import frc.robot.subsystems.HoodPIDSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
+import frc.robot.subsystems.IntakeArmPID;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.LoaderSubsystem;
+import frc.robot.subsystems.ServoSubsystem;
 import frc.robot.subsystems.ShooterPID;
 
 /**
@@ -46,17 +51,22 @@ public class RobotContainer {
   private final ShooterPID m_rightShooterPID = new ShooterPID(ShooterConstants.kRightShooter, "Right Shooter", true);
   private final ShooterPID m_leftShooterPID = new ShooterPID(ShooterConstants.kLeftShooter, "Left Shooter", false);
   //private final ShooterPIDSubsystem m_shooterPID = new ShooterPIDSubsystem(ShooterConstants.kRightShooter, ShooterConstants.kLeftShooter);
-  //private final AdjustableHoodSubsystem m_hoodSubsystem = new AdjustableHoodSubsystem();
-  //private final ServoTest m_servo = new ServoTest();
+  private final AdjustableHoodSubsystem m_hoodSubsystem = new AdjustableHoodSubsystem();
   private final ClimberSubsystem m_climber = new ClimberSubsystem();
-  private final HoodPID m_hood = new HoodPID(8);
+  private final ServoSubsystem m_ServoSubsystem = new ServoSubsystem();
+  private final HoodPIDSubsystem m_hood = new HoodPIDSubsystem(8);
 
   // private final ExampleCommand m_autoCommand = new ExampleCommand(m_indexer);
   private final LimelightSubsystem m_limelight = new LimelightSubsystem();
+  private final IntakeArmPID m_rightArm = new IntakeArmPID(IntakeConstants.kRightIntakeMoverMotor, "Right Intake Arm", true);
+  private final IntakeArmPID m_leftArm = new IntakeArmPID(IntakeConstants.kLeftIntakeMoverMotor, "Left Intake Arm", false);
+
+  //private final IntakeArmPID2 m_intakeArm = new IntakeArmPID2();
 
   XboxController m_driverController = new XboxController(OIconstants.kDriverControllerPort);
   XboxController m_operatorController = new XboxController(OIconstants.kOperatorControllerPort);
   XboxController m_testController = new XboxController(OIconstants.kTestControllerPort);
+
 
   public static enum Mode{
     AUTO(false), COLLECTION(true), ALIGN(true), SHOOTING(true), DEFENSE(false);
@@ -110,6 +120,23 @@ public class RobotContainer {
      * TEST CONTROLLER
      * 
      */
+     //new JoystickButton(m_testController, Button.kA.value).whenPressed(() -> m_hood.enable()).whenReleased(() -> m_hood.disable());
+     new JoystickButton(m_testController, Button.kA.value)
+      .whenPressed(new InstantCommand(m_hood::enable, m_hood))
+      .whenReleased(new InstantCommand(m_hood::disable, m_hood));
+
+    new JoystickButton(m_testController, Button.kB.value).whenHeld(new RunHood(m_hood, 17.5));
+    new JoystickButton(m_testController, Button.kX.value).whenHeld(new RunHood(m_hood, 0.1));
+    new JoystickButton(m_testController, Button.kY.value).whenHeld(new RunHood(m_hood, 5));
+
+    new JoystickButton(m_testController, Button.kBumperLeft.value).whenHeld(new RunIntakeArms(m_rightArm, m_leftArm, -10));
+    new JoystickButton(m_testController, Button.kBumperRight.value).whenHeld(new RunIntakeArms(m_rightArm, m_leftArm, 0));
+
+    // new JoystickButton(m_testController, Button.kBumperLeft.value)
+    //     .whenPressed(new InstantCommand(m_intakeArm::enable, m_intakeArm))
+    //     .whenReleased(new InstantCommand(m_intakeArm::disable, m_intakeArm));
+
+    // new JoystickButton(m_testController, Button.kBumperRight.value).whenHeld(new RunIntakeArms2(m_intakeArm, -5));
 
      // HOOD TESTING
      //new JoystickButton(m_testController, Button.kA.value).whenPressed(() -> m_hood.enable()).whenReleased(() -> m_hood.disable());
@@ -189,6 +216,8 @@ public class RobotContainer {
      * DRIVER CONTROLLER
      */
 
+    //drives servos with Button 
+    new JoystickButton(m_driverController, XboxController.Button.kStart.value).whenReleased(new RunCommand(() -> m_ServoSubsystem.engage(), m_ServoSubsystem));
     // Left Bumper - Intakes
     new JoystickButton(m_driverController, Button.kBumperLeft.value).whenHeld(new LoaderToMiddleBB(m_loader, m_intake, m_indexer));
     // Right Bumper - Shoots

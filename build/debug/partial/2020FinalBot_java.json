@@ -1,0 +1,11 @@
+[
+  {
+    "name": "2020FinalBot (in project 2020FinalBot)",
+    "file": "C:\\Users\\angel\\Desktop\\2020 robot\\2020FinalBot\\build\\libs\\2020FinalBot.jar",
+    "extensions": [
+      "C:\\Users\\angel\\Desktop\\2020 robot\\2020FinalBot\\build\\tmp\\expandedArchives\\halsim_gui-2020.2.2-windowsx86-64.zip_f45deb918a703b9a683ad4047e06ed3c\\windows\\x86-64\\shared\\halsim_gui.dll"
+    ],
+    "librarydir": "C:\\Users\\angel\\Desktop\\2020 robot\\2020FinalBot\\build\\tmp\\jniExtractDir",
+    "mainclass": "frc.robot.Main"
+  }
+]
