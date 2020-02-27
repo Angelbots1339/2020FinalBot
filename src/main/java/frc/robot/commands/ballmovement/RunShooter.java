@@ -8,17 +8,18 @@
 package frc.robot.commands.ballmovement;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.commands.util.ShootingProfiles;
 import frc.robot.subsystems.ShooterPID;
 
 public class RunShooter extends CommandBase {
 
   private final ShooterPID m_leftPID;
   private final ShooterPID m_rightPID;
-  private double m_speed;
+  private ShootingProfiles m_targetProfile;
   /**
    * Creates a new RunShooter.
    */
-  public RunShooter(ShooterPID leftPID, ShooterPID rightPID, double speed) {
+  public RunShooter(ShooterPID leftPID, ShooterPID rightPID, ShootingProfiles targetProfile) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_leftPID = leftPID;
     addRequirements(m_leftPID);
@@ -26,14 +27,20 @@ public class RunShooter extends CommandBase {
     m_rightPID = rightPID;
     addRequirements(m_rightPID);
 
-    m_speed = speed;
+    m_targetProfile = targetProfile;
+  }
+  /**
+   * Creates a new RunShooter.
+   */
+  public RunShooter(ShooterPID leftPID, ShooterPID rightPID, double targetSpeed) {
+    this(leftPID, rightPID, new ShootingProfiles(-1, targetSpeed, -1));
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_leftPID.setSetpoint(m_speed);
-    m_rightPID.setSetpoint(m_speed);
+    m_leftPID.setSetpoint(m_targetProfile.getShooterSpeed());
+    m_rightPID.setSetpoint(m_targetProfile.getShooterSpeed());
     m_leftPID.enable();
     m_rightPID.enable();
   }

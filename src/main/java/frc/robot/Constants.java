@@ -66,8 +66,8 @@ public final class Constants {
 
         // PID values
         // TODO have to be tuned to current robot values
-        public final static double kP = 0.0008; //0.001;//0.00008;
-        public final static double kI = 0.00001;
+        public final static double kP = 0.001; //0.001;//0.0008;
+        public final static double kI = 0.00002;
         public final static double kD = 0;
         public final static double kff = 0;
 
@@ -147,13 +147,17 @@ public final class Constants {
         // on networktable for data.  Check network table data in Shuffleboard when troubleshooting
         public final static String kLimeTable = "limelight";
         public final static int kDefaultPipeline = 0;
-        public static final double kAngleP = 0.01;
-        public static final double kDriveP = 0.01;
-        public static final double kDriveTolerance = 0.02;
-        public static final double kLimelightToTargetHeight = 1.5493999999999999;//TODO in meters
+        public static final double kAngleP = 0.03;
+        public static final double kDriveP = 0.22;
+        public static final double kDriveTolerance = 0.055;
+        public static final double kLimelightToTargetHeight = 1.626;//TODO in meters
         public static final double kVerticalFOV = 49.7;
         public static final double kHorizontalFOV = 59.6;
-        public static final double kLimeLightTilt = 8.8;//TODO
+        public static final double kLimeLightTilt = 12;//TODO
+        public static final double k2XZoomCutoff = 3.785;//TODO
+        public static final double k3XZoomCutoff = 5.436;//TODO
+        public static final boolean kAutoZoom = true;
+
 
     }
 

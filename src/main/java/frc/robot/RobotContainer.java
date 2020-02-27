@@ -20,6 +20,7 @@ import frc.robot.commands.RunHood;
 import frc.robot.commands.RunVision;
 import frc.robot.commands.ballmovement.LoaderToMiddleBB;
 import frc.robot.commands.ballmovement.RunShooter;
+import frc.robot.commands.ballmovement.ShootAllBalls;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HoodPID;
@@ -110,16 +111,27 @@ public class RobotContainer {
      * 
      */
 
+     // HOOD TESTING
      //new JoystickButton(m_testController, Button.kA.value).whenPressed(() -> m_hood.enable()).whenReleased(() -> m_hood.disable());
-     new JoystickButton(m_testController, Button.kA.value)
-      .whenPressed(new InstantCommand(m_hood::enable, m_hood))
-      .whenReleased(new InstantCommand(m_hood::disable, m_hood));
+     //new JoystickButton(m_testController, Button.kA.value)
+     // .whenPressed(new InstantCommand(m_hood::enable, m_hood))
+     // .whenReleased(new InstantCommand(m_hood::disable, m_hood));
+    // new JoystickButton(m_testController, Button.kB.value).whenHeld(new RunHood(m_hood, 17.5));
+    // new JoystickButton(m_testController, Button.kX.value).whenHeld(new RunHood(m_hood, 0.1));
+    // new JoystickButton(m_testController, Button.kY.value).whenHeld(new RunHood(m_hood, 5));
 
-    new JoystickButton(m_testController, Button.kB.value).whenHeld(new RunHood(m_hood, 17.5));
-    new JoystickButton(m_testController, Button.kX.value).whenHeld(new RunHood(m_hood, 0.1));
-    new JoystickButton(m_testController, Button.kY.value).whenHeld(new RunHood(m_hood, 5));
+    // SHOOTER SETPOINT TESTING
+    // Left Bumper - Intakes
+    new JoystickButton(m_testController, Button.kBumperLeft.value).whenHeld(new LoaderToMiddleBB(m_loader, m_intake, m_indexer));
+    // Right Bumper - Shoots
+    new JoystickButton(m_testController, Button.kBumperRight.value).whenHeld(new ShootAllBalls(m_intake, m_indexer, m_loader, m_rightShooterPID, m_leftShooterPID));
+    // A Button - Reeve up Shooter at Slower speed (2500)
+    new JoystickButton(m_testController, Button.kA.value).whenHeld(new RunShooter(m_rightShooterPID, m_leftShooterPID, 3500));
+    new JoystickButton(m_testController, Button.kB.value).whenHeld(new RunShooter(m_rightShooterPID, m_leftShooterPID, 4000));
+    new JoystickButton(m_testController, Button.kX.value).whenHeld(new RunShooter(m_rightShooterPID, m_leftShooterPID, 4500));
+    new JoystickButton(m_testController, Button.kY.value).whenHeld(new RunShooter(m_rightShooterPID, m_leftShooterPID, 5300));
 
-     /*
+    /*
     // Left Bumper - Intake and Indexer --- TEST THIS ONE
     new JoystickButton(m_testController, Button.kBumperLeft.value).whenHeld(new RunIntakeIndex(m_indexer, m_intake));
     //new JoystickButton(m_testController, Button.kBumperLeft.value).whenPressed(() -> m_indexer.enable())

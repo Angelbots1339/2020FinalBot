@@ -59,8 +59,21 @@ public class LimelightSubsystem extends SubsystemBase {
     return mNetworkTable.getEntry("ta").getDouble(0.0);
   }
 
+  public void setPipeline(int index) {
+    mNetworkTable.getEntry("pipeline").setDouble(index);
+  }
+
+  public int getPipeline() {
+    return (int) mNetworkTable.getEntry("pipeline").getDouble(0.0);
+  }
+
   @Override
   public void periodic() {
+    if (LimelightConstants.kAutoZoom)
+      setPipeline(getDistanceToVisionTarget() > LimelightConstants.k2XZoomCutoff
+          ? getDistanceToVisionTarget() > LimelightConstants.k3XZoomCutoff ? 2 : 1
+          : 0);
+    if(!seesTarget()) setPipeline(0);
     SmartDashboard.putBoolean(LimelightConstants.kLimeTable + ": Has Target", seesTarget());
     SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Pipeline Latency (ms)", getLatency());
     SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": X ", getXTargetOffset());

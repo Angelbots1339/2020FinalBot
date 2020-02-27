@@ -1,9 +1,9 @@
 package frc.robot.commands.util;
 
 public class ShootingProfiles {
-    private final double distance;
-    private final double shooterSpeed;
-    private final double hoodvalue;
+    private double distance;
+    private double shooterSpeed;
+    private double hoodvalue;
 
     public ShootingProfiles(double distance, double shooterSpeed, double hoodvalue) {
         this.distance = distance;
@@ -22,5 +22,11 @@ public class ShootingProfiles {
     public double getHoodvalue() {
         return hoodvalue;
     }
+
+	public void set(ShootingProfiles shootingProfiles) {
+        distance = shootingProfiles.getDistance();
+        shooterSpeed = shootingProfiles.getShooterSpeed();
+        hoodvalue = shootingProfiles.getHoodvalue();
+	}
 
 }
