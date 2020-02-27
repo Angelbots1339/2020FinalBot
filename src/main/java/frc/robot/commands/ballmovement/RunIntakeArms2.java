@@ -6,54 +6,52 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.commands.ballmovement;
-import frc.robot.subsystems.*;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.IntakeArmPID2;
+/**
+ * currently testing this one
+ */
 
-// add an if bb is triggered only the indexer and loader runs 
-public class RunIntakeIndex extends CommandBase {
+public class RunIntakeArms2 extends CommandBase {
 
-  private final IndexerSubsystem m_indexer;
-  private final IntakeSubsystem m_intake;
+  private final IntakeArmPID2 m_rightArm;
+  private final double m_setpoint;
+  
 
-  public RunIntakeIndex(IndexerSubsystem indexer, IntakeSubsystem intake){
+  /**
+   * Creates a new RunIntakeArms.
+   */
+  public RunIntakeArms2(IntakeArmPID2 motor, double setpoint){
     // Use addRequirements() here to declare subsystem dependencies.
-    m_indexer = indexer;
-    addRequirements(indexer);
-    m_intake = intake;
-    addRequirements(intake);
+    m_rightArm = motor;
+    addRequirements(m_rightArm);
+
+    m_setpoint = setpoint;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_indexer.enable();
-    m_intake.enableIntake();
+    m_rightArm.setSetpoint(m_setpoint);
+    m_rightArm.enable();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
-  //@Override
-  /*
+  @Override
   public void execute() {
-    if(m_indexer.isCurrentSpike()){
-      m_indexer.reverse(); //TODO
-    }
-    
   }
-  */
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_indexer.disable();
-    m_intake.disableIntake();
+    m_rightArm.disable();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-
     return false;
-  
   }
+
 }
