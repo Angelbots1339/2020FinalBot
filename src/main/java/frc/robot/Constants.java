@@ -150,7 +150,7 @@ public final class Constants {
         public final static double kMaxHoodVolt = 4;
         public final static double kminEncoderValue = 0;
         public final static double kmaxEncoderValue = 17.5;
-        public final static double positionTolerance = .4;
+        public final static double positionTolerance = .35;
 		public static final double KSVolts = 0.13;
         public static final double KVVoltSecondsPerRotation = 12 * (12.5 / 11000); // Neo 550 - 11000 rpm, with 12.5:1 reduction
         

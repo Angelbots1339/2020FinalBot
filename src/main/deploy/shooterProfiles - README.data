@@ -1,0 +1,9 @@
+2m 3500rpm 13.2hr   - 2/27 - pretty happy with this, working from front in hole and seide
+2.5m 3800rpm 13.6hr - 2/27 - good
+3m 4000rpm 14.8hr   - 2/27 - really good
+4m 4400rpm 14hr     - 2/27 - not tested, same below....
+5m 44000rpm 15hr
+6.3m 4500rpm 16hr
+
+2/27 Notes
+- Hood PID is slightly overshooting when running with Vision

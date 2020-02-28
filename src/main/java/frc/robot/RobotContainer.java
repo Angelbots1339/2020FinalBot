@@ -18,6 +18,7 @@ import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIconstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.ballmovement.LoaderToMiddleBB;
+import frc.robot.commands.ballmovement.MoveBallsToShooter;
 import frc.robot.commands.ballmovement.RunIntakeArms;
 import frc.robot.commands.ballmovement.RunShooter;
 import frc.robot.commands.ballmovement.ShootAllBalls;
@@ -222,13 +223,13 @@ public class RobotContainer {
    new JoystickButton(m_driverController, Button.kBumperLeft.value).whenHeld(new LoaderToMiddleBB(m_loader, m_intake, m_indexer));
    // Right Bumper - Shoots - MOVE INTAKE ARM
    new JoystickButton(m_driverController, Button.kBumperRight.value).whenHeld(new RunVision(m_limelight, m_drive, m_leftShooterPID, m_rightShooterPID, m_intake, m_indexer, m_loader, m_hood));
-    // A Button - Reeve up Shooter at Slower speed (4000)
-    new JoystickButton(m_driverController, Button.kA.value).whenHeld(new RunShooter(m_rightShooterPID, m_leftShooterPID, 4000));
+    // A Button - 
+    new JoystickButton(m_driverController, Button.kA.value).whenHeld(new MoveBallsToShooter(m_intake, m_indexer, m_loader));
+    // B Button - Reeve up Shooter
+    new JoystickButton(m_driverController, Button.kB.value).whenHeld(new RunShooter(m_rightShooterPID, m_leftShooterPID, 4000));
     // X Button - Reverse indexer
     new JoystickButton(m_driverController, Button.kX.value).whenPressed(() -> m_indexer.reverse())
         .whenReleased(() -> m_indexer.disable());
-    // B Button - Reeve up Shooter
-    new JoystickButton(m_driverController, Button.kB.value).whenHeld(new RunShooter(m_rightShooterPID, m_leftShooterPID, ShooterConstants.kShooterTargetRPS));
     // Y Button - reverses intake - REVERSE EVERYTHING
     new JoystickButton(m_driverController, Button.kY.value).whenPressed(() -> m_intake.reverseIntake())
         .whenReleased(() -> m_intake.disableIntake());

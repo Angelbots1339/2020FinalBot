@@ -15,21 +15,13 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import frc.robot.Constants.HoodedShooterConstants;
 import frc.robot.Constants.ShooterConstants;
-//import edu.wpi.first.wpilibj.controller.PIDController;
-//import edu.wpi.first.wpilibj2.command.PIDSubsystem;
-//import frc.robot.Constants.ShooterConstants;
 
 public class ShooterPID extends PIDSubsystem {
   
   private final CANSparkMax m_motor;
   private final CANEncoder m_Encoder;
-  private CANSparkMax m_hoodMotor;
-  private CANEncoder m_hoodEncoder;
-  
   private String m_name;
-  
   private final SimpleMotorFeedforward m_shooterFeedforward =
       new SimpleMotorFeedforward(ShooterConstants.KSVolts,
                                  ShooterConstants.KVVoltSecondsPerRotation);
@@ -40,9 +32,7 @@ public class ShooterPID extends PIDSubsystem {
   public ShooterPID(int motorID, String name, boolean inverted) {
     super(new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD));
     m_motor = new CANSparkMax(motorID, MotorType.kBrushless);
-    m_hoodMotor = new CANSparkMax(HoodedShooterConstants.kHoodPort, MotorType.kBrushless);
     m_Encoder = new CANEncoder(m_motor);
-    m_hoodEncoder = new CANEncoder(m_hoodMotor);
     m_name = name;
     // Spark 1 - Inverted - Not 
     // Spark 3 - Inverted - Yes
