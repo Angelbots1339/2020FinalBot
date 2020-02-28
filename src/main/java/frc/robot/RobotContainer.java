@@ -50,10 +50,8 @@ public class RobotContainer {
   private final LoaderSubsystem m_loader = new LoaderSubsystem();
   private final ShooterPID m_rightShooterPID = new ShooterPID(ShooterConstants.kRightShooter, "Right Shooter", true);
   private final ShooterPID m_leftShooterPID = new ShooterPID(ShooterConstants.kLeftShooter, "Left Shooter", false);
-  //private final ShooterPIDSubsystem m_shooterPID = new ShooterPIDSubsystem(ShooterConstants.kRightShooter, ShooterConstants.kLeftShooter);
-  private final AdjustableHoodSubsystem m_hoodSubsystem = new AdjustableHoodSubsystem();
   private final ClimberSubsystem m_climber = new ClimberSubsystem();
-  private final ServoSubsystem m_ServoSubsystem = new ServoSubsystem();
+  //private final ServoSubsystem m_ServoSubsystem = new ServoSubsystem();
   private final HoodPIDSubsystem m_hood = new HoodPIDSubsystem(8);
 
   // private final ExampleCommand m_autoCommand = new ExampleCommand(m_indexer);
@@ -121,13 +119,13 @@ public class RobotContainer {
      * 
      */
      //new JoystickButton(m_testController, Button.kA.value).whenPressed(() -> m_hood.enable()).whenReleased(() -> m_hood.disable());
-     new JoystickButton(m_testController, Button.kA.value)
-      .whenPressed(new InstantCommand(m_hood::enable, m_hood))
-      .whenReleased(new InstantCommand(m_hood::disable, m_hood));
+     //new JoystickButton(m_testController, Button.kA.value)
+     // .whenPressed(new InstantCommand(m_hood::enable, m_hood))
+     // .whenReleased(new InstantCommand(m_hood::disable, m_hood));
 
-    new JoystickButton(m_testController, Button.kB.value).whenHeld(new RunHood(m_hood, 17.5));
-    new JoystickButton(m_testController, Button.kX.value).whenHeld(new RunHood(m_hood, 0.1));
-    new JoystickButton(m_testController, Button.kY.value).whenHeld(new RunHood(m_hood, 5));
+    new JoystickButton(m_testController, Button.kA.value).whenHeld(new RunHood(m_hood, -.1));
+    new JoystickButton(m_testController, Button.kB.value).whenHeld(new RunHood(m_hood, 14));
+    new JoystickButton(m_testController, Button.kX.value).whenHeld(new RunHood(m_hood, 16));
 
     new JoystickButton(m_testController, Button.kBumperLeft.value).whenHeld(new RunIntakeArms(m_rightArm, m_leftArm, -10));
     new JoystickButton(m_testController, Button.kBumperRight.value).whenHeld(new RunIntakeArms(m_rightArm, m_leftArm, 0));
@@ -147,6 +145,7 @@ public class RobotContainer {
     // new JoystickButton(m_testController, Button.kX.value).whenHeld(new RunHood(m_hood, 0.1));
     // new JoystickButton(m_testController, Button.kY.value).whenHeld(new RunHood(m_hood, 5));
 
+    /*
     // SHOOTER SETPOINT TESTING
     // Left Bumper - Intakes
     new JoystickButton(m_testController, Button.kBumperLeft.value).whenHeld(new LoaderToMiddleBB(m_loader, m_intake, m_indexer));
@@ -157,6 +156,7 @@ public class RobotContainer {
     new JoystickButton(m_testController, Button.kB.value).whenHeld(new RunShooter(m_rightShooterPID, m_leftShooterPID, 4000));
     new JoystickButton(m_testController, Button.kX.value).whenHeld(new RunShooter(m_rightShooterPID, m_leftShooterPID, 4500));
     new JoystickButton(m_testController, Button.kY.value).whenHeld(new RunShooter(m_rightShooterPID, m_leftShooterPID, 5300));
+    */
 
     /*
     // Left Bumper - Intake and Indexer --- TEST THIS ONE
@@ -217,22 +217,24 @@ public class RobotContainer {
      */
 
     //drives servos with Button 
-    new JoystickButton(m_driverController, XboxController.Button.kStart.value).whenReleased(new RunCommand(() -> m_ServoSubsystem.engage(), m_ServoSubsystem));
-    // Left Bumper - Intakes
-    new JoystickButton(m_driverController, Button.kBumperLeft.value).whenHeld(new LoaderToMiddleBB(m_loader, m_intake, m_indexer));
-    // Right Bumper - Shoots
-    new JoystickButton(m_driverController, Button.kBumperRight.value).whenHeld(new RunVision(m_limelight, m_drive, m_leftShooterPID, m_rightShooterPID, m_intake, m_indexer, m_loader));
-    // A Button - Reeve up Shooter at Slower speed (2500)
-    new JoystickButton(m_driverController, Button.kA.value).whenHeld(new RunShooter(m_rightShooterPID, m_leftShooterPID, 2500));
+    //  new JoystickButton(m_driverController, XboxController.Button.kStart.value).whenReleased(new RunCommand(() -> m_ServoSubsystem.engage(), m_ServoSubsystem));
+   // Left Bumper - Intakes - REVERSE INTAKE
+   new JoystickButton(m_driverController, Button.kBumperLeft.value).whenHeld(new LoaderToMiddleBB(m_loader, m_intake, m_indexer));
+   // Right Bumper - Shoots - MOVE INTAKE ARM
+   new JoystickButton(m_driverController, Button.kBumperRight.value).whenHeld(new RunVision(m_limelight, m_drive, m_leftShooterPID, m_rightShooterPID, m_intake, m_indexer, m_loader, m_hood));
+    // A Button - Reeve up Shooter at Slower speed (4000)
+    new JoystickButton(m_driverController, Button.kA.value).whenHeld(new RunShooter(m_rightShooterPID, m_leftShooterPID, 4000));
     // X Button - Reverse indexer
     new JoystickButton(m_driverController, Button.kX.value).whenPressed(() -> m_indexer.reverse())
         .whenReleased(() -> m_indexer.disable());
     // B Button - Reeve up Shooter
     new JoystickButton(m_driverController, Button.kB.value).whenHeld(new RunShooter(m_rightShooterPID, m_leftShooterPID, ShooterConstants.kShooterTargetRPS));
-    // Y Button - reverses intake
+    // Y Button - reverses intake - REVERSE EVERYTHING
     new JoystickButton(m_driverController, Button.kY.value).whenPressed(() -> m_intake.reverseIntake())
         .whenReleased(() -> m_intake.disableIntake());
-
+    // Right trigger - SHOOT ALL BALLS
+    // Left trigger - INTAKE
+    
     /**
      * OPERATOR CONTROLLER
      */

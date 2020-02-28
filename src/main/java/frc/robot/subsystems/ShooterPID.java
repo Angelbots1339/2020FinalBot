@@ -77,8 +77,8 @@ public class ShooterPID extends PIDSubsystem {
   public void periodic() {
     super.periodic();
     SmartDashboard.putNumber(m_name + " RPM", getMeasurement());
-    SmartDashboard.putNumber(m_name + " Set", m_controller.getSetpoint());
-    SmartDashboard.putBoolean(m_name + " OnT", atSetpoint());
+   // SmartDashboard.putNumber(m_name + " Set", m_controller.getSetpoint());
+    //SmartDashboard.putBoolean(m_name + " OnT", atSetpoint());
     
   }
 

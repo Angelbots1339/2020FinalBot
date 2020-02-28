@@ -21,13 +21,9 @@ public class LimelightSubsystem extends SubsystemBase {
   /**
    * Creates a new Limelight.
    */
-  public double getDistanceToVisionTarget() {
-    return LimelightConstants.kLimelightToTargetHeight
-        / Math.tan(Math.toRadians(getYTargetOffset() + LimelightConstants.kLimeLightTilt));
-  }
-
   public LimelightSubsystem() {
     mNetworkTable = NetworkTableInstance.getDefault().getTable(LimelightConstants.kLimeTable);
+    setLed(mLedMode);
   }
 
   public enum LedMode {
@@ -59,6 +55,11 @@ public class LimelightSubsystem extends SubsystemBase {
     return mNetworkTable.getEntry("ta").getDouble(0.0);
   }
 
+  public double getDistanceToVisionTarget() {
+    return LimelightConstants.kLimelightToTargetHeight
+        / Math.tan(Math.toRadians(getYTargetOffset() + LimelightConstants.kLimeLightTilt));
+  }
+
   public void setPipeline(int index) {
     mNetworkTable.getEntry("pipeline").setDouble(index);
   }
@@ -74,10 +75,10 @@ public class LimelightSubsystem extends SubsystemBase {
           ? getDistanceToVisionTarget() > LimelightConstants.k3XZoomCutoff ? 2 : 1
           : 0);
     if(!seesTarget()) setPipeline(0);
-    SmartDashboard.putBoolean(LimelightConstants.kLimeTable + ": Has Target", seesTarget());
-    SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Pipeline Latency (ms)", getLatency());
-    SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": X ", getXTargetOffset());
-    SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Y", getYTargetOffset());
-    SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Dist", getDistanceToVisionTarget());
+    // SmartDashboard.putBoolean(LimelightConstants.kLimeTable + ": Has Target", seesTarget());
+    // SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Pipeline Latency (ms)", getLatency());
+    // SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": X ", getXTargetOffset());
+    // SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Y", getYTargetOffset());
+    // SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Dist", getDistanceToVisionTarget());
   }
 }

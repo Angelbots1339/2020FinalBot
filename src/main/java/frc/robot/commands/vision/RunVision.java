@@ -13,15 +13,19 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.ballmovement.HoodPID;
 import frc.robot.commands.ballmovement.RunShooter;
 import frc.robot.commands.ballmovement.ShootAllBalls;
 import frc.robot.commands.util.ShootingProfiles;
+import frc.robot.subsystems.AdjustableHoodSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.HoodPIDSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.LoaderSubsystem;
 import frc.robot.subsystems.ShooterPID;
+import frc.robot.subsystems.LimelightSubsystem.LedMode;
 
 /**
  * RunVision
@@ -35,10 +39,14 @@ public class RunVision extends ParallelCommandGroup {
     IntakeSubsystem m_intake;
     IndexerSubsystem m_indexer;
     LoaderSubsystem m_loader;
+    HoodPIDSubsystem m_hood;
     ShootingProfiles m_targetProfile = new ShootingProfiles(-1, -1, -1);
 
+    // add something that sets a default hood and speed once it no longer sees it
+
     public RunVision(LimelightSubsystem limeLight, DriveSubsystem drive, ShooterPID leftShooter,
-            ShooterPID rightShooter, IntakeSubsystem intake, IndexerSubsystem indexer, LoaderSubsystem loader) {
+            ShooterPID rightShooter, IntakeSubsystem intake, IndexerSubsystem indexer,
+             LoaderSubsystem loader, HoodPIDSubsystem hood) {
         m_limeLight = limeLight;
         m_drive = drive;
         m_leftShooter = leftShooter;
@@ -46,14 +54,17 @@ public class RunVision extends ParallelCommandGroup {
         m_intake = intake;
         m_indexer = indexer;
         m_loader = loader;
+        m_hood = hood;
 
         addCommands(new RunShooter(m_leftShooter, m_rightShooter, m_targetProfile),
-                new SequentialCommandGroup(new CameraAlign(m_drive, m_limeLight, m_targetProfile),
+                    new RunHood(m_hood, m_targetProfile),
+                    new SequentialCommandGroup(new CameraAlign(m_drive, m_limeLight, m_targetProfile),
                         new ShootAllBalls(m_intake, m_indexer, m_loader, m_leftShooter, m_rightShooter)));
     }
 
     @Override
     public void initialize() {
+        //m_limeLight.setLed(LedMode.PIPELINE);
         double currentDist = m_limeLight.getDistanceToVisionTarget();
         SmartDashboard.putNumber("current Dist", currentDist);
         /**
@@ -81,7 +92,7 @@ public class RunVision extends ParallelCommandGroup {
             String line;
             while ((line = br.readLine()) != null)
                 profilesArr.add(new ShootingProfiles(getProperty(line, "m"), getProperty(line, "rpm"),
-                        getProperty(line, "clicks")));
+                        getProperty(line, "hr"))); // hr = hoodRotations
             br.close(); // stops the reader
         }
         // if file is not found, stack trace is printed
@@ -94,6 +105,13 @@ public class RunVision extends ParallelCommandGroup {
         }
         return profilesArr;
     }
+
+    @Override
+    public void end(boolean interrupted) {
+        //m_limeLight.setLed(LedMode.OFF);
+        super.end(interrupted);        
+    }
+
 
     /**
      * uses regxr to look through the text file

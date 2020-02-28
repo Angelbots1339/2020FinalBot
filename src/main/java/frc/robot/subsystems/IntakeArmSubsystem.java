@@ -78,7 +78,7 @@ public class IntakeArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-   SmartDashboard.putNumber(m_name + "motor current:", m_motor.getOutputCurrent());
-   SmartDashboard.putNumber(m_name + "Encoder: ", m_Encoder.getPosition());
+  //  SmartDashboard.putNumber(m_name + "motor current:", m_motor.getOutputCurrent());
+  //  SmartDashboard.putNumber(m_name + "Encoder: ", m_Encoder.getPosition());
   }
 }

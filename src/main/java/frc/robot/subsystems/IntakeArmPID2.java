@@ -60,9 +60,9 @@ public class IntakeArmPID2 extends PIDSubsystem {
   public void useOutput(double output, double setpoint) {
     output = MathUtil.clamp(output, -IntakeConstants.kIntakeArmMotorVolt, IntakeConstants.kIntakeArmMotorVolt);
     m_rightMotor.setVoltage(output);
-    SmartDashboard.putNumber("R Intake Arm Output", output);
-    SmartDashboard.putNumber("L Intake Arm Output", m_leftMotor.get());
-    System.out.println("Im Here in output");
+    // SmartDashboard.putNumber("R Intake Arm Output", output);
+    // SmartDashboard.putNumber("L Intake Arm Output", m_leftMotor.get());
+    // System.out.println("Im Here in output");
   }
 
   @Override

@@ -12,6 +12,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpiutil.math.MathUtil;
@@ -20,6 +21,10 @@ import frc.robot.Constants.HoodedShooterConstants;
 public class HoodPIDSubsystem extends PIDSubsystem {
   private final CANSparkMax m_hood;
   private final CANEncoder m_Encoder;
+
+  private final SimpleMotorFeedforward m_feedforward =
+      new SimpleMotorFeedforward(HoodedShooterConstants.KSVolts,
+                                 HoodedShooterConstants.KVVoltSecondsPerRotation);
   /**
    * Creates a new HoodPID.
    */
@@ -29,8 +34,9 @@ public class HoodPIDSubsystem extends PIDSubsystem {
     m_Encoder = new CANEncoder(m_hood);
     m_Encoder.setPosition(0);
 
-    getController().setTolerance(HoodedShooterConstants.positionTolerance);
     
+    getController().setTolerance(HoodedShooterConstants.positionTolerance);
+
     // Regardless of what's passed in, clamp to the min and max
     MathUtil.clamp(setpoint,HoodedShooterConstants.kminEncoderValue, HoodedShooterConstants.kmaxEncoderValue);
     setSetpoint(setpoint);
@@ -38,6 +44,7 @@ public class HoodPIDSubsystem extends PIDSubsystem {
 
   @Override
   public void useOutput(double output, double setpoint) {
+    output += m_feedforward.calculate(setpoint);
     output = MathUtil.clamp(output, -HoodedShooterConstants.kMaxHoodVolt, HoodedShooterConstants.kMaxHoodVolt);
     m_hood.setVoltage(output);
     SmartDashboard.putNumber("HoodOutput", output);
@@ -62,6 +69,6 @@ public class HoodPIDSubsystem extends PIDSubsystem {
   public void periodic() {
     super.periodic();
     SmartDashboard.putNumber("HoodEncoder", getMeasurement());
-    SmartDashboard.putNumber("HoodSet", getController().getSetpoint());
+    //SmartDashboard.putNumber("HoodSet", getController().getSetpoint());
   }
 }

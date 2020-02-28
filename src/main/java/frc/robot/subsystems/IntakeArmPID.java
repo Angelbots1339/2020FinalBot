@@ -78,8 +78,8 @@ public class IntakeArmPID extends PIDSubsystem {
 
   public void periodic() {
     super.periodic();
-    SmartDashboard.putNumber(m_name + " Encoder", getMeasurement());
-    SmartDashboard.putNumber(m_name + " Set Point", getController().getSetpoint());
+    // SmartDashboard.putNumber(m_name + " Encoder", getMeasurement());
+    // SmartDashboard.putNumber(m_name + " Set Point", getController().getSetpoint());
   }
 
   

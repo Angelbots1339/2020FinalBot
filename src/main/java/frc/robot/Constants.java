@@ -57,7 +57,7 @@ public final class Constants {
         public final static int kLeftIndexerMotor = 7;
         public final static int kRightIndexMotor = 6;
         // Speed was at 0.45 for Scrimmage
-        public final static double kMaxIndexSpeed = 0.75; // speed, was 0.5
+        public final static double kMaxIndexSpeed = 0.7; // speed, was 0.5
         public final static double kAcceptableCurrentSpike = 0;
 
     }
@@ -66,9 +66,9 @@ public final class Constants {
         public final static int kLoaderMotor = 2; // SparkMAX
         // Changed by Ender, was 0.55 for Scrimmage
         // This speed is used when feeding balls to shooter
-        public final static double kMaxLoaderSpeed = 1; // speed
+        public final static double kMaxLoaderSpeed = 0.8; // speed
         // This speed is used when loading first ball
-        public final static double kInitLoaderSpeed = 0.2; // speed
+        public final static double kInitLoaderSpeed = 0.3; // speed
     }
 
     public final static class ShooterConstants{
@@ -141,17 +141,19 @@ public final class Constants {
     public final class HoodedShooterConstants{
         public final static int kHoodPort = 4;
 
-        public final static double kP = .8;
-        public final static double kI = 0;
-        public final static double kD = 0;
-        public final static double kMaxHoodVolt = 8;
-
-        public final static double kminEncoderValue = 0;
-        public final static double kmaxEncoderValue = 17.5;
         public final static double kmaxVeloValue = 0.2;
         public final static double kmaxNormalCurrent = 18;
-
-        public final static double positionTolerance = 1;
+        // PID HOOD
+        public final static double kP = 0.8;
+        public final static double kI = 0.0;
+        public final static double kD = 0;
+        public final static double kMaxHoodVolt = 4;
+        public final static double kminEncoderValue = 0;
+        public final static double kmaxEncoderValue = 17.5;
+        public final static double positionTolerance = .4;
+		public static final double KSVolts = 0.13;
+        public static final double KVVoltSecondsPerRotation = 12 * (12.5 / 11000); // Neo 550 - 11000 rpm, with 12.5:1 reduction
+        
     }
     public static final class LimelightConstants {
         // Ensure that the limelight hostname is just "limelight", otherwise there will be nothing
@@ -159,15 +161,18 @@ public final class Constants {
         public final static String kLimeTable = "limelight";
         public final static int kDefaultPipeline = 0;
         public static final double kAngleP = 0.03;
-        public static final double kDriveP = 0.22;
-        public static final double kDriveTolerance = 0.055;
-        public static final double kLimelightToTargetHeight = 1.626;//TODO in meters
+        public static final double kDriveP = 0.25;
+        public static final double kDriveTolerance = 0.095;//used to be 0.055
+        public static final double kLimelightHeight = 0.43;
+        public static final double kTagetHeight = 2.08;
+        public static final double kLimelightToTargetHeight = kTagetHeight - kLimelightHeight;
         public static final double kVerticalFOV = 49.7;
         public static final double kHorizontalFOV = 59.6;
-        public static final double kLimeLightTilt = 12;//TODO
+        public static final double kLimeLightTilt = 25;
         public static final double k2XZoomCutoff = 3.785;//TODO
         public static final double k3XZoomCutoff = 5.436;//TODO
         public static final boolean kAutoZoom = true;
+    
 
         public final static double minEncoderValue = 0.1;
         public final static double maxEncoderValue = 17.5;
@@ -181,10 +186,10 @@ public final class Constants {
 
     public final class SensorConstants{
 
-		public final static int topEmitter = 0;
-		public final static int topReciever = 1;
-		public final static int middleEmitter = 2;
-		public final static int middleReciever = 3;
+		public final static int topEmitter = 1;
+		public final static int topReciever = 0;
+		public final static int middleEmitter = 3;
+		public final static int middleReciever = 2;
 		public final static int bottomLeftEmitter = 4;
 		public final static int bottomLeftReciever = 5;
 		public final static int bottomRightEmitter = 6;

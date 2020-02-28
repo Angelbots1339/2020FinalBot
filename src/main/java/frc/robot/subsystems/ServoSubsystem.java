@@ -83,7 +83,7 @@ public class ServoSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     //crankDatSouljaBoy();
 
-    SmartDashboard.putNumber("LeftPos", leftServo.get());
-    SmartDashboard.putNumber("RightPos", rightServo.get());
+    //SmartDashboard.putNumber("LeftPos", leftServo.get());
+    //SmartDashboard.putNumber("RightPos", rightServo.get());
   }
 }

@@ -8,28 +8,33 @@
 package frc.robot.commands.vision;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.commands.util.ShootingProfiles;
 import frc.robot.subsystems.HoodPIDSubsystem;
 
 public class RunHood extends CommandBase {
 
   private final HoodPIDSubsystem m_hoodPID;
-  private double m_setpoint;
+  private ShootingProfiles m_targetProfile;
 
   /**
    * Creates a new RunHood.
    */
-  public RunHood(HoodPIDSubsystem hoodPID, double setpoint) {
+  public RunHood(HoodPIDSubsystem hoodPID, ShootingProfiles targetProfile) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_hoodPID = hoodPID;
     addRequirements(m_hoodPID);
 
-    m_setpoint = setpoint;
+    m_targetProfile = targetProfile;
+  }
+
+  public RunHood(HoodPIDSubsystem hoodPID, double targetHood){
+    this(hoodPID, new ShootingProfiles(-1, -1, targetHood));
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_hoodPID.setSetpoint(m_setpoint);
+    m_hoodPID.setSetpoint(m_targetProfile.getHoodvalue());
     m_hoodPID.enable();
 
   }

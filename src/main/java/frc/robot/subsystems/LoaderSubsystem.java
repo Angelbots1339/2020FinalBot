@@ -91,7 +91,7 @@ public class LoaderSubsystem extends SubsystemBase {
   }
 
   public boolean isMiddleBeamBroken(){
-   return!(m_middleReceiver).get();
+   return!(m_middleReceiver.get());
    //return false;
   }
 

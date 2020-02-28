@@ -18,8 +18,8 @@ public class LoaderToMiddleBB extends CommandBase {
   private final LoaderSubsystem m_loader;
   private final IntakeSubsystem m_intake;
   private final IndexerSubsystem m_indexer;
-  private int m_spikeCount = 0;
-  private int m_reverseCount = 0;
+  //private int m_spikeCount = 0;
+  //private int m_reverseCount = 0;
 
   public LoaderToMiddleBB(LoaderSubsystem loader, IntakeSubsystem intake, IndexerSubsystem indexer){
     // Use addRequirements() here to declare subsystem dependencies.
@@ -37,7 +37,9 @@ public class LoaderToMiddleBB extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    if(!m_loader.isMiddleBeamBroken()) {
     m_loader.enable(LoaderConstants.kInitLoaderSpeed);
+    }
     m_indexer.enable();
     m_intake.enableIntake();
   }
@@ -45,28 +47,19 @@ public class LoaderToMiddleBB extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // Load the first ball, stops the loader when the middle beam break is broken
 
     // stops the loader when the middle beam break is broken
-    
     if(m_loader.isMiddleBeamBroken() && !m_loader.isTopBeamBroken()){
       m_loader.disable();
-    } // when the speed is too fast, the top BB will trip and we need to reverse it
-    else if(m_loader.isTopBeamBroken()){
-      m_loader.reverse(LoaderConstants.kInitLoaderSpeed);
     }
     else if(m_loader.isTopBeamBroken()){
-      m_loader.reverse(LoaderConstants.kInitLoaderSpeed);
+      m_loader.reverse(LoaderConstants.kMaxLoaderSpeed);
     }
-
-    // if top broken, then reverse
+       // if top broken, then reverse
     // if top not broken and middle broken stop
 
-    // if top broken, then reverse
-    // if top not broken and middle broken stop
     // if the indexer stales reverse until its good - may need to add a counter to see if the current spike is happening for longer 
     /*
-    THIS WAS FOR CONTINGENCY, HAS NOT BEEN USED
     if(m_indexer.isCurrentSpike()){
       m_spikeCount++;
       if (m_spikeCount >= 20) {
@@ -80,7 +73,7 @@ public class LoaderToMiddleBB extends CommandBase {
         m_reverseCount--;
       }
       else {
-        m_indexer.enable();
+        m_indexer.enable(); //TODO if works fix all
       }
     }
     */
@@ -99,6 +92,8 @@ public class LoaderToMiddleBB extends CommandBase {
   @Override
   public boolean isFinished() {
     // checks to see if Bottom beam break is broken
+    // may need a filter
+    // may need to add a timeout
     // return m_loader.isTopBeamBroken();
     // stops when button stops being held
     return false;
