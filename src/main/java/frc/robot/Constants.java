@@ -68,7 +68,8 @@ public final class Constants {
         // This speed is used when feeding balls to shooter
         public final static double kMaxLoaderSpeed = 0.8; // speed
         // This speed is used when loading first ball
-        public final static double kInitLoaderSpeed = 0.3; // speed
+        // public final static double kInitLoaderSpeed = 0.2; // speed
+        public final static double kInitLoaderSpeed = 0.6; // speed
     }
 
     public final static class ShooterConstants{
