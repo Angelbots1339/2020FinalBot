@@ -18,8 +18,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIconstants;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.commands.autonomous.Auto;
 import frc.robot.commands.ballmovement.LoaderToMiddleBB;
 import frc.robot.commands.ballmovement.MoveBallsToShooter;
+import frc.robot.commands.ballmovement.ReverseEverything;
 import frc.robot.commands.ballmovement.RunIntakeArms;
 import frc.robot.commands.ballmovement.RunShooter;
 import frc.robot.commands.vision.RunHood;
@@ -53,8 +55,6 @@ public class RobotContainer {
   private final ClimberSubsystem m_climber = new ClimberSubsystem();
   // private final ServoSubsystem m_ServoSubsystem = new ServoSubsystem();
   private final HoodPIDSubsystem m_hood = new HoodPIDSubsystem(8);
-
-  // private final ExampleCommand m_autoCommand = new ExampleCommand(m_indexer);
   private final LimelightSubsystem m_limelight = new LimelightSubsystem();
   private final IntakeArmPID m_rightArm = new IntakeArmPID(IntakeConstants.kRightIntakeMoverMotor, "Right Intake Arm",
       true);
@@ -130,9 +130,11 @@ public class RobotContainer {
     new JoystickButton(m_testController, Button.kX.value).whenHeld(new RunHood(m_hood, 16));
 
     new JoystickButton(m_testController, Button.kBumperLeft.value)
-        .whenHeld(new RunIntakeArms(m_rightArm, m_leftArm, -10));
+        .whenHeld(new RunIntakeArms(m_rightArm, m_leftArm));
     new JoystickButton(m_testController, Button.kBumperRight.value)
-        .whenHeld(new RunIntakeArms(m_rightArm, m_leftArm, 0));
+        .whenHeld(new RunIntakeArms(m_rightArm, m_leftArm));
+    // new JoystickButton(m_testController, Button.kBumperLeft.value).whenHeld(new RunIntakeArms(m_rightArm, m_leftArm, -10));
+    // new JoystickButton(m_testController, Button.kBumperRight.value).whenHeld(new RunIntakeArms(m_rightArm, m_leftArm, 0));
 
     // new JoystickButton(m_testController, Button.kBumperLeft.value)
     // .whenPressed(new InstantCommand(m_intakeArm::enable, m_intakeArm))
@@ -270,6 +272,21 @@ public class RobotContainer {
     // Left trigger - INTAKE
 
     /**
+     * Nick's prefered controls
+     */
+    // right trigger --- shoot all balls
+    // right bumper --- Deter balls/run intake backwards
+    // left bumper --- intake balls(balls to middle bb)
+    new JoystickButton(m_driverController, Button.kBumperLeft.value).whenHeld(new LoaderToMiddleBB(m_loader, m_intake, m_indexer));
+    // left trigger --- vision
+    // X button --- unload/unjam
+    new JoystickButton(m_driverController, Button.kX.value).whenHeld(new ReverseEverything(m_loader, m_intake, m_indexer));
+    // Y button --- mode changes
+    // A button --- intake arm up/dowm
+    new JoystickButton(m_driverController, Button.kA.value).whenHeld(new RunIntakeArms(m_rightArm, m_leftArm));
+    // B button --- 
+    
+    /**
      * OPERATOR CONTROLLER
      */
 
@@ -301,12 +318,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An ExampleCommand will run in autonomous
-    try {
-      throw new Exception();
-    } catch (Exception e) {
-      System.out.println("No Auto Command");
-      e.printStackTrace();
-    }
-    return null;
+    return new Auto(m_rightArm, m_leftArm);
   }
 }

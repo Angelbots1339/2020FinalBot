@@ -17,27 +17,24 @@ public class RunIntakeArms extends CommandBase {
 
   private final IntakeArmPID m_rightArm;
   private final IntakeArmPID m_leftArm;
-  private final double m_setpoint;
 
   /**
    * Creates a new RunIntakeArms.
    */
-  public RunIntakeArms(IntakeArmPID right, IntakeArmPID left, double setpoint){
+  public RunIntakeArms(IntakeArmPID right, IntakeArmPID left){
     // Use addRequirements() here to declare subsystem dependencies.
     m_rightArm = right;
     addRequirements(m_rightArm);
 
     m_leftArm = left;
     addRequirements(m_leftArm);
-
-    m_setpoint = setpoint;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_leftArm.setSetpoint(m_setpoint);
-    m_rightArm.setSetpoint(m_setpoint);
+    m_leftArm.runIntakeArms();
+    m_rightArm.runIntakeArms();
     m_leftArm.enable();
     m_rightArm.enable();
   }
