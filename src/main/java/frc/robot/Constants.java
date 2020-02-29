@@ -187,14 +187,14 @@ public final class Constants {
 
     public final class SensorConstants{
 
-		public final static int topEmitter = 1;
-		public final static int topReciever = 0;
+		public final static int topEmitter = 5; //1; broke them so we had to switch the ports
+		public final static int topReciever = 4; //0;
 		public final static int middleEmitter = 3;
 		public final static int middleReciever = 2;
-		public final static int ShooterEmitter = 4; // right next to shooter, counts when balls leave
-		public final static int ShooterReciever = 5;
-		public final static int bottomRightEmitter = 6; // counts when balls enter
-		public final static int bottomRightReciever = 7;
+		public final static int ShooterEmitter = 0; //5; // right next to shooter, counts when balls leave
+		public final static int ShooterReciever = 1; // 4;
+		public final static int bottomEmitter = 6; // counts when balls enter
+		public final static int bottomReciever = 7;
 
     }
 

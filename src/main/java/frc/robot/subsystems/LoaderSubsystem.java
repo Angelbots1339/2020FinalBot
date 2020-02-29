@@ -51,8 +51,8 @@ public class LoaderSubsystem extends SubsystemBase {
     
     m_shooterEmitter = new DigitalInput(SensorConstants.ShooterEmitter);
     m_shooterReceiver = new DigitalInput(SensorConstants.ShooterReciever);
-    m_bottomRightEmitter = new DigitalInput(SensorConstants.bottomRightEmitter);
-    m_bottomRightReceiver = new DigitalInput(SensorConstants.bottomRightReciever);
+    m_bottomRightEmitter = new DigitalInput(SensorConstants.bottomEmitter);
+    m_bottomRightReceiver = new DigitalInput(SensorConstants.bottomReciever);
     
   }
 
@@ -88,10 +88,10 @@ public class LoaderSubsystem extends SubsystemBase {
     SmartDashboard.putBoolean("Middle Reciever", m_middleReceiver.get());
 
     
-    SmartDashboard.putBoolean("Bottom Right Emitter", m_bottomRightEmitter.get());
-    SmartDashboard.putBoolean("Bottom Right Reciever", m_bottomRightReceiver.get());
-    SmartDashboard.putBoolean("Bottom Left Emitter", m_shooterEmitter.get());
-    SmartDashboard.putBoolean("Bottom Left Reciever", m_shooterReceiver.get());
+    SmartDashboard.putBoolean("Bottom Emitter", m_bottomRightEmitter.get());
+    SmartDashboard.putBoolean("Bottom Reciever", m_bottomRightReceiver.get());
+    SmartDashboard.putBoolean("Shooter Emitter", m_shooterEmitter.get());
+    SmartDashboard.putBoolean("Shooter Reciever", m_shooterReceiver.get());
 
     SmartDashboard.putNumber("# of balls", getCount());
     
