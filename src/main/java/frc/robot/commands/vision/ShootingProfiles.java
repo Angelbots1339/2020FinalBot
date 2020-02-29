@@ -1,4 +1,6 @@
-package frc.robot.commands.util;
+package frc.robot.commands.vision;
+
+import java.util.regex.Pattern;
 
 public class ShootingProfiles {
     private double distance;
@@ -9,6 +11,21 @@ public class ShootingProfiles {
         this.distance = distance;
         this.shooterSpeed = shooterSpeed;
         this.hoodvalue = hoodvalue;
+    }
+
+    public ShootingProfiles(String info) {
+        this(getProperty(info, "m"), getProperty(info, "rpm"), getProperty(info, "hr"));
+    }
+
+    /**
+     * uses regxr to look through the text file
+     * 
+     * @param str Line of text in text file
+     * @param key Leters behind numbers in str
+     * @return the number before the key
+     */
+    private static double getProperty(String str, String key) {
+        return Double.parseDouble(str.replaceAll(".*?(\\d+(\\.\\d*)?)" + Pattern.quote(key) + ".*", "$1"));
     }
 
     public double getDistance() {
@@ -23,10 +40,10 @@ public class ShootingProfiles {
         return hoodvalue;
     }
 
-	public void set(ShootingProfiles shootingProfiles) {
+    public void set(ShootingProfiles shootingProfiles) {
         distance = shootingProfiles.getDistance();
         shooterSpeed = shootingProfiles.getShooterSpeed();
         hoodvalue = shootingProfiles.getHoodvalue();
-	}
+    }
 
 }

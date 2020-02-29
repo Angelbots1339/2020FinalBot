@@ -10,7 +10,6 @@ package frc.robot.commands.vision;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.commands.util.ShootingProfiles;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
@@ -24,7 +23,6 @@ public class CameraAlign extends CommandBase {
   public double m_drive;
   private ShootingProfiles m_targetProfile;
   private double driveError;
-  private boolean isFinished = false;
 
   public CameraAlign(DriveSubsystem driveSubsystem, LimelightSubsystem cameraSubsystem, ShootingProfiles targetProfile) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -57,17 +55,18 @@ public class CameraAlign extends CommandBase {
     SmartDashboard.putNumber("Vision Turn", m_turn);
     SmartDashboard.putNumber("Vision Drive", m_drive);
     SmartDashboard.putNumber("Vision Drive Error", driveError);
-    isFinished = m_driveSubsystem.arcadeDrive(m_drive, m_turn, Constants.LimelightConstants.kDriveTolerance);
+    m_limeLight.setAligned(m_driveSubsystem.arcadeDrive(m_drive, m_turn, Constants.LimelightConstants.kDriveTolerance));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_limeLight.setAligned(true);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return isFinished;
+    return false;
   }
 }

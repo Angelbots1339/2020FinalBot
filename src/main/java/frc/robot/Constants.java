@@ -191,9 +191,9 @@ public final class Constants {
 		public final static int topReciever = 0;
 		public final static int middleEmitter = 3;
 		public final static int middleReciever = 2;
-		public final static int bottomLeftEmitter = 4;
-		public final static int bottomLeftReciever = 5;
-		public final static int bottomRightEmitter = 6;
+		public final static int ShooterEmitter = 4; // right next to shooter, counts when balls leave
+		public final static int ShooterReciever = 5;
+		public final static int bottomRightEmitter = 6; // counts when balls enter
 		public final static int bottomRightReciever = 7;
 
     }
@@ -204,6 +204,9 @@ public final class Constants {
          public static final int kDriverControllerPort = 1;
          public static final int kOperatorControllerPort = 0;
          public static final int kTestControllerPort = 2;
+         
+         public static final double kLeftTriggerThreshold = 0.5;
+         public static final double kRightTriggerThreshold = 0.5;
          
          public final static int leftYAxis = 1;      // speed 
          public final static int leftXAxis = 0;      //

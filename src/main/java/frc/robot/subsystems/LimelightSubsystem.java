@@ -9,7 +9,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.LimelightConstants;;
 
@@ -17,6 +16,7 @@ public class LimelightSubsystem extends SubsystemBase {
 
   private NetworkTable mNetworkTable;
   private LedMode mLedMode = LedMode.PIPELINE; // 0 - use pipeline mode, 1 - off, 2 - blink, 3 - on
+  private boolean m_isAligned = true;
 
   /**
    * Creates a new Limelight.
@@ -74,11 +74,25 @@ public class LimelightSubsystem extends SubsystemBase {
       setPipeline(getDistanceToVisionTarget() > LimelightConstants.k2XZoomCutoff
           ? getDistanceToVisionTarget() > LimelightConstants.k3XZoomCutoff ? 2 : 1
           : 0);
-    if(!seesTarget()) setPipeline(0);
-    // SmartDashboard.putBoolean(LimelightConstants.kLimeTable + ": Has Target", seesTarget());
-    // SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Pipeline Latency (ms)", getLatency());
-    // SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": X ", getXTargetOffset());
-    // SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Y", getYTargetOffset());
-    // SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Dist", getDistanceToVisionTarget());
+    if (!seesTarget())
+      setPipeline(0);
+    // SmartDashboard.putBoolean(LimelightConstants.kLimeTable + ": Has Target",
+    // seesTarget());
+    // SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Pipeline Latency
+    // (ms)", getLatency());
+    // SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": X ",
+    // getXTargetOffset());
+    // SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Y",
+    // getYTargetOffset());
+    // SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Dist",
+    // getDistanceToVisionTarget());
+  }
+
+  public void setAligned(boolean isAligned) {
+    m_isAligned = isAligned;
+  }
+
+  public boolean isAligned() {
+    return m_isAligned;
   }
 }

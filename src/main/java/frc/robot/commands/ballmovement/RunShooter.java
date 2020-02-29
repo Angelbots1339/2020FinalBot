@@ -8,7 +8,7 @@
 package frc.robot.commands.ballmovement;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.commands.util.ShootingProfiles;
+import frc.robot.commands.vision.ShootingProfiles;
 import frc.robot.subsystems.ShooterPID;
 
 public class RunShooter extends CommandBase {
