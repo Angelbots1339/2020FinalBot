@@ -28,6 +28,8 @@ public class Auto extends ParallelCommandGroup {
     m_rightArm = rightArm;
     m_leftArm = leftArm;
 
-    addCommands(new RunIntakeArms(m_rightArm, m_leftArm));
+    addCommands(
+      // new RunIntakeArms(m_rightArm, m_leftArm)
+      );
   }
 }

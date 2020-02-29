@@ -66,7 +66,7 @@ public final class Constants {
         public final static int kLoaderMotor = 2; // SparkMAX
         // Changed by Ender, was 0.55 for Scrimmage
         // This speed is used when feeding balls to shooter
-        public final static double kMaxLoaderSpeed = 0.8; // speed
+        public final static double kMaxLoaderSpeed = 1; // speed
         // This speed is used when loading first ball
         // public final static double kInitLoaderSpeed = 0.2; // speed
         public final static double kInitLoaderSpeed = 0.6; // speed
@@ -161,9 +161,8 @@ public final class Constants {
         // on networktable for data.  Check network table data in Shuffleboard when troubleshooting
         public final static String kLimeTable = "limelight";
         public final static int kDefaultPipeline = 0;
-        public static final double kAngleP = 0.03;
         public static final double kDriveP = 0.25;
-        public static final double kDriveTolerance = 0.095;//used to be 0.055
+        public static final double kDriveTolerance = 0.125;//used to be 0.055
         public static final double kLimelightHeight = 0.43;
         public static final double kTagetHeight = 2.08;
         public static final double kLimelightToTargetHeight = kTagetHeight - kLimelightHeight;

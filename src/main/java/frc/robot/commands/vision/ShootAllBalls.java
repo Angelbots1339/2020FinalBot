@@ -7,7 +7,10 @@
 
 package frc.robot.commands.vision;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.commands.ballmovement.RunShooter;
+import frc.robot.subsystems.HoodPIDSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -22,11 +25,18 @@ public class ShootAllBalls extends CommandBase {
   private ShooterPID m_leftShooter;
   private ShooterPID m_rightShooter;
   private LimelightSubsystem m_limelight;
+  private HoodPIDSubsystem m_hood;
+  private Command runShooter;
+  private Command runHood;
+  private ShootingProfiles latestProfile;
+
   /**
    * Creates a new ShootAllBalls.
+   * 
    * @param m_targetProfile
    */
-  public ShootAllBalls(IntakeSubsystem intake, IndexerSubsystem index, LoaderSubsystem loader, ShooterPID leftShooter, ShooterPID rightShooter, LimelightSubsystem limelight) {
+  public ShootAllBalls(IntakeSubsystem intake, IndexerSubsystem index, LoaderSubsystem loader, ShooterPID leftShooter,
+      ShooterPID rightShooter, HoodPIDSubsystem hood, LimelightSubsystem limelight) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_intake = intake;
     addRequirements(m_intake);
@@ -39,21 +49,31 @@ public class ShootAllBalls extends CommandBase {
 
     m_leftShooter = leftShooter;
     m_rightShooter = rightShooter;
+    m_hood = hood;
     m_limelight = limelight;
+    runShooter = new RunShooter(m_leftShooter, m_rightShooter, new ShootingProfiles(0,0,0,0,0));
+    runHood = new RunHood(m_hood, new ShootingProfiles(0,0,0,0,0));
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    latestProfile = m_limelight.getLatestProfile();
 
+    if (!m_limelight.isAligning()) {
+      runShooter = new RunShooter(m_leftShooter, m_rightShooter, latestProfile);
+      runHood = new RunHood(m_hood, latestProfile);
+      runShooter.schedule();
+      runHood.schedule();
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_leftShooter.atSetpoint() && m_rightShooter.atSetpoint() && m_limelight.isAligned()){
+    if (m_leftShooter.atSetpoint() && m_rightShooter.atSetpoint() && m_limelight.isAligned()) {
       m_intake.enableIntake();
-      m_indexer.enable();
+      m_indexer.enable(latestProfile.getLoadingSpeed());
       m_loader.enable();
     }
   }
@@ -61,6 +81,10 @@ public class ShootAllBalls extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    if (!m_limelight.isAligning()) {
+      runShooter.cancel();
+      runHood.cancel();
+    }
     m_intake.disableIntake();
     m_indexer.disable();
     m_loader.disable();

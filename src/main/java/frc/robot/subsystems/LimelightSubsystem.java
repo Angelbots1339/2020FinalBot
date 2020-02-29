@@ -9,14 +9,18 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.LimelightConstants;;
+import frc.robot.Constants.LimelightConstants;
+import frc.robot.commands.vision.ShootingProfiles;;
 
 public class LimelightSubsystem extends SubsystemBase {
 
   private NetworkTable mNetworkTable;
-  private LedMode mLedMode = LedMode.PIPELINE; // 0 - use pipeline mode, 1 - off, 2 - blink, 3 - on
+  private LedMode mLedMode = LedMode.PIPELINE; 
   private boolean m_isAligned = true;
+  private boolean m_isAligning = false;
+  private ShootingProfiles m_latestTargetProfile = new ShootingProfiles(3, 0, 0, 0, 0);
 
   /**
    * Creates a new Limelight.
@@ -76,6 +80,7 @@ public class LimelightSubsystem extends SubsystemBase {
           : 0);
     if (!seesTarget())
       setPipeline(0);
+    SmartDashboard.putString("profile", m_latestTargetProfile.toString());
     // SmartDashboard.putBoolean(LimelightConstants.kLimeTable + ": Has Target",
     // seesTarget());
     // SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Pipeline Latency
@@ -84,8 +89,8 @@ public class LimelightSubsystem extends SubsystemBase {
     // getXTargetOffset());
     // SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Y",
     // getYTargetOffset());
-    // SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Dist",
-    // getDistanceToVisionTarget());
+    SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Dist",
+    getDistanceToVisionTarget());
   }
 
   public void setAligned(boolean isAligned) {
@@ -94,5 +99,21 @@ public class LimelightSubsystem extends SubsystemBase {
 
   public boolean isAligned() {
     return m_isAligned;
+  }
+
+  public void setAligning(boolean isAligning) {
+    m_isAligning = isAligning;
+  }
+
+  public boolean isAligning() {
+    return m_isAligning;
+  }
+
+  public void setActiveProfile(ShootingProfiles latestTargetProfile) {
+    m_latestTargetProfile = latestTargetProfile;
+  }
+
+  public ShootingProfiles getLatestProfile() {
+    return m_latestTargetProfile;
   }
 }

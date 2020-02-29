@@ -6,15 +6,21 @@ public class ShootingProfiles {
     private double distance;
     private double shooterSpeed;
     private double hoodvalue;
+    private double angleP;
+    private double loadingSpeed;
 
-    public ShootingProfiles(double distance, double shooterSpeed, double hoodvalue) {
+    public ShootingProfiles(double distance, double shooterSpeed, double hoodvalue, double angleP,
+            double loadingSpeed) {
         this.distance = distance;
         this.shooterSpeed = shooterSpeed;
         this.hoodvalue = hoodvalue;
+        this.angleP = angleP;
+        this.loadingSpeed = loadingSpeed;
     }
 
     public ShootingProfiles(String info) {
-        this(getProperty(info, "m"), getProperty(info, "rpm"), getProperty(info, "hr"));
+        this(getProperty(info, "m"), getProperty(info, "rpm"), getProperty(info, "hr"), getProperty(info, "aP"),
+                getProperty(info, "LS"));
     }
 
     /**
@@ -40,10 +46,26 @@ public class ShootingProfiles {
         return hoodvalue;
     }
 
+    public double getAngleP() {
+        return angleP;
+    }
+
+    public double getLoadingSpeed() {
+        return loadingSpeed;
+    }
+
     public void set(ShootingProfiles shootingProfiles) {
         distance = shootingProfiles.getDistance();
         shooterSpeed = shootingProfiles.getShooterSpeed();
         hoodvalue = shootingProfiles.getHoodvalue();
+        angleP = shootingProfiles.getAngleP();
+        loadingSpeed = shootingProfiles.getLoadingSpeed();
+    }
+
+    @Override
+    public String toString() {
+        return "ShootingProfiles [angleP=" + angleP + ", distance=" + distance + ", hoodvalue=" + hoodvalue
+                + ", loadingSpeed=" + loadingSpeed + ", shooterSpeed=" + shooterSpeed + "]";
     }
 
 }

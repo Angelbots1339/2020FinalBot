@@ -20,7 +20,6 @@ import frc.robot.Constants.OIconstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.autonomous.Auto;
 import frc.robot.commands.ballmovement.LoaderToMiddleBB;
-import frc.robot.commands.ballmovement.MoveBallsToShooter;
 import frc.robot.commands.ballmovement.ReverseEverything;
 import frc.robot.commands.ballmovement.RunIntakeArms;
 import frc.robot.commands.ballmovement.RunShooter;
@@ -128,28 +127,25 @@ public class RobotContainer {
 
     // drives servos with Button
     // Left Bumper - Intakes - REVERSE INTAKE
-    new JoystickButton(m_driverController, Button.kBumperLeft.value)
-        .whenHeld(new LoaderToMiddleBB(m_loader, m_intake, m_indexer));
-    // Right Bumper - Shoots - MOVE INTAKE ARM
-    new JoystickButton(m_driverController, Button.kBumperRight.value).whenHeld(new RunVision(m_limelight, m_drive,
-        m_leftShooterPID, m_rightShooterPID, m_intake, m_indexer, m_loader, m_hood));
-    // A Button -
-    new JoystickButton(m_driverController, Button.kA.value)
-        .whenHeld(new MoveBallsToShooter(m_intake, m_indexer, m_loader));
-    // B Button - Reeve up Shooter
-    new JoystickButton(m_driverController, Button.kB.value)
-        .whenHeld(new RunShooter(m_rightShooterPID, m_leftShooterPID, 4000));
-    // X Button - Reverse indexer
-    new JoystickButton(m_driverController, Button.kX.value).whenPressed(() -> m_indexer.reverse())
-        .whenReleased(() -> m_indexer.disable());
-    // Y Button - reverses intake - REVERSE EVERYTHING
-    new JoystickButton(m_driverController, Button.kY.value).whenPressed(() -> m_intake.reverseIntake())
-        .whenReleased(() -> m_intake.disableIntake());
-    new Trigger(() -> m_driverController.getTriggerAxis(Hand.kLeft) > Constants.OIconstants.kLeftTriggerThreshold)
-        .whenActive(new RunVision(m_limelight, m_drive, m_leftShooterPID, m_rightShooterPID, m_intake, m_indexer,
-            m_loader, m_hood));
-    new Trigger(() -> m_driverController.getTriggerAxis(Hand.kRight) > Constants.OIconstants.kRightTriggerThreshold)
-        .whenActive(new ShootAllBalls(m_intake, m_indexer, m_loader, m_leftShooterPID, m_rightShooterPID, m_limelight));
+    // new JoystickButton(m_driverController, Button.kBumperLeft.value)
+    //     .whenHeld(new LoaderToMiddleBB(m_loader, m_intake, m_indexer));
+    // // Right Bumper - Shoots - MOVE INTAKE ARM
+    // new JoystickButton(m_driverController, Button.kBumperRight.value).whenHeld(new RunVision(m_limelight, m_drive,
+    //     m_leftShooterPID, m_rightShooterPID, m_intake, m_indexer, m_loader, m_hood));
+    // // A Button -
+    // new JoystickButton(m_driverController, Button.kA.value)
+    //     .whenHeld(new MoveBallsToShooter(m_intake, m_indexer, m_loader));
+    // // B Button - Reeve up Shooter
+    // new JoystickButton(m_driverController, Button.kB.value)
+    //     .whenHeld(new RunShooter(m_rightShooterPID, m_leftShooterPID, 4000));
+    // // X Button - Reverse indexer
+    // new JoystickButton(m_driverController, Button.kX.value).whenPressed(() -> m_indexer.reverse())
+    //     .whenReleased(() -> m_indexer.disable());
+    // // Y Button - reverses intake - REVERSE EVERYTHING
+    // new JoystickButton(m_driverController, Button.kY.value).whenPressed(() -> m_intake.reverseIntake())
+    //     .whenReleased(() -> m_intake.disableIntake());
+    
+    
     // Right trigger - SHOOT ALL BALLS
     // Left trigger - INTAKE
 
@@ -157,15 +153,22 @@ public class RobotContainer {
      * Nick's prefered controls
      */
     // right trigger --- shoot all balls
+    new Trigger(() -> m_driverController.getTriggerAxis(Hand.kRight) > Constants.OIconstants.kRightTriggerThreshold)
+        .whileActiveOnce(new ShootAllBalls(m_intake, m_indexer, m_loader, m_leftShooterPID, m_rightShooterPID, m_hood, m_limelight));
     // right bumper --- Deter balls/run intake backwards
+    new JoystickButton(m_driverController, Button.kBumperRight.value).whenPressed(() -> m_intake.reverseIntake())
+                      .whenReleased(() -> m_intake.disableIntake());
     // left bumper --- intake balls(balls to middle bb)
     new JoystickButton(m_driverController, Button.kBumperLeft.value).whenHeld(new LoaderToMiddleBB(m_loader, m_intake, m_indexer));
     // left trigger --- vision
+    new Trigger(() -> m_driverController.getTriggerAxis(Hand.kLeft) > Constants.OIconstants.kLeftTriggerThreshold)
+        .whileActiveOnce(new RunVision(m_limelight, m_drive, m_leftShooterPID, m_rightShooterPID, m_intake, m_indexer,
+            m_loader, m_hood));
     // X button --- unload/unjam
     new JoystickButton(m_driverController, Button.kX.value).whenHeld(new ReverseEverything(m_loader, m_intake, m_indexer));
     // Y button --- mode changes
-    // A button --- intake arm up/dowm
-    new JoystickButton(m_driverController, Button.kA.value).whenHeld(new RunIntakeArms(m_rightArm, m_leftArm));
+    // A button --- intake arm up/dowm --- broken?
+    // new JoystickButton(m_driverController, Button.kA.value).whenPressed(new RunIntakeArms(m_rightArm, m_leftArm));
     // B button --- 
     
     /**
@@ -175,12 +178,12 @@ public class RobotContainer {
     // Left Bumper - Decrease
     // Right Bumper - Increase
     // X button climbs
-    new JoystickButton(m_operatorController, Button.kX.value).whenPressed(() -> m_climber.enable())
-        .whenReleased(() -> m_climber.disable()); // needs to be inverted
+    //new JoystickButton(m_operatorController, Button.kX.value).whenPressed(() -> m_climber.enable())
+     //   .whenReleased(() -> m_climber.disable()); // needs to be inverted
     // Right Y axis controls the hooded shooter
     // Left Y axis controls the intake roatater
-    m_intake.setDefaultCommand(new RunCommand(
-        () -> m_intake.rotateIntakeArms(m_operatorController.getRawAxis(OIconstants.leftYAxis)), m_intake));
+   // m_intake.setDefaultCommand(new RunCommand(
+    //    () -> m_intake.rotateIntakeArms(m_operatorController.getRawAxis(OIconstants.leftYAxis)), m_intake));
 
   }
 

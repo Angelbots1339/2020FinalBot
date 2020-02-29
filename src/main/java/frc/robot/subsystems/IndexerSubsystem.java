@@ -29,8 +29,12 @@ public class IndexerSubsystem extends SubsystemBase {
   }
 
   public void enable(){
-    m_leftIndexer.set(IndexerConstants.kMaxIndexSpeed);
-    m_rightIndexer.set(IndexerConstants.kMaxIndexSpeed);
+    enable(IndexerConstants.kMaxIndexSpeed);
+  }
+
+  public void enable(double speed){
+    m_leftIndexer.set(speed);
+    m_rightIndexer.set(speed);
   }
 
   public void reverse(){

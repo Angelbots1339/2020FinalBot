@@ -80,7 +80,7 @@ public class IntakeArmPID extends PIDSubsystem {
    * Command to set the setpoint so the intake arms go up and down
    */
   public void runIntakeArms(){
-    if(m_Encoder.getPosition() >= -10){
+    if(m_Encoder.getPosition() <= -9){
       setSetpoint(0);
     }
     else{
@@ -90,8 +90,8 @@ public class IntakeArmPID extends PIDSubsystem {
 
   public void periodic() {
     super.periodic();
-    // SmartDashboard.putNumber(m_name + " Encoder", getMeasurement());
-    // SmartDashboard.putNumber(m_name + " Set Point", getController().getSetpoint());
+    SmartDashboard.putNumber(m_name + " Encoder", getMeasurement());
+    SmartDashboard.putNumber(m_name + " Set Point", getController().getSetpoint());
   }
 
   

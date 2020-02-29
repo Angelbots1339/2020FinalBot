@@ -19,6 +19,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.LoaderSubsystem;
 import frc.robot.subsystems.ShooterPID;
+import frc.robot.subsystems.LimelightSubsystem.LedMode;
 
 /**
  * RunVision
@@ -33,7 +34,7 @@ public class RunVision extends ParallelCommandGroup {
     IndexerSubsystem m_indexer;
     LoaderSubsystem m_loader;
     HoodPIDSubsystem m_hood;
-    ShootingProfiles m_targetProfile = new ShootingProfiles(-1, -1, -1);
+    ShootingProfiles m_targetProfile = new ShootingProfiles(-1, -1, -1, 0, 0);
 
     // add something that sets a default hood and speed once it no longer sees it
 
@@ -50,12 +51,13 @@ public class RunVision extends ParallelCommandGroup {
         m_hood = hood;
 
         addCommands(new RunShooter(m_leftShooter, m_rightShooter, m_targetProfile),
-                new RunHood(m_hood, m_targetProfile), new CameraAlign(m_drive, m_limeLight, m_targetProfile));
+                new RunHood(m_hood, m_targetProfile), 
+                new CameraAlign(m_drive, m_limeLight, m_targetProfile));
     }
 
     @Override
     public void initialize() {
-        // m_limeLight.setLed(LedMode.PIPELINE);
+        //m_limeLight.setLed(LedMode.PIPELINE);
         double currentDist = m_limeLight.getDistanceToVisionTarget();
         SmartDashboard.putNumber("current Dist", currentDist);
         /**
@@ -67,6 +69,8 @@ public class RunVision extends ParallelCommandGroup {
                         .collect(Collectors.minBy((a, b) -> (int) Math.signum(
                                 Math.abs(a.getDistance() - currentDist) - Math.abs(b.getDistance() - currentDist))))
                         .get());
+        m_limeLight.setActiveProfile(m_targetProfile);
+        m_limeLight.setAligning(true);
         super.initialize();
     }
 
@@ -100,10 +104,10 @@ public class RunVision extends ParallelCommandGroup {
 
     @Override
     public void end(boolean interrupted) {
-        // m_limeLight.setLed(LedMode.OFF);
-        super.end(interrupted);
-        new RunHood(m_hood, 0).schedule();
         //m_limeLight.setLed(LedMode.OFF);
+        super.end(interrupted);
+        m_limeLight.setAligning(false);
+
     }
 
 }

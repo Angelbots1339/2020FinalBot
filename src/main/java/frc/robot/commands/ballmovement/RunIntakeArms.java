@@ -47,14 +47,12 @@ public class RunIntakeArms extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_leftArm.disable();
-    m_rightArm.disable();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 
 }

@@ -27,7 +27,7 @@ public class RunHood extends CommandBase {
   }
 
   public RunHood(HoodPIDSubsystem hoodPID, double targetHood){
-    this(hoodPID, new ShootingProfiles(-1, -1, targetHood));
+    this(hoodPID, new ShootingProfiles(-1, -1, targetHood, 0, 0));
   }
 
   // Called when the command is initially scheduled.
@@ -35,7 +35,6 @@ public class RunHood extends CommandBase {
   public void initialize() {
     m_hoodPID.setSetpoint(m_targetProfile.getHoodvalue());
     m_hoodPID.enable();
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -46,12 +45,13 @@ public class RunHood extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_hoodPID.disable();
+    m_hoodPID.setSetpoint(0);
+    m_hoodPID.enable();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return m_hoodPID.atSetpoint();
+    return false;
   }
 }

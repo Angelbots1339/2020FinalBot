@@ -48,8 +48,8 @@ public class CameraAlign extends CommandBase {
 
     if (m_limeLight.seesTarget()) {
       driveError = m_limeLight.getDistanceToVisionTarget() - m_targetProfile.getDistance();
-      m_turn += Constants.LimelightConstants.kAngleP * m_limeLight.getXTargetOffset();
-      m_drive += driveError * Constants.LimelightConstants.kDriveP;
+      m_turn += m_targetProfile.getAngleP() * m_limeLight.getXTargetOffset();
+      // m_drive += driveError * Constants.LimelightConstants.kDriveP;
     }
 
     SmartDashboard.putNumber("Vision Turn", m_turn);

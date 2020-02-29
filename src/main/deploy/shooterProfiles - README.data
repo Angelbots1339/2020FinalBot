@@ -7,3 +7,5 @@
 
 2/27 Notes
 - Hood PID is slightly overshooting when running with Vision
+
+need to add p for angle and loader speed
