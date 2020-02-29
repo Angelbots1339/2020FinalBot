@@ -8,7 +8,6 @@
 package frc.robot.commands.vision;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.commands.util.ShootingProfiles;
 import frc.robot.subsystems.HoodPIDSubsystem;
 
 public class RunHood extends CommandBase {
@@ -53,6 +52,6 @@ public class RunHood extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return m_hoodPID.atSetpoint();
   }
 }

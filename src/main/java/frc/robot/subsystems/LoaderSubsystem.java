@@ -20,8 +20,8 @@ public class LoaderSubsystem extends SubsystemBase {
 
   private CANSparkMax m_loader;
   
-  private DigitalInput m_bottomLeftEmitter;
-  private DigitalInput m_bottomLeftReceiver;
+  private DigitalInput m_shooterEmitter;
+  private DigitalInput m_shooterReceiver;
   private DigitalInput m_bottomRightEmitter;
   private DigitalInput m_bottomRightReceiver;
   
@@ -31,10 +31,14 @@ public class LoaderSubsystem extends SubsystemBase {
   private DigitalInput m_topEmitter;
   private DigitalInput m_topReceiver;
 
+  private int m_count;
+
   /**
    * Creates a new LoaderSubsystem.
    */
   public LoaderSubsystem() {
+    m_count = 0;
+
     m_loader = new CANSparkMax(LoaderConstants.kLoaderMotor, MotorType.kBrushless);
     m_loader.setInverted(true);
     
@@ -45,8 +49,8 @@ public class LoaderSubsystem extends SubsystemBase {
     m_middleReceiver = new DigitalInput(SensorConstants.middleReciever);
 
     
-    m_bottomLeftEmitter = new DigitalInput(SensorConstants.bottomLeftEmitter);
-    m_bottomLeftReceiver = new DigitalInput(SensorConstants.bottomLeftReciever);
+    m_shooterEmitter = new DigitalInput(SensorConstants.ShooterEmitter);
+    m_shooterReceiver = new DigitalInput(SensorConstants.ShooterReciever);
     m_bottomRightEmitter = new DigitalInput(SensorConstants.bottomRightEmitter);
     m_bottomRightReceiver = new DigitalInput(SensorConstants.bottomRightReciever);
     
@@ -68,6 +72,16 @@ public class LoaderSubsystem extends SubsystemBase {
   }
 
   public void periodic() {
+   
+    // counting
+    if(isBottomBroken()){
+      m_count++;
+    }
+    if(isShooterBeamBroken()){
+      m_count--;
+    }
+
+
     SmartDashboard.putBoolean("Top Emitter", m_topEmitter.get());
     SmartDashboard.putBoolean("Top Reciever", m_topReceiver.get());
     SmartDashboard.putBoolean("Middle Emitter", m_middleEmitter.get());
@@ -76,13 +90,24 @@ public class LoaderSubsystem extends SubsystemBase {
     
     SmartDashboard.putBoolean("Bottom Right Emitter", m_bottomRightEmitter.get());
     SmartDashboard.putBoolean("Bottom Right Reciever", m_bottomRightReceiver.get());
-    SmartDashboard.putBoolean("Bottom Left Emitter", m_bottomLeftEmitter.get());
-    SmartDashboard.putBoolean("Bottom Left Reciever", m_bottomLeftReceiver.get());
-    
-  
+    SmartDashboard.putBoolean("Bottom Left Emitter", m_shooterEmitter.get());
+    SmartDashboard.putBoolean("Bottom Left Reciever", m_shooterReceiver.get());
 
+    SmartDashboard.putNumber("# of balls", getCount());
+    
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("loader", m_loader.get());
+  }
+
+  public int getCount(){
+    
+
+    return m_count;
+  }
+
+  public boolean isShooterBeamBroken(){
+    return!(m_shooterReceiver.get());
+    //return false;
   }
 
   public boolean isTopBeamBroken(){
