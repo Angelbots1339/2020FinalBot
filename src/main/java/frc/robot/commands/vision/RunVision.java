@@ -103,6 +103,7 @@ public class RunVision extends ParallelCommandGroup {
         // m_limeLight.setLed(LedMode.OFF);
         super.end(interrupted);
         new RunHood(m_hood, 0).schedule();
+        //m_limeLight.setLed(LedMode.OFF);
     }
 
 }

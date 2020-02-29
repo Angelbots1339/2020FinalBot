@@ -57,7 +57,7 @@ public class IntakeArmPID2 extends PIDSubsystem {
   }
 
   public void runIntakeArms(){
-    if(m_rightEncoder.getPosition() >= -10){
+    if(m_rightEncoder.getPosition() <= -10){
       setSetpoint(0);
     }
     else{

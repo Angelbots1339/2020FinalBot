@@ -172,6 +172,7 @@ public final class Constants {
         public static final double kLimeLightTilt = 25;
         public static final double k2XZoomCutoff = 3.785;//TODO
         public static final double k3XZoomCutoff = 5.436;//TODO
+        public static final double[] kPanningOffest = {0, -9, -8};//TODO
         public static final boolean kAutoZoom = true;
     
 

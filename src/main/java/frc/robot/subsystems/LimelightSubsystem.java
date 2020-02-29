@@ -57,7 +57,7 @@ public class LimelightSubsystem extends SubsystemBase {
 
   public double getDistanceToVisionTarget() {
     return LimelightConstants.kLimelightToTargetHeight
-        / Math.tan(Math.toRadians(getYTargetOffset() + LimelightConstants.kLimeLightTilt));
+        / Math.tan(Math.toRadians(getYTargetOffset() + LimelightConstants.kLimeLightTilt + LimelightConstants.kPanningOffest[getPipeline()]));
   }
 
   public void setPipeline(int index) {
