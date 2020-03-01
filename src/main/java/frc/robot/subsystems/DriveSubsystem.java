@@ -56,6 +56,18 @@ public class DriveSubsystem extends SubsystemBase {
 
     // Wooooah there - Chad implemented this for speed control on initial testing
     setMaxOutput(DriveConstants.kMaxDriveSpeed);
+    m_drive.setDeadband(DriveConstants.kMinPower);
+  }
+
+  /**
+   * Drives the robot using curvature controls.
+   *
+   * @param fwd the commanded forward movement
+   * @param rot the commanded rotation
+   */
+  public void curvatureDrive(double fwd, double rot) {
+    // speed limiting accomplished in Constructor
+    m_drive.curvatureDrive(fwd, rot, Math.abs(fwd) < DriveConstants.turnThreshold);
   }
 
   /**

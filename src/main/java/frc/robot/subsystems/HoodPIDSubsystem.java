@@ -71,6 +71,7 @@ public class HoodPIDSubsystem extends PIDSubsystem {
     SmartDashboard.putNumber("HoodEncoder", getMeasurement());
     SmartDashboard.putNumber("HoodSet", getController().getSetpoint());
     SmartDashboard.putNumber("Hood Current", m_hood.getOutputCurrent());
-    SmartDashboard.putNumber("Hood Current", m_hood.getMotorTemperature());
+    SmartDashboard.putNumber("Hood Applied Output", m_hood.getAppliedOutput());
+    SmartDashboard.putNumber("Hood Motor TEmp", m_hood.getMotorTemperature());
   }
 }

@@ -27,6 +27,7 @@ public final class Constants {
         public final static double kMaxDriveSpeed = 0.5; // speed
 
         public final static double kMinPower = 0.2; // speed
+		public static final double turnThreshold = 0.2;
     }
 
     public final class IntakeConstants{
@@ -145,13 +146,13 @@ public final class Constants {
         public final static double kmaxVeloValue = 0.2;
         public final static double kmaxNormalCurrent = 18;
         // PID HOOD
-        public final static double kP = 0.8;
+        public final static double kP = 0.8;//0.8
         public final static double kI = 0.0;
-        public final static double kD = 0;
+        public final static double kD = 0.019;
         public final static double kMaxHoodVolt = 4;
         public final static double kminEncoderValue = 0;
         public final static double kmaxEncoderValue = 17.5;
-        public final static double positionTolerance = .35;
+        public final static double positionTolerance = .5;
 		public static final double KSVolts = 0.13;
         public static final double KVVoltSecondsPerRotation = 12 * (12.5 / 11000); // Neo 550 - 11000 rpm, with 12.5:1 reduction
         
@@ -162,7 +163,7 @@ public final class Constants {
         public final static String kLimeTable = "limelight";
         public final static int kDefaultPipeline = 0;
         public static final double kDriveP = 0.25;
-        public static final double kDriveTolerance = 0.125;//used to be 0.055
+        public static final double kDriveTolerance = 0.4;//used to be 0.055
         public static final double kLimelightHeight = 0.43;
         public static final double kTagetHeight = 2.08;
         public static final double kLimelightToTargetHeight = kTagetHeight - kLimelightHeight;

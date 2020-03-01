@@ -52,7 +52,7 @@ public class RobotContainer {
   private final ShooterPID m_rightShooterPID = new ShooterPID(ShooterConstants.kRightShooter, "Right Shooter", true);
   private final ShooterPID m_leftShooterPID = new ShooterPID(ShooterConstants.kLeftShooter, "Left Shooter", false);
   private final ClimberSubsystem m_climber = new ClimberSubsystem();
-  // private final ServoSubsystem m_ServoSubsystem = new ServoSubsystem();
+  //private final ServoSubsystem m_servo = new ServoSubsystem();
   private final HoodPIDSubsystem m_hood = new HoodPIDSubsystem(8);
   private final LimelightSubsystem m_limelight = new LimelightSubsystem();
   private final IntakeArmPID m_rightArm = new IntakeArmPID(IntakeConstants.kRightIntakeMoverMotor, "Right Intake Arm",
@@ -95,7 +95,7 @@ public class RobotContainer {
         // A split-stick arcade command, with forward/backward controlled by the left
         // hand, and turning controlled by the right.
         // Left Y Axis needs to be inverted for driving forward
-        new RunCommand(() -> m_drive.arcadeDrive(-1 * m_driverController.getRawAxis(OIconstants.leftYAxis),
+        new RunCommand(() -> m_drive.curvatureDrive(-1 * m_driverController.getRawAxis(OIconstants.leftYAxis),
             m_driverController.getRawAxis(OIconstants.rightXAxis)), m_drive));
 
   }
@@ -166,10 +166,14 @@ public class RobotContainer {
             m_loader, m_hood));
     // X button --- unload/unjam
     new JoystickButton(m_driverController, Button.kX.value).whenHeld(new ReverseEverything(m_loader, m_intake, m_indexer));
-    // Y button --- mode changes
+    // Y button --- deploy buddy climbing
+    // new JoystickButton(m_driverController, Button.kY.value).whenPressed(() -> m_climber.enable())
+    //     .whenReleased(() -> m_climber.disable()); ---doesn't work yet
     // A button --- intake arm up/dowm --- broken?
     // new JoystickButton(m_driverController, Button.kA.value).whenPressed(new RunIntakeArms(m_rightArm, m_leftArm));
-    // B button --- 
+    // B button --- climb
+    new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> m_climber.enable())
+        .whenReleased(() -> m_climber.disable()); // needs to be inverted
     
     /**
      * OPERATOR CONTROLLER

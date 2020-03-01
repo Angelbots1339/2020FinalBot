@@ -27,10 +27,10 @@ public class ServoSubsystem extends SubsystemBase {
   }
 
   public void setBothAngle(double degrees) {
-    //leftServo.setAngle(degrees);
-    //rightServo.setAngle(degrees);
-    rightServo.set(0.0);//need to find setpoints
-    leftServo.set(0.0);
+    leftServo.setAngle(degrees);
+    rightServo.setAngle(degrees);
+   // rightServo.set(0.0);//need to find setpoints
+   // leftServo.set(0.0);
   }
 
   public double getLeftAngle(){
