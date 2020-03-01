@@ -15,54 +15,64 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpiutil.math.MathUtil;
+import frc.robot.Constants.DashboardConstants;
 import frc.robot.Constants.IntakeConstants;
+
 /**
  * currently testing this
  */
 
 public class IntakeArmPID extends PIDSubsystem {
-  private final CANSparkMax m_motor;
-  private final CANEncoder m_Encoder;
+  private final CANSparkMax m_leftMotor;
+  private final CANSparkMax m_rightMotor;
+  private final CANEncoder m_rightEncoder;
 
-  private final String m_name;
-  private double setpoint = 0;
+  private double m_setpoint = 0;
 
   /**
    * Creates a new Intake Arm PID.
    */
-  public IntakeArmPID(int motorID, String name, boolean inverted) {
+  public IntakeArmPID() {
     super(new PIDController(IntakeConstants.kP, IntakeConstants.kI, IntakeConstants.kD));
-    m_motor = new CANSparkMax(motorID, MotorType.kBrushless);
-    m_Encoder = new CANEncoder(m_motor);
-    m_Encoder.setPosition(0);
-    m_name = name;
+    m_leftMotor = new CANSparkMax(IntakeConstants.kLeftIntakeMoverMotor, MotorType.kBrushless);
+    m_rightMotor = new CANSparkMax(IntakeConstants.kRightIntakeMoverMotor, MotorType.kBrushless);
+    m_rightEncoder = new CANEncoder(m_rightMotor);
+    m_rightEncoder.setPosition(0);
+    // Spark 8 - Right - Inverted
+    // Spark 9 - Left - Not Inverted
+    m_leftMotor.setInverted(false);
+    m_rightMotor.setInverted(true);
+    m_leftMotor.follow(m_rightMotor, true);
 
-    // Spark 8 - Right - Inverted 
-    // Spark 9 - Left -  Not Inverted
-    m_motor.setInverted(inverted);
-
-    getController().setTolerance(IntakeConstants.positionTolerance);
-
-    // Regardless of what's passed in, clamp to the min and max
-    MathUtil.clamp(setpoint, IntakeConstants.kminEncoderValue, IntakeConstants.kmaxEncoderValue);
-    setSetpoint(setpoint);
+    getController().setTolerance(IntakeConstants.kPositionTolerance);
+    setSetpoint(m_setpoint);
   }
 
   public double getSetpoint() {
-    return setpoint;
+    return m_setpoint;
+  }
+
+  public void runIntakeArms() {
+
+    /*
+     * if(m_rightEncoder.getPosition() <= -1){
+     * setSetpoint(IntakeConstants.kMaxEncoderValue); enable(); }else{
+     * setSetpoint(IntakeConstants.kMinEncoderValue); enable(); }
+     */
   }
 
   @Override
   public void useOutput(double output, double setpoint) {
     output = MathUtil.clamp(output, -IntakeConstants.kIntakeArmMotorVolt, IntakeConstants.kIntakeArmMotorVolt);
-    m_motor.setVoltage(output);
-    SmartDashboard.putNumber(m_name + " Output", output);
+    m_rightMotor.setVoltage(output);
+    SmartDashboard.putNumber("Right Intake Arm Output", output);
+    SmartDashboard.putNumber("Left Intake Arm Output", m_leftMotor.get());
   }
 
   @Override
   public double getMeasurement() {
     // Return the process variable measurement here
-    return m_Encoder.getPosition();
+    return m_rightEncoder.getPosition();
   }
 
   public boolean atSetpoint() {
@@ -71,28 +81,26 @@ public class IntakeArmPID extends PIDSubsystem {
 
   public void setSetpoint(double setpoint) {
     // Regardless of what's passed in, clamp to the min and max
-    setpoint = MathUtil.clamp(setpoint, IntakeConstants.kminEncoderValue, IntakeConstants.kmaxEncoderValue);
+    setpoint = MathUtil.clamp(setpoint, IntakeConstants.kMinEncoderValue, IntakeConstants.kMaxEncoderValue);
     super.setSetpoint(setpoint);
-    this.setpoint = setpoint;
-  }
-
-  /**
-   * Command to set the setpoint so the intake arms go up and down
-   */
-  public void runIntakeArms(){
-    if(m_Encoder.getPosition() <= -9){
-      setSetpoint(0);
-    }
-    else{
-      setSetpoint(-10);
-    }
+    m_setpoint = setpoint;
   }
 
   public void periodic() {
     super.periodic();
-    SmartDashboard.putNumber(m_name + " Encoder", getMeasurement());
-    SmartDashboard.putNumber(m_name + " Set Point", getController().getSetpoint());
+    if (DashboardConstants.kIntakeArmTelemetry) {
+      SmartDashboard.putNumber("Right Intake Arm Encoder", getMeasurement());
+      SmartDashboard.putNumber("Left Intake Arm Current", m_leftMotor.getOutputCurrent());
+      SmartDashboard.putNumber("Right Intake Arm Set Point", getController().getSetpoint());
+    }
   }
 
-  
+  public void toggleSetpoint() {
+    if (getSetpoint() < (IntakeConstants.kMinEncoderValue + IntakeConstants.kMaxEncoderValue) / 2) {
+      setSetpoint(IntakeConstants.kMaxEncoderValue);
+    } else {
+      setSetpoint(IntakeConstants.kMinEncoderValue);
+    }
+  }
+
 }

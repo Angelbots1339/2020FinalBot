@@ -11,19 +11,16 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIconstants;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.commands.autonomous.Auto;
 import frc.robot.commands.ballmovement.LoaderToMiddleBB;
 import frc.robot.commands.ballmovement.ReverseEverything;
-import frc.robot.commands.ballmovement.RunIntakeArms;
-import frc.robot.commands.ballmovement.RunShooter;
-import frc.robot.commands.vision.RunHood;
+import frc.robot.commands.ballmovement.ToggleIntakeArms;
 import frc.robot.commands.vision.RunVision;
 import frc.robot.commands.vision.ShootAllBalls;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -34,6 +31,7 @@ import frc.robot.subsystems.IntakeArmPID;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.LoaderSubsystem;
+import frc.robot.subsystems.ServoSubsystem;
 import frc.robot.subsystems.ShooterPID;
 
 /**
@@ -52,34 +50,13 @@ public class RobotContainer {
   private final ShooterPID m_rightShooterPID = new ShooterPID(ShooterConstants.kRightShooter, "Right Shooter", true);
   private final ShooterPID m_leftShooterPID = new ShooterPID(ShooterConstants.kLeftShooter, "Left Shooter", false);
   private final ClimberSubsystem m_climber = new ClimberSubsystem();
-  //private final ServoSubsystem m_servo = new ServoSubsystem();
+  private final ServoSubsystem m_servo = new ServoSubsystem();
   private final HoodPIDSubsystem m_hood = new HoodPIDSubsystem(8);
   private final LimelightSubsystem m_limelight = new LimelightSubsystem();
-  private final IntakeArmPID m_rightArm = new IntakeArmPID(IntakeConstants.kRightIntakeMoverMotor, "Right Intake Arm",
-      true);
-  private final IntakeArmPID m_leftArm = new IntakeArmPID(IntakeConstants.kLeftIntakeMoverMotor, "Left Intake Arm",
-      false);
-
-  // private final IntakeArmPID2 m_intakeArm = new IntakeArmPID2();
+  private final IntakeArmPID m_arm = new IntakeArmPID();
 
   XboxController m_driverController = new XboxController(OIconstants.kDriverControllerPort);
-  XboxController m_operatorController = new XboxController(OIconstants.kOperatorControllerPort);
   XboxController m_testController = new XboxController(OIconstants.kTestControllerPort);
-
-  public static enum Mode {
-    AUTO(false), COLLECTION(true), ALIGN(true), SHOOTING(true), DEFENSE(false);
-
-    private boolean m_isShootCycle;
-
-    private Mode(boolean isShootCycle) {
-      m_isShootCycle = isShootCycle;
-    }
-
-    public boolean isShootCycle() {
-      // return COLLECTION || ALIGN || SHOOTING;
-      return false;
-    }
-  }
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -87,7 +64,6 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the button bindings
     configureButtonBindings();
-    // m_hoodSubsystem.resetEncoder();
 
     // Configure default commands
     // Set the default drive command to split-stick arcade drive
@@ -95,8 +71,8 @@ public class RobotContainer {
         // A split-stick arcade command, with forward/backward controlled by the left
         // hand, and turning controlled by the right.
         // Left Y Axis needs to be inverted for driving forward
-        new RunCommand(() -> m_drive.curvatureDrive(-1 * m_driverController.getRawAxis(OIconstants.leftYAxis),
-            m_driverController.getRawAxis(OIconstants.rightXAxis)), m_drive));
+        new RunCommand(() -> m_drive.curvatureDrive(-1 * m_driverController.getY(Hand.kLeft),
+            m_driverController.getX(Hand.kRight)), m_drive));
 
   }
 
@@ -113,14 +89,9 @@ public class RobotContainer {
      * 
      */
 
-    new JoystickButton(m_testController, Button.kA.value).whenHeld(new RunHood(m_hood, -.1));
-    new JoystickButton(m_testController, Button.kB.value).whenHeld(new RunHood(m_hood, 14));
-    new JoystickButton(m_testController, Button.kX.value).whenHeld(new RunHood(m_hood, 16));
-
-    new JoystickButton(m_testController, Button.kBumperLeft.value)
-        .whenHeld(new RunIntakeArms(m_rightArm, m_leftArm));
-    new JoystickButton(m_testController, Button.kBumperRight.value)
-        .whenHeld(new RunIntakeArms(m_rightArm, m_leftArm));
+    //new JoystickButton(m_testController, Button.kA.value).whenHeld(new RunHood(m_hood, -.1));
+    //new JoystickButton(m_testController, Button.kB.value).whenHeld(new RunHood(m_hood, 14));
+    new JoystickButton(m_testController, Button.kBumperRight.value).whenPressed(() -> m_servo.engage());
     /**
      * DRIVER CONTROLLER
      */
@@ -164,17 +135,19 @@ public class RobotContainer {
     new Trigger(() -> m_driverController.getTriggerAxis(Hand.kLeft) > Constants.OIconstants.kLeftTriggerThreshold)
         .whileActiveOnce(new RunVision(m_limelight, m_drive, m_leftShooterPID, m_rightShooterPID, m_intake, m_indexer,
             m_loader, m_hood));
+    // A button -- Intake arm toggle
+    new JoystickButton(m_driverController, Button.kA.value).whenPressed(new ToggleIntakeArms(m_arm));
+
+    // B button --- climb
+    new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> m_climber.enable())
+       .whenReleased(() -> m_climber.disable());
     // X button --- unload/unjam
     new JoystickButton(m_driverController, Button.kX.value).whenHeld(new ReverseEverything(m_loader, m_intake, m_indexer));
     // Y button --- deploy buddy climbing
     // new JoystickButton(m_driverController, Button.kY.value).whenPressed(() -> m_climber.enable())
     //     .whenReleased(() -> m_climber.disable()); ---doesn't work yet
-    // A button --- intake arm up/dowm --- broken?
-    // new JoystickButton(m_driverController, Button.kA.value).whenPressed(new RunIntakeArms(m_rightArm, m_leftArm));
-    // B button --- climb
-    new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> m_climber.enable())
-        .whenReleased(() -> m_climber.disable()); // needs to be inverted
-    
+
+        
     /**
      * OPERATOR CONTROLLER
      */
@@ -197,7 +170,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return new Auto(m_rightArm, m_leftArm);
+    return null;
+    // return new Auto(m_rightArm, m_leftArm);
   }
 }

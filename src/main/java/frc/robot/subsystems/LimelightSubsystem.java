@@ -11,13 +11,14 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.DashboardConstants;
 import frc.robot.Constants.LimelightConstants;
 import frc.robot.commands.vision.ShootingProfiles;;
 
 public class LimelightSubsystem extends SubsystemBase {
 
   private NetworkTable mNetworkTable;
-  private LedMode mLedMode = LedMode.PIPELINE; 
+  private LedMode mLedMode = LedMode.PIPELINE;
   private boolean m_isAligned = true;
   private boolean m_isAligning = false;
   private ShootingProfiles m_latestTargetProfile = new ShootingProfiles(3, 0, 0, 0, 0);
@@ -60,8 +61,8 @@ public class LimelightSubsystem extends SubsystemBase {
   }
 
   public double getDistanceToVisionTarget() {
-    return LimelightConstants.kLimelightToTargetHeight
-        / Math.tan(Math.toRadians(getYTargetOffset() + LimelightConstants.kLimeLightTilt + LimelightConstants.kPanningOffest[getPipeline()]));
+    return LimelightConstants.kLimelightToTargetHeight / Math.tan(Math.toRadians(
+        getYTargetOffset() + LimelightConstants.kLimeLightTilt + LimelightConstants.kPanningOffest[getPipeline()]));
   }
 
   public void setPipeline(int index) {
@@ -80,17 +81,15 @@ public class LimelightSubsystem extends SubsystemBase {
           : 0);
     if (!seesTarget())
       setPipeline(0);
+
+    if (DashboardConstants.kLimelightTelemetry) {
+      SmartDashboard.putBoolean(LimelightConstants.kLimeTable + ": Has Target", seesTarget());
+      SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Pipeline Latency(ms)", getLatency());
+      SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": X ", getXTargetOffset());
+      SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Y", getYTargetOffset());
+    }
     SmartDashboard.putString("profile", m_latestTargetProfile.toString());
-    // SmartDashboard.putBoolean(LimelightConstants.kLimeTable + ": Has Target",
-    // seesTarget());
-    // SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Pipeline Latency
-    // (ms)", getLatency());
-    // SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": X ",
-    // getXTargetOffset());
-    // SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Y",
-    // getYTargetOffset());
-    SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Dist",
-    getDistanceToVisionTarget());
+    SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Dist", getDistanceToVisionTarget());
   }
 
   public void setAligned(boolean isAligned) {

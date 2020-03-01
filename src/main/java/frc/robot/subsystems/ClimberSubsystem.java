@@ -12,8 +12,10 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
+import frc.robot.Constants.DashboardConstants;
 
 public class ClimberSubsystem extends SubsystemBase {
   /**
@@ -26,14 +28,15 @@ public class ClimberSubsystem extends SubsystemBase {
   private CANEncoder m_rightEncoder;
   private CANEncoder m_leftEncoder;
 
-  /** TODO
-   * Need feedback to Driver Station in case of improper setup
-   * For Example, if climber is ran for xxx seconds but encoder does not register then kill the climb?
-   * Mechanically, this setup would mean the motors are back-driving into the wrench ratchet
+  /**
+   * TODO Need feedback to Driver Station in case of improper setup For Example,
+   * if climber is ran for xxx seconds but encoder does not register then kill the
+   * climb? Mechanically, this setup would mean the motors are back-driving into
+   * the wrench ratchet
    */
   public ClimberSubsystem() {
-    //m_rightEncoder = new CANEncoder(m_rightClimber);
-    //m_leftEncoder = new CANEncoder(m_leftClimber);
+    // m_rightEncoder = new CANEncoder(m_rightClimber);
+    // m_leftEncoder = new CANEncoder(m_leftClimber);
     m_rightClimber = new CANSparkMax(ClimberConstants.kRightClimberMotor, MotorType.kBrushless);
     m_leftClimber = new CANSparkMax(ClimberConstants.kLeftClimberMotor, MotorType.kBrushless);
 
@@ -45,30 +48,30 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   /*
-  TODO - Needs to be verified for direction, enable() uses a negative value
-  public void enable(double speed){
-    m_rightClimber.set(speed);
-    m_leftClimber.set(speed);
-    m_speed = speed;
-  }
-  */
+   * TODO - Needs to be verified for direction, enable() uses a negative value
+   * public void enable(double speed){ m_rightClimber.set(speed);
+   * m_leftClimber.set(speed); m_speed = speed; }
+   */
 
-  public void enable(){
+  public void enable() {
     m_rightClimber.set(-1 * ClimberConstants.kClimberSpeed);
     m_leftClimber.set(-1 * ClimberConstants.kClimberSpeed);
   }
+
   @Override
   public void periodic() {
-    // SmartDashboard.putNumber("Left Climb Amp", m_leftClimber.getOutputCurrent());
-    // SmartDashboard.putNumber("Right Climb Amp", m_rightClimber.getOutputCurrent());
-    // SmartDashboard.putNumber("Climber Speed", m_speed);
-    //SmartDashboard.putNumber("Left Climb Encoder", m_leftEncoder.getPosition());
-    //SmartDashboard.putNumber("Right Climb Encoder", m_rightEncoder.getPosition());
+    if (DashboardConstants.kClimberTelemetry) {
+      SmartDashboard.putNumber("Left Climb Amp", m_leftClimber.getOutputCurrent());
+      SmartDashboard.putNumber("Right Climb Amp", m_rightClimber.getOutputCurrent());
+      SmartDashboard.putNumber("Climber Speed", m_speed);
+      SmartDashboard.putNumber("Left Climb Encoder", m_leftEncoder.getPosition());
+      SmartDashboard.putNumber("Right Climb Encoder", m_rightEncoder.getPosition());
+    }
     // This method will be called once per scheduler run
   }
 
-public void disable() {
-	m_rightClimber.set(0);
-  m_leftClimber.set(0);
-}
+  public void disable() {
+    m_rightClimber.set(0);
+    m_leftClimber.set(0);
+  }
 }

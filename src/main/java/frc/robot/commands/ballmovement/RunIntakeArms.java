@@ -15,28 +15,23 @@ import frc.robot.subsystems.IntakeArmPID;
 
 public class RunIntakeArms extends CommandBase {
 
-  private final IntakeArmPID m_rightArm;
-  private final IntakeArmPID m_leftArm;
-
+  private final IntakeArmPID m_arm;
+  private double m_setpoint;
   /**
    * Creates a new RunIntakeArms.
    */
-  public RunIntakeArms(IntakeArmPID right, IntakeArmPID left){
+  public RunIntakeArms(IntakeArmPID arm, double setpoint){
     // Use addRequirements() here to declare subsystem dependencies.
-    m_rightArm = right;
-    addRequirements(m_rightArm);
-
-    m_leftArm = left;
-    addRequirements(m_leftArm);
+    m_arm = arm;
+    m_setpoint = setpoint;
+    addRequirements(m_arm);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_leftArm.runIntakeArms();
-    m_rightArm.runIntakeArms();
-    m_leftArm.enable();
-    m_rightArm.enable();
+    m_arm.setSetpoint(m_setpoint);
+    m_arm.enable();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -47,12 +42,13 @@ public class RunIntakeArms extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_arm.disable();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return true;
+    return false;
   }
 
 }

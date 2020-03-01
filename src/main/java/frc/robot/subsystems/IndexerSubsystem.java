@@ -9,7 +9,10 @@ package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.DashboardConstants;
 import frc.robot.Constants.IndexerConstants;
 
 public class IndexerSubsystem extends SubsystemBase {
@@ -28,21 +31,21 @@ public class IndexerSubsystem extends SubsystemBase {
     m_rightIndexer.setInverted(false);
   }
 
-  public void enable(){
+  public void enable() {
     enable(IndexerConstants.kMaxIndexSpeed);
   }
 
-  public void enable(double speed){
+  public void enable(double speed) {
     m_leftIndexer.set(speed);
     m_rightIndexer.set(speed);
   }
 
-  public void reverse(){
+  public void reverse() {
     m_leftIndexer.set(IndexerConstants.kMaxIndexSpeed * -1);
     m_rightIndexer.set(IndexerConstants.kMaxIndexSpeed * -1);
   }
 
-  public void disable(){
+  public void disable() {
     m_leftIndexer.set(0);
     m_rightIndexer.set(0);
   }
@@ -50,20 +53,22 @@ public class IndexerSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    /*
-    SmartDashboard.putNumber("right indexer", m_rightIndexer.get());
-    SmartDashboard.putNumber("left indexer", m_leftIndexer.get());
-    SmartDashboard.putNumber("Right Indexer Amps", m_rightIndexer.getOutputCurrent());
-    SmartDashboard.putNumber("Left Indexer Amps", m_leftIndexer.getOutputCurrent());*/
-    
+    if (DashboardConstants.kIndexerTelemetry) {
+      SmartDashboard.putNumber("right indexer", m_rightIndexer.get());
+      SmartDashboard.putNumber("left indexer", m_leftIndexer.get());
+      SmartDashboard.putNumber("Right Indexer Amps", m_rightIndexer.getOutputCurrent());
+      SmartDashboard.putNumber("Left Indexer Amps", m_leftIndexer.getOutputCurrent());
+    }
+
   }
+
   /**
-   * Returns true if the current spikes in the indexer
-   * TODO - this needs to be checked for the actual stall current, do not use otherwise
+   * Returns true if the current spikes in the indexer TODO - this needs to be
+   * checked for the actual stall current, do not use otherwise
    */
-  public boolean isCurrentSpike(){
-    return (m_leftIndexer.getOutputCurrent() > IndexerConstants.kAcceptableCurrentSpike) || 
-           (m_rightIndexer.getOutputCurrent() > IndexerConstants.kAcceptableCurrentSpike);
+  public boolean isCurrentSpike() {
+    return (m_leftIndexer.getOutputCurrent() > IndexerConstants.kAcceptableCurrentSpike)
+        || (m_rightIndexer.getOutputCurrent() > IndexerConstants.kAcceptableCurrentSpike);
   }
 
 }

@@ -75,6 +75,12 @@ public class ShootAllBalls extends CommandBase {
       m_intake.enableIntake();
       m_indexer.enable(latestProfile.getLoadingSpeed());
       m_loader.enable();
+    }else{
+      if(m_loader.isTopBeamBroken()){
+        m_intake.disableIntake();
+        m_indexer.disable();
+        m_loader.disable();
+      }
     }
   }
 

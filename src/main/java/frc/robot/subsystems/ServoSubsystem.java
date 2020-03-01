@@ -8,9 +8,10 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
-
+import frc.robot.Constants.DashboardConstants;
 
 public class ServoSubsystem extends SubsystemBase {
   /**
@@ -19,36 +20,38 @@ public class ServoSubsystem extends SubsystemBase {
 
   private Servo leftServo;
   private Servo rightServo;
-  private boolean engageToggle;
+  private boolean engageToggle = true;
 
   public ServoSubsystem() {
     leftServo = new Servo(ClimberConstants.kLeftServo);
     rightServo = new Servo(ClimberConstants.kRightServo);
+
   }
 
   public void setBothAngle(double degrees) {
     leftServo.setAngle(degrees);
     rightServo.setAngle(degrees);
-   // rightServo.set(0.0);//need to find setpoints
-   // leftServo.set(0.0);
+    // rightServo.set(0.0);//need to find setpoints
+    // leftServo.set(0.0);
   }
 
-  public double getLeftAngle(){
+  public double getLeftAngle() {
     return leftServo.get();
   }
 
-  public double getRightAngle(){
+  public double getRightAngle() {
     return rightServo.get();
   }
 
+  // Right Servo is correct
   public void engage() {
-    if(getEngageToggled()) { // if false (engaged) set to unlocked position
-      rightServo.setAngle(0.0);//TODO this ain't final someone check this
-      leftServo.setAngle(0.0);//TODO this ain't final someone check this
+    if (getEngageToggled()) { // if false (engaged) set to unlocked position
+      rightServo.setAngle(90);// TODO this ain't final someone check this
+      leftServo.setAngle(0.0);// TODO this ain't final someone check this
       toggleEngage();
     } else { // else sets to locked
-      rightServo.setAngle(90.0);//TODO this ain't final someone check this
-      leftServo.setAngle(90.0);//TODO this ain't final someone check this
+      rightServo.setAngle(0);// TODO this ain't final someone check this
+      leftServo.setAngle(90.0);// TODO this ain't final someone check this
       toggleEngage();
     }
   }
@@ -61,27 +64,12 @@ public class ServoSubsystem extends SubsystemBase {
     return engageToggle;
   }
 
-
-
-
-  /*public void crankDatSouljaBoy() {
-    if(refreshCount < 50) {
-      rightServo.set(1.0);
-      leftServo.set(1.0);
-    } else {
-      refreshCount++;
-      rightServo.set(0.0);
-      leftServo.set(0.0);
-    }
-  }
-*/
-
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-    //crankDatSouljaBoy();
 
-    //SmartDashboard.putNumber("LeftPos", leftServo.get());
-    //SmartDashboard.putNumber("RightPos", rightServo.get());
+    if (DashboardConstants.kServoTelemetry) {
+      SmartDashboard.putNumber("L Servo Pos", leftServo.get());
+      SmartDashboard.putNumber("R Servo Pos", rightServo.get());
+    }
   }
 }

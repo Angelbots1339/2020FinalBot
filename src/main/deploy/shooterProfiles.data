@@ -1,9 +1,12 @@
 // 2m 3400rpm 13.2hr
 // 2.5m 3800rpm 13.6hr
-3m 4000rpm 16hr 0.085aP 0.5LS
-4m 4000rpm 16hr 0.085aP 0.5LS
-5m 4000rpm 16hr 0.085aP 0.5LS
-6m 5600rpm 16.8hr 0.075aP 0.5LS
-7m 5600rpm 16.8hr 0.075aP 0.5LS
-8.4m 5600rpm 17.2hr 0.080aP 0.5LS
+1.5m 3500rpm 9hr 0.085aP 0.48LS
+2m 3500rpm 14hr 0.085aP 0.48LS
+3m 3500rpm 15.5hr 0.085aP 0.5LS
+4m 3600rpm 17hr 0.085aP 0.35LS
+5m 3600rpm 17.5hr 0.085aP 0.5LS
+6m 3900rpm 17.5hr 0.095aP 0.25LS
+7m 3900rpm 17.5hr 0.095aP 0.25LS
+8m 5600rpm 17.2hr 0.080aP 0.5LS
+9m 5600rpm 16.5hr 0.080aP 0.5LS
 // 12m 5600rpm 17.5 0.80aP 0.5LS

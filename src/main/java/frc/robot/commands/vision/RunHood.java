@@ -45,7 +45,7 @@ public class RunHood extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_hoodPID.setSetpoint(1);
+    m_hoodPID.setSetpoint(0.1);
     m_hoodPID.enable();
   }
 

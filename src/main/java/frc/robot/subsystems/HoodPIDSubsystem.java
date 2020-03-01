@@ -16,11 +16,12 @@ import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import edu.wpi.first.wpiutil.math.MathUtil;
+import frc.robot.Constants.DashboardConstants;
 import frc.robot.Constants.HoodedShooterConstants;
 
 public class HoodPIDSubsystem extends PIDSubsystem {
   private final CANSparkMax m_hood;
-  private final CANEncoder m_Encoder;
+  private final CANEncoder m_encoder;
 
   private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(HoodedShooterConstants.KSVolts,
       HoodedShooterConstants.KVVoltSecondsPerRotation);
@@ -31,13 +32,13 @@ public class HoodPIDSubsystem extends PIDSubsystem {
   public HoodPIDSubsystem(double setpoint) {
     super(new PIDController(HoodedShooterConstants.kP, HoodedShooterConstants.kI, HoodedShooterConstants.kD));
     m_hood = new CANSparkMax(HoodedShooterConstants.kHoodPort, MotorType.kBrushless);
-    m_Encoder = new CANEncoder(m_hood);
-    m_Encoder.setPosition(0);
+    m_encoder = new CANEncoder(m_hood);
+    m_encoder.setPosition(0);
 
-    getController().setTolerance(HoodedShooterConstants.positionTolerance);
+    getController().setTolerance(HoodedShooterConstants.kPositionTolerance);
 
     // Regardless of what's passed in, clamp to the min and max
-    MathUtil.clamp(setpoint, HoodedShooterConstants.kminEncoderValue, HoodedShooterConstants.kmaxEncoderValue);
+    MathUtil.clamp(setpoint, HoodedShooterConstants.kMinEncoderValue, HoodedShooterConstants.kmaxEncoderValue);
     setSetpoint(setpoint);
   }
 
@@ -52,7 +53,7 @@ public class HoodPIDSubsystem extends PIDSubsystem {
   @Override
   public double getMeasurement() {
     // Return the process variable measurement here
-    return m_Encoder.getPosition();
+    return m_encoder.getPosition();
   }
 
   public boolean atSetpoint() {
@@ -61,21 +62,23 @@ public class HoodPIDSubsystem extends PIDSubsystem {
 
   public void setSetpoint(double setpoint) {
     // Regardless of what's passed in, clamp to the min and max
-    setpoint = MathUtil.clamp(setpoint, HoodedShooterConstants.kminEncoderValue,
+    setpoint = MathUtil.clamp(setpoint, HoodedShooterConstants.kMinEncoderValue,
         HoodedShooterConstants.kmaxEncoderValue);
     super.setSetpoint(setpoint);
   }
 
   public void periodic() {
     super.periodic();
-    if (m_hood.getOutputCurrent() > HoodedShooterConstants.kminResistedVoltage) {
-      m_Encoder.setPosition(m_hood.getOutputCurrent() > 0 ? HoodedShooterConstants.kmaxEncoderValue
-          : HoodedShooterConstants.kminEncoderValue);
+    if (m_hood.getOutputCurrent() > HoodedShooterConstants.kMinResistedVoltage) {
+      m_encoder.setPosition(m_hood.getOutputCurrent() > 0 ? HoodedShooterConstants.kmaxEncoderValue
+          : HoodedShooterConstants.kMinEncoderValue);
     }
-    SmartDashboard.putNumber("HoodEncoder", getMeasurement());
-    SmartDashboard.putNumber("HoodSet", getController().getSetpoint());
-    SmartDashboard.putNumber("Hood Current", m_hood.getOutputCurrent());
-    SmartDashboard.putNumber("Hood Applied Output", m_hood.getAppliedOutput());
-    SmartDashboard.putNumber("Hood Motor TEmp", m_hood.getMotorTemperature());
+    if (DashboardConstants.kHoodPIDTelemetry) {
+      SmartDashboard.putNumber("HoodEncoder", getMeasurement());
+      SmartDashboard.putNumber("HoodSet", getController().getSetpoint());
+      SmartDashboard.putNumber("Hood Current", m_hood.getOutputCurrent());
+      SmartDashboard.putNumber("Hood Applied Output", m_hood.getAppliedOutput());
+      SmartDashboard.putNumber("Hood Motor Temp", m_hood.getMotorTemperature());
+    }
   }
 }

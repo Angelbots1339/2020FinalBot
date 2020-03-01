@@ -9,14 +9,14 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 //import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.DashboardConstants;
 import frc.robot.Constants.DriveConstants;
 
 public class DriveSubsystem extends SubsystemBase {
   // The motors on the left side of the drive.
   private WPI_TalonFX m_leftFront = new WPI_TalonFX(DriveConstants.kLeftFrontMotor);
   private WPI_TalonFX m_leftBack = new WPI_TalonFX(DriveConstants.kLeftBackMotor);
-  
-                         
+
   // The motors on the right side of the drive.
   private WPI_TalonFX m_rightFront = new WPI_TalonFX(DriveConstants.kRightFrontMotor);
   private WPI_TalonFX m_rightBack = new WPI_TalonFX(DriveConstants.kRightBackMotor);
@@ -67,7 +67,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void curvatureDrive(double fwd, double rot) {
     // speed limiting accomplished in Constructor
-    m_drive.curvatureDrive(fwd, rot, Math.abs(fwd) < DriveConstants.turnThreshold);
+    m_drive.curvatureDrive(fwd, rot, Math.abs(fwd) < DriveConstants.kTurnInPlaceThreshold);
   }
 
   /**
@@ -105,9 +105,9 @@ public class DriveSubsystem extends SubsystemBase {
     double rightSpeed = Math.abs(right) > threshold
         ? Math.copySign(Math.max(DriveConstants.kMinPower, Math.abs(right)), right)
         : 0;
-        SmartDashboard.putNumber("real left Vision", leftSpeed);
-        SmartDashboard.putNumber("real right Vision", rightSpeed);
-    
+    SmartDashboard.putNumber("real left Vision", leftSpeed);
+    SmartDashboard.putNumber("real right Vision", rightSpeed);
+
     m_drive.tankDrive(leftSpeed, rightSpeed, false);
     // m_leftMotors.set(leftSpeed);
     // m_rightMotors.set(rightSpeed);
@@ -184,28 +184,28 @@ public class DriveSubsystem extends SubsystemBase {
    * (DriveConstants.kGyroReversed ? -1.0 : 1.0); }
    */
 
-  public void periodic(){
-    
-    SmartDashboard.putNumber("left front speed", m_leftFront.get());
-    SmartDashboard.putNumber("left back speed", m_rightBack.get());
-    SmartDashboard.putNumber("right front speed", m_rightFront.get());
-    SmartDashboard.putNumber("right back speed", m_rightFront.get());
+  public void periodic() {
+    if (DashboardConstants.kDriveTelemetry) {
+      SmartDashboard.putNumber("left front speed", m_leftFront.get());
+      SmartDashboard.putNumber("left back speed", m_rightBack.get());
+      SmartDashboard.putNumber("right front speed", m_rightFront.get());
+      SmartDashboard.putNumber("right back speed", m_rightFront.get());
 
-    SmartDashboard.putNumber("left front temp", m_leftFront.getTemperature());
-    SmartDashboard.putNumber("left back temp", m_rightBack.getTemperature());
-    SmartDashboard.putNumber("right front temp", m_rightFront.getTemperature());
-    SmartDashboard.putNumber("right back temp", m_rightFront.getTemperature());
+      SmartDashboard.putNumber("left front temp", m_leftFront.getTemperature());
+      SmartDashboard.putNumber("left back temp", m_rightBack.getTemperature());
+      SmartDashboard.putNumber("right front temp", m_rightFront.getTemperature());
+      SmartDashboard.putNumber("right back temp", m_rightFront.getTemperature());
 
-    SmartDashboard.putNumber("left front volt", m_leftFront.getBusVoltage());
-    SmartDashboard.putNumber("left back volt", m_rightBack.getBusVoltage());
-    SmartDashboard.putNumber("right front volt", m_rightFront.getBusVoltage());
-    SmartDashboard.putNumber("right back volt", m_rightFront.getBusVoltage());
+      SmartDashboard.putNumber("left front volt", m_leftFront.getBusVoltage());
+      SmartDashboard.putNumber("left back volt", m_rightBack.getBusVoltage());
+      SmartDashboard.putNumber("right front volt", m_rightFront.getBusVoltage());
+      SmartDashboard.putNumber("right back volt", m_rightFront.getBusVoltage());
 
-    SmartDashboard.putNumber("left front percent output", m_leftFront.getMotorOutputPercent());
-    SmartDashboard.putNumber("left back percent output", m_rightBack.getMotorOutputPercent());
-    SmartDashboard.putNumber("right front percent output", m_rightFront.getMotorOutputPercent());
-    SmartDashboard.putNumber("right back percent output", m_rightFront.getMotorOutputPercent());
+      SmartDashboard.putNumber("left front percent output", m_leftFront.getMotorOutputPercent());
+      SmartDashboard.putNumber("left back percent output", m_rightBack.getMotorOutputPercent());
+      SmartDashboard.putNumber("right front percent output", m_rightFront.getMotorOutputPercent());
+      SmartDashboard.putNumber("right back percent output", m_rightFront.getMotorOutputPercent());
+    }
 
-  
   }
 }

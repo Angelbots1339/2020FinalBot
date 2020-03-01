@@ -6,6 +6,7 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.commands.ballmovement;
+
 import frc.robot.Constants.LoaderConstants;
 import frc.robot.subsystems.*;
 
@@ -13,15 +14,14 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class LoaderToMiddleBB extends CommandBase {
 
-  // the middle beam break is right before the ball reaches the shooter, so the ball is not touching the shooter
+  // the middle beam break is right before the ball reaches the shooter, so the
+  // ball is not touching the shooter
 
   private final LoaderSubsystem m_loader;
   private final IntakeSubsystem m_intake;
   private final IndexerSubsystem m_indexer;
-  //private int m_spikeCount = 0;
-  //private int m_reverseCount = 0;
-
-  public LoaderToMiddleBB(LoaderSubsystem loader, IntakeSubsystem intake, IndexerSubsystem indexer){
+ 
+  public LoaderToMiddleBB(LoaderSubsystem loader, IntakeSubsystem intake, IndexerSubsystem indexer) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_loader = loader;
     addRequirements(m_loader);
@@ -31,14 +31,14 @@ public class LoaderToMiddleBB extends CommandBase {
 
     m_indexer = indexer;
     addRequirements(m_indexer);
-    
+
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if(!m_loader.isMiddleBeamBroken()) {
-    m_loader.enable(LoaderConstants.kInitLoaderSpeed);
+    if (!m_loader.isMiddleBeamBroken()) {
+      m_loader.enable(LoaderConstants.kInitLoaderSpeed);
     }
     m_indexer.enable();
     m_intake.enableIntake();
@@ -49,35 +49,23 @@ public class LoaderToMiddleBB extends CommandBase {
   public void execute() {
 
     // stops the loader when the middle beam break is broken
-    if(m_loader.isMiddleBeamBroken() && !m_loader.isTopBeamBroken()){
+    if (m_loader.isMiddleBeamBroken() && !m_loader.isTopBeamBroken()) {
       m_loader.disable();
-    }
-    else if(m_loader.isTopBeamBroken()){
+    } else if (m_loader.isTopBeamBroken()) {
       m_loader.reverse(LoaderConstants.kMaxLoaderSpeed);
     }
-       // if top broken, then reverse
+    // if top broken, then reverse
     // if top not broken and middle broken stop
 
-    // if the indexer stales reverse until its good - may need to add a counter to see if the current spike is happening for longer 
+    // if the indexer stales reverse until its good - may need to add a counter to
+    // see if the current spike is happening for longer
     /*
-    if(m_indexer.isCurrentSpike()){
-      m_spikeCount++;
-      if (m_spikeCount >= 20) {
-        m_indexer.reverse();
-        m_reverseCount = 20;
-        m_spikeCount = 0;
-      }
-    }
-    else{
-      if (m_reverseCount > 0) {
-        m_reverseCount--;
-      }
-      else {
-        m_indexer.enable(); //TODO if works fix all
-      }
-    }
-    */
-  
+     * if(m_indexer.isCurrentSpike()){ m_spikeCount++; if (m_spikeCount >= 20) {
+     * m_indexer.reverse(); m_reverseCount = 20; m_spikeCount = 0; } } else{ if
+     * (m_reverseCount > 0) { m_reverseCount--; } else { m_indexer.enable(); //TODO
+     * if works fix all } }
+     */
+
   }
 
   // Called once the command ends or is interrupted.
