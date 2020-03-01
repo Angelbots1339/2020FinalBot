@@ -26,7 +26,7 @@ public final class Constants {
         public final static int kRightFrontMotor = 12;
         public final static int kRightBackMotor = 15;
 
-        public final static double kMaxDriveSpeed = 0.5; // speed
+        public final static double kMaxDriveSpeed = 0.6; // speed
 
         public final static double kMinPower = 0.2; // speed
         public final static double kTurnInPlaceThreshold = 0.2;

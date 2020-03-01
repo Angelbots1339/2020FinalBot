@@ -57,6 +57,10 @@ public class DriveSubsystem extends SubsystemBase {
     // Wooooah there - Chad implemented this for speed control on initial testing
     setMaxOutput(DriveConstants.kMaxDriveSpeed);
     m_drive.setDeadband(DriveConstants.kMinPower);
+    m_leftFront.configOpenloopRamp(0);
+    m_leftBack.configOpenloopRamp(0);
+    m_rightFront.configOpenloopRamp(0);
+    m_rightBack.configOpenloopRamp(0);
   }
 
   /**
