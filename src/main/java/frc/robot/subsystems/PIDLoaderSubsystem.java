@@ -66,7 +66,7 @@ public class PIDLoaderSubsystem extends PIDSubsystem {
   }
 
   public void enable() {
-    setSetpoint(LoaderConstants.kMaxLoaderSpeed);
+    setSetpoint(LoaderConstants.kFeedLoaderSpeed);
     super.enable();
   }
 

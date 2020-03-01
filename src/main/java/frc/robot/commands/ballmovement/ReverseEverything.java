@@ -38,7 +38,7 @@ public class ReverseEverything extends CommandBase {
   public void initialize() {
     m_intake.reverseIntake();
     m_index.reverse();
-    m_loader.reverse(LoaderConstants.kInitLoaderSpeed);
+    m_loader.reverse(LoaderConstants.kReverseLoaderSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

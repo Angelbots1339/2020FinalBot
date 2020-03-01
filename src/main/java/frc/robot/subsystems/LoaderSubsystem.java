@@ -56,7 +56,7 @@ public class LoaderSubsystem extends SubsystemBase {
   }
 
   public void enable() {
-    m_loader.set(LoaderConstants.kMaxLoaderSpeed);
+    m_loader.set(LoaderConstants.kFeedLoaderSpeed);
   }
 
   public void reverse(double speed) {

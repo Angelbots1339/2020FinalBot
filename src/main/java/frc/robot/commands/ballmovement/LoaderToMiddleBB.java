@@ -52,7 +52,7 @@ public class LoaderToMiddleBB extends CommandBase {
     if (m_loader.isMiddleBeamBroken() && !m_loader.isTopBeamBroken()) {
       m_loader.disable();
     } else if (m_loader.isTopBeamBroken()) {
-      m_loader.reverse(LoaderConstants.kMaxLoaderSpeed);
+      m_loader.reverse(LoaderConstants.kReverseLoaderSpeed);
     }
     // if top broken, then reverse
     // if top not broken and middle broken stop

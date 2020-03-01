@@ -135,9 +135,8 @@ public class RobotContainer {
     new Trigger(() -> m_driverController.getTriggerAxis(Hand.kLeft) > Constants.OIconstants.kLeftTriggerThreshold)
         .whileActiveOnce(new RunVision(m_limelight, m_drive, m_leftShooterPID, m_rightShooterPID, m_intake, m_indexer,
             m_loader, m_hood));
-    // A button -- Intake arm toggle
-    new JoystickButton(m_driverController, Button.kA.value).whenPressed(new ToggleIntakeArms(m_arm));
-
+    // A button -- Intake arm toggle - this works, commented out for testing convenience
+    // new JoystickButton(m_driverController, Button.kA.value).whenPressed(new ToggleIntakeArms(m_arm));
     // B button --- climb
     new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> m_climber.enable())
        .whenReleased(() -> m_climber.disable());
@@ -148,20 +147,6 @@ public class RobotContainer {
     //     .whenReleased(() -> m_climber.disable()); ---doesn't work yet
 
         
-    /**
-     * OPERATOR CONTROLLER
-     */
-
-    // Left Bumper - Decrease
-    // Right Bumper - Increase
-    // X button climbs
-    //new JoystickButton(m_operatorController, Button.kX.value).whenPressed(() -> m_climber.enable())
-     //   .whenReleased(() -> m_climber.disable()); // needs to be inverted
-    // Right Y axis controls the hooded shooter
-    // Left Y axis controls the intake roatater
-   // m_intake.setDefaultCommand(new RunCommand(
-    //    () -> m_intake.rotateIntakeArms(m_operatorController.getRawAxis(OIconstants.leftYAxis)), m_intake));
-
   }
 
   /**
