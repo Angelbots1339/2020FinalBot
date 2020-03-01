@@ -22,9 +22,9 @@ public class HoodPIDSubsystem extends PIDSubsystem {
   private final CANSparkMax m_hood;
   private final CANEncoder m_Encoder;
 
-  private final SimpleMotorFeedforward m_feedforward =
-      new SimpleMotorFeedforward(HoodedShooterConstants.KSVolts,
-                                 HoodedShooterConstants.KVVoltSecondsPerRotation);
+  private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(HoodedShooterConstants.KSVolts,
+      HoodedShooterConstants.KVVoltSecondsPerRotation);
+
   /**
    * Creates a new HoodPID.
    */
@@ -34,11 +34,10 @@ public class HoodPIDSubsystem extends PIDSubsystem {
     m_Encoder = new CANEncoder(m_hood);
     m_Encoder.setPosition(0);
 
-    
     getController().setTolerance(HoodedShooterConstants.positionTolerance);
 
     // Regardless of what's passed in, clamp to the min and max
-    MathUtil.clamp(setpoint,HoodedShooterConstants.kminEncoderValue, HoodedShooterConstants.kmaxEncoderValue);
+    MathUtil.clamp(setpoint, HoodedShooterConstants.kminEncoderValue, HoodedShooterConstants.kmaxEncoderValue);
     setSetpoint(setpoint);
   }
 
@@ -62,12 +61,17 @@ public class HoodPIDSubsystem extends PIDSubsystem {
 
   public void setSetpoint(double setpoint) {
     // Regardless of what's passed in, clamp to the min and max
-    setpoint = MathUtil.clamp(setpoint, HoodedShooterConstants.kminEncoderValue,HoodedShooterConstants.kmaxEncoderValue);
+    setpoint = MathUtil.clamp(setpoint, HoodedShooterConstants.kminEncoderValue,
+        HoodedShooterConstants.kmaxEncoderValue);
     super.setSetpoint(setpoint);
   }
 
   public void periodic() {
     super.periodic();
+    if (m_hood.getOutputCurrent() > HoodedShooterConstants.kminResistedVoltage) {
+      m_Encoder.setPosition(m_hood.getOutputCurrent() > 0 ? HoodedShooterConstants.kmaxEncoderValue
+          : HoodedShooterConstants.kminEncoderValue);
+    }
     SmartDashboard.putNumber("HoodEncoder", getMeasurement());
     SmartDashboard.putNumber("HoodSet", getController().getSetpoint());
     SmartDashboard.putNumber("Hood Current", m_hood.getOutputCurrent());
