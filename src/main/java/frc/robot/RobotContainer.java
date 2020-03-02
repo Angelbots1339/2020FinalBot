@@ -18,7 +18,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OIconstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.autonomous.Auto;
-import frc.robot.commands.ballmovement.LoaderToMiddleBB;
 import frc.robot.commands.ballmovement.LoaderToMiddleBB2;
 import frc.robot.commands.ballmovement.ReverseEverything;
 import frc.robot.commands.ballmovement.RunShooter;
@@ -32,7 +31,6 @@ import frc.robot.subsystems.IntakeArmPID;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.LoaderPIDSubsystem;
-import frc.robot.subsystems.LoaderSubsystem;
 import frc.robot.subsystems.ServoSubsystem;
 import frc.robot.subsystems.ShooterPID;
 

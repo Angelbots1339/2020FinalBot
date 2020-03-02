@@ -73,7 +73,7 @@ public final class Constants {
 		public final static double kP = 0.007;
 		public final static double kI = 0.000;
 		public final static double kD = 0.001;
-        public final static double kLoaderToleranceRPS = 10;
+        public final static double kLoaderToleranceRPM = 10;
         public final static double kLoaderSetpoint = 920;
         public final static double KSVolts = 0.25; 
         public final static double KVVoltSecondsPerRotation = 12 / (11000 / 4.8); 

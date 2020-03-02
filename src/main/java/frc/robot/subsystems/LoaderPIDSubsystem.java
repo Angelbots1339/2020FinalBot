@@ -55,7 +55,7 @@ public class LoaderPIDSubsystem extends PIDSubsystem {
     m_encoder.setPosition(0);
     m_encoder.setVelocityConversionFactor(0.2083);
 
-    getController().setTolerance(LoaderConstants.kLoaderToleranceRPS);
+    getController().setTolerance(LoaderConstants.kLoaderToleranceRPM);
     setSetpoint(LoaderConstants.kLoaderSetpoint);
 
     m_topEmitter = new DigitalInput(SensorConstants.topEmitter);
