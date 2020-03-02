@@ -48,9 +48,6 @@ public class DriveSubsystem extends SubsystemBase {
     // m_leftEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
     // m_rightEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
 
-    // m_leftBack.follow(m_leftFront);
-    // m_rightBack.follow(m_rightBack);
-
     // Practice bot is wired and mounted in a way where nothing is inverted
     // Left Axis of joystick response needs to be inverted though
 

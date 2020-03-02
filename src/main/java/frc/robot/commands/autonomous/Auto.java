@@ -8,7 +8,8 @@
 package frc.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import frc.robot.commands.ballmovement.RunIntakeArms;
+import frc.robot.Constants.IntakeConstants;
+import frc.robot.commands.ballmovement.ToggleIntakeArms;
 import frc.robot.subsystems.IntakeArmPID;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -19,17 +20,15 @@ public class Auto extends ParallelCommandGroup {
   /**
    * Creates a new Auto.
    */
-  private IntakeArmPID m_rightArm;
-  private IntakeArmPID m_leftArm;
+  private IntakeArmPID m_intakeArm;
 
-  public Auto(IntakeArmPID rightArm, IntakeArmPID leftArm) {
+  public Auto(IntakeArmPID arm) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());super();
-    m_rightArm = rightArm;
-    m_leftArm = leftArm;
+    m_intakeArm = arm;
 
     addCommands(
-      // new RunIntakeArms(m_rightArm, m_leftArm)
+      new ToggleIntakeArms(m_intakeArm)
       );
   }
 }

@@ -19,7 +19,7 @@ import frc.robot.Constants.DashboardConstants;
 import frc.robot.Constants.LoaderConstants;
 import frc.robot.Constants.SensorConstants;
 
-public class PIDLoaderSubsystem extends PIDSubsystem {
+public class LoaderPIDSubsystem extends PIDSubsystem {
 
   private CANSparkMax m_loader;
   private final CANEncoder m_encoder;
@@ -39,7 +39,7 @@ public class PIDLoaderSubsystem extends PIDSubsystem {
   /**
    * Creates a new LoaderSubsystem.
    */
-  public PIDLoaderSubsystem() {
+  public LoaderPIDSubsystem() {
     super(new PIDController(LoaderConstants.kP, LoaderConstants.kI, LoaderConstants.kD));
     m_count = 0;
 
@@ -50,7 +50,7 @@ public class PIDLoaderSubsystem extends PIDSubsystem {
     m_encoder.setPosition(0);
 
     getController().setTolerance(LoaderConstants.kLoaderToleranceRPS);
-    setSetpoint(0);
+    setSetpoint(LoaderConstants.kLoaderSetpoint);
 
     m_topEmitter = new DigitalInput(SensorConstants.topEmitter);
     m_topReceiver = new DigitalInput(SensorConstants.topReciever);
@@ -62,7 +62,6 @@ public class PIDLoaderSubsystem extends PIDSubsystem {
     m_shooterReceiver = new DigitalInput(SensorConstants.ShooterReciever);
     m_bottomRightEmitter = new DigitalInput(SensorConstants.bottomEmitter);
     m_bottomRightReceiver = new DigitalInput(SensorConstants.bottomReciever);
-
   }
 
   public void enable() {
@@ -83,35 +82,6 @@ public class PIDLoaderSubsystem extends PIDSubsystem {
   public void disable() {
     setSetpoint(0);
     super.enable();
-  }
-
-  public void periodic() {
-
-    // counting
-    if (isBottomBroken()) {
-      m_count++;
-    }
-    if (isShooterBeamBroken()) {
-      m_count--;
-    }
-
-    if (DashboardConstants.kPIDLoaderTelemetry) {
-      SmartDashboard.putBoolean("Top Emitter", m_topEmitter.get());
-      SmartDashboard.putBoolean("Top Reciever", m_topReceiver.get());
-      SmartDashboard.putBoolean("Middle Emitter", m_middleEmitter.get());
-      SmartDashboard.putBoolean("Middle Reciever", m_middleReceiver.get());
-
-      SmartDashboard.putBoolean("Bottom Emitter", m_bottomRightEmitter.get());
-      SmartDashboard.putBoolean("Bottom Reciever", m_bottomRightReceiver.get());
-      SmartDashboard.putBoolean("Shooter Emitter", m_shooterEmitter.get());
-      SmartDashboard.putBoolean("Shooter Reciever", m_shooterReceiver.get());
-
-      SmartDashboard.putNumber("# of balls", getCount());
-
-      // This method will be called once per scheduler run
-      SmartDashboard.putNumber("loader", m_loader.get());
-      SmartDashboard.putNumber("loader RPM", m_encoder.getVelocity());
-    }
   }
 
   public int getCount() {
@@ -145,6 +115,44 @@ public class PIDLoaderSubsystem extends PIDSubsystem {
   @Override
   protected double getMeasurement() {
     return m_encoder.getVelocity();
+  }
+
+  public boolean atSetpoint() {
+    return m_controller.atSetpoint();
+  }
+
+  public void setSetpoint(double setpoint) {
+    super.setSetpoint(setpoint);
+  }
+
+  
+  public void periodic() {
+    super.periodic();
+
+    // counting
+    if (isBottomBroken()) {
+      m_count++;
+    }
+    if (isShooterBeamBroken()) {
+      m_count--;
+    }
+    if (DashboardConstants.kPIDLoaderTelemetry) {
+      SmartDashboard.putBoolean("Top Emitter", m_topEmitter.get());
+      SmartDashboard.putBoolean("Top Reciever", m_topReceiver.get());
+      SmartDashboard.putBoolean("Middle Emitter", m_middleEmitter.get());
+      SmartDashboard.putBoolean("Middle Reciever", m_middleReceiver.get());
+
+      SmartDashboard.putBoolean("Bottom Emitter", m_bottomRightEmitter.get());
+      SmartDashboard.putBoolean("Bottom Reciever", m_bottomRightReceiver.get());
+      SmartDashboard.putBoolean("Shooter Emitter", m_shooterEmitter.get());
+      SmartDashboard.putBoolean("Shooter Reciever", m_shooterReceiver.get());
+
+      SmartDashboard.putNumber("# of balls", getCount());
+
+      // This method will be called once per scheduler run
+      SmartDashboard.putNumber("loader", m_loader.get());
+      SmartDashboard.putNumber("loader RPM", m_encoder.getVelocity());
+    }
   }
 
 }

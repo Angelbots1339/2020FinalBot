@@ -72,7 +72,9 @@ public final class Constants {
 		public final static double kP = 0.001;
 		public final static double kI = 0;
 		public final static double kD = 0;
-		public final static double kLoaderToleranceRPS = 30;
+        public final static double kLoaderToleranceRPS = 30;
+        public final static double kLoaderSetpoint = 30;
+
     }
 
     public final static class ShooterConstants {
