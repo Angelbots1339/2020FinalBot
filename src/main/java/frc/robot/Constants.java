@@ -66,15 +66,15 @@ public final class Constants {
         // This speed is used when feeding balls to shooter
         public final static double kFeedLoaderSpeed = 0.6; // speed
         // This speed is used when loading first ball
-        public final static double kInitLoaderSpeed = 0.5; // speed
+        public final static double kInitLoaderSpeed = 0.45; // speed
         // This speed is used when reversing
-        public final static double kReverseLoaderSpeed = 0.6; // speed
+        public final static double kReverseLoaderSpeed = 0.55; // speed
         // Loader PID 
 		public final static double kP = 0.007;
 		public final static double kI = 0.000;
 		public final static double kD = 0.001;
         public final static double kLoaderToleranceRPS = 10;
-        public final static double kLoaderSetpoint = 2300;
+        public final static double kLoaderSetpoint = 920;
         public final static double KSVolts = 0.25; 
         public final static double KVVoltSecondsPerRotation = 12 / (11000 / 4.8); 
 
@@ -84,9 +84,9 @@ public final class Constants {
         public final static int kLeftShooter = 1;
         public final static int kRightShooter = 3;
 
+        public final static double kRapidShotThreshold = 6.1; // in meters
         // PID values
-        // TODO have to be tuned to current robot values
-        public final static double kP = 0.0008; // 0.002, 0.001;//0.0008;
+        public final static double kP = 0.0008; // all good
         public final static double kI = 0.00001;
         public final static double kD = 0;
         public final static double kFF = 0;
@@ -118,9 +118,9 @@ public final class Constants {
         public final static double kP = 0.9;    //0.8
         public final static double kI = 0.0;
         public final static double kD = 0.019;
-        public final static double kMaxHoodVolt = 1.5;
+        public final static double kMaxHoodVolt = 1;
         public final static double kMinEncoderValue = 0;
-        public final static double kmaxEncoderValue = 17.5;
+        public final static double kmaxEncoderValue = 17.4;
 
         public final static double kMinResistedVoltage = 60;
         public final static double kPositionTolerance = .35;

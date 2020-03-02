@@ -19,13 +19,14 @@ import java.util.stream.Collectors;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.ballmovement.RunShooter;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HoodPIDSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
-import frc.robot.subsystems.LoaderSubsystem;
+import frc.robot.subsystems.LoaderPIDSubsystem;
 import frc.robot.subsystems.ShooterPID;
 
 public class VisionShoot extends CommandBase {
@@ -33,7 +34,7 @@ public class VisionShoot extends CommandBase {
   private static final ArrayList<ShootingProfiles> data = getData();
   private final IntakeSubsystem m_intake;
   private final IndexerSubsystem m_indexer;
-  private final LoaderSubsystem m_loader;
+  private final LoaderPIDSubsystem m_loader;
   private final ShooterPID m_leftShooter;
   private final ShooterPID m_rightShooter;
   private final LimelightSubsystem m_limelight;
@@ -51,7 +52,7 @@ public class VisionShoot extends CommandBase {
    * 
    * @param m_targetProfile
    */
-  public VisionShoot(IntakeSubsystem intake, IndexerSubsystem index, LoaderSubsystem loader, ShooterPID leftShooter,
+  public VisionShoot(IntakeSubsystem intake, IndexerSubsystem index, LoaderPIDSubsystem loader, ShooterPID leftShooter,
       ShooterPID rightShooter, HoodPIDSubsystem hood, LimelightSubsystem limelight, DriveSubsystem drive,
       BooleanSupplier isAligning, BooleanSupplier isShooting) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -72,7 +73,7 @@ public class VisionShoot extends CommandBase {
     m_isAligning = isAligning;
     m_isShooting = isShooting;
 
-    latestProfile = new ShootingProfiles(0, 0, 0, 0, 0);
+    latestProfile = new ShootingProfiles(0, 0, 0, 0, 0, 0);
     runShooter = new RunShooter(m_leftShooter, m_rightShooter, latestProfile);
     runHood = new RunHood(m_hood, latestProfile);
     cameraAlign = new CameraAlign(m_drive, m_limelight, latestProfile);
@@ -81,6 +82,7 @@ public class VisionShoot extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    updateProfile();
     runShooter.schedule();
     runHood.schedule();
   }
@@ -88,26 +90,17 @@ public class VisionShoot extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("hi");
-    if (m_limelight.seesTarget()) {
-      double currentDist = m_limelight.getDistanceToVisionTarget();
-      m_limelight
-          .setActiveProfile(data.stream()
-              .collect(Collectors.minBy((a,
-                  b) -> (int) Math
-                      .signum(Math.abs(a.getDistance() - currentDist) - Math.abs(b.getDistance() - currentDist))))
-              .get());
-    }
-    latestProfile.set(m_limelight.getLatestProfile());
+    updateProfile();
     if (m_isAligning.getAsBoolean() && !m_limelight.isAligning()) {
       cameraAlign.schedule();
       m_limelight.setAligning(true);
     }
     if (m_isShooting.getAsBoolean()) {
-      if (m_leftShooter.atSetpoint() && m_rightShooter.atSetpoint() && m_hood.atSetpoint()
+      if (((m_leftShooter.atSetpoint() && m_rightShooter.atSetpoint()) || m_limelight.getDistanceToVisionTarget() < ShooterConstants.kRapidShotThreshold) && m_hood.atSetpoint()
           && (m_limelight.isAligned() || !m_isAligning.getAsBoolean())) {
-        // m_intake.enableIntake();
-        m_indexer.enable(latestProfile.getLoadingSpeed());
+        m_intake.enableIntake();
+        m_indexer.enable(latestProfile.getIndexerSpeed());
+        m_loader.setSetpoint(latestProfile.getLoaderSpeed());
         m_loader.enable();
       } else {
         if (m_loader.isMiddleBeamBroken()) {
@@ -125,6 +118,19 @@ public class VisionShoot extends CommandBase {
       cameraAlign.cancel();
       m_limelight.setAligning(false);
     }
+  }
+
+  private void updateProfile() {
+    if (m_limelight.seesTarget()) {
+      double currentDist = m_limelight.getDistanceToVisionTarget();
+      m_limelight
+          .setActiveProfile(data.stream()
+              .collect(Collectors.minBy((a,
+                  b) -> (int) Math
+                      .signum(Math.abs(a.getDistance() - currentDist) - Math.abs(b.getDistance() - currentDist))))
+              .get());
+    }
+    latestProfile.set(m_limelight.getLatestProfile());
   }
 
   public static ArrayList<ShootingProfiles> getData() {

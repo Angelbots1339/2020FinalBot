@@ -72,13 +72,11 @@ public class LoaderPIDSubsystem extends PIDSubsystem {
 
 
   public void reverse(double speed) {
-    setSetpoint(speed * -1);
-    super.enable();
+    m_loader.set(-speed);
   }
 
   public void runSpeed(double speed) {
-    setSetpoint(speed);
-    super.enable();
+    m_loader.set(speed);
   }
 
   public int getCount() {
@@ -87,17 +85,14 @@ public class LoaderPIDSubsystem extends PIDSubsystem {
 
   public boolean isShooterBeamBroken() {
     return !(m_shooterReceiver.get());
-    // return false;
   }
 
   public boolean isTopBeamBroken() {
     return !(m_topReceiver.get());
-    // return false;
   }
 
   public boolean isMiddleBeamBroken() {
     return !(m_middleReceiver.get());
-    // return false;
   }
 
   public boolean isBottomBroken() {

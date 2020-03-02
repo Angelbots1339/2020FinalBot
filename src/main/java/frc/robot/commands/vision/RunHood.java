@@ -28,7 +28,7 @@ public class RunHood extends CommandBase {
   }
 
   public RunHood(HoodPIDSubsystem hoodPID, double targetHood){
-    this(hoodPID, new ShootingProfiles(-1, -1, targetHood, 0, 0));
+    this(hoodPID, new ShootingProfiles(-1, -1, targetHood, 0, 0, 0));
   }
 
   // Called when the command is initially scheduled.

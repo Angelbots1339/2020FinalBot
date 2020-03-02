@@ -7,20 +7,22 @@ public class ShootingProfiles {
     private double shooterSpeed;
     private double hoodvalue;
     private double angleP;
-    private double loadingSpeed;
+    private double indexerSpeed;
+    private double loaderSpeed;
 
-    public ShootingProfiles(double distance, double shooterSpeed, double hoodvalue, double angleP,
-            double loadingSpeed) {
+    public ShootingProfiles(double distance, double shooterSpeed, double hoodvalue, double angleP, double indexerSpeed,
+            double loaderSpeed) {
         this.distance = distance;
         this.shooterSpeed = shooterSpeed;
         this.hoodvalue = hoodvalue;
         this.angleP = angleP;
-        this.loadingSpeed = loadingSpeed;
+        this.indexerSpeed = indexerSpeed;
+        this.loaderSpeed = loaderSpeed;
     }
 
     public ShootingProfiles(String info) {
         this(getProperty(info, "m"), getProperty(info, "rpm"), getProperty(info, "hr"), getProperty(info, "aP"),
-                getProperty(info, "LS"));
+                getProperty(info, "IS"), getProperty(info, "LS"));
     }
 
     /**
@@ -50,8 +52,8 @@ public class ShootingProfiles {
         return angleP;
     }
 
-    public double getLoadingSpeed() {
-        return loadingSpeed;
+    public double getIndexerSpeed() {
+        return indexerSpeed;
     }
 
     public void set(ShootingProfiles shootingProfiles) {
@@ -59,13 +61,19 @@ public class ShootingProfiles {
         shooterSpeed = shootingProfiles.getShooterSpeed();
         hoodvalue = shootingProfiles.getHoodvalue();
         angleP = shootingProfiles.getAngleP();
-        loadingSpeed = shootingProfiles.getLoadingSpeed();
+        indexerSpeed = shootingProfiles.getIndexerSpeed();
+        loaderSpeed = shootingProfiles.getLoaderSpeed();
+    }
+
+    public double getLoaderSpeed() {
+        return loaderSpeed;
     }
 
     @Override
     public String toString() {
         return "ShootingProfiles [angleP=" + angleP + ", distance=" + distance + ", hoodvalue=" + hoodvalue
-                + ", loadingSpeed=" + loadingSpeed + ", shooterSpeed=" + shooterSpeed + "]";
+                + ", indexerSpeed=" + indexerSpeed + ", loaderSpeed=" + loaderSpeed + ", shooterSpeed=" + shooterSpeed
+                + "]";
     }
 
 }

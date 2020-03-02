@@ -33,7 +33,7 @@ public class RunShooter extends CommandBase {
    * Creates a new RunShooter.
    */
   public RunShooter(ShooterPID leftPID, ShooterPID rightPID, double targetSpeed) {
-    this(leftPID, rightPID, new ShootingProfiles(-1, targetSpeed, -1, 0, 0));
+    this(leftPID, rightPID, new ShootingProfiles(-1, targetSpeed, -1, 0, 0, 0));
   }
 
   // Called when the command is initially scheduled.

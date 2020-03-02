@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.LoaderConstants;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.LoaderSubsystem;
+import frc.robot.subsystems.LoaderPIDSubsystem;
 
 public class ReverseEverything extends CommandBase {
   /**
@@ -19,9 +19,9 @@ public class ReverseEverything extends CommandBase {
    */
   private IntakeSubsystem m_intake;
   private IndexerSubsystem m_index;
-  private LoaderSubsystem m_loader;
+  private LoaderPIDSubsystem m_loader;
 
-  public ReverseEverything(LoaderSubsystem loader, IntakeSubsystem intake, IndexerSubsystem indexer) {
+  public ReverseEverything(LoaderPIDSubsystem loader, IntakeSubsystem intake, IndexerSubsystem indexer) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_intake = intake;
     addRequirements(m_intake);

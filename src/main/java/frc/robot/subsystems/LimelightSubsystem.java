@@ -21,7 +21,7 @@ public class LimelightSubsystem extends SubsystemBase {
   private LedMode mLedMode = LedMode.PIPELINE;
   private boolean m_isAligned = true;
   private boolean m_isAligning = false;
-  private ShootingProfiles m_latestTargetProfile = new ShootingProfiles(3, 0, 0, 0, 0);
+  private ShootingProfiles m_latestTargetProfile = new ShootingProfiles(3, 0, 0, 0, 0, 0);
 
   /**
    * Creates a new Limelight.

@@ -25,7 +25,6 @@ public class LoaderToMiddleBB2 extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     m_loader = loader;
     addRequirements(m_loader);
-    m_loader.setSetpoint(LoaderConstants.kLoaderSetpoint);
 
     m_intake = intake;
     addRequirements(m_intake);
@@ -38,10 +37,10 @@ public class LoaderToMiddleBB2 extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    //if (!m_loader.isMiddleBeamBroken()) {
-      m_loader.enable();
-    //}
-    m_indexer.enable(0.6);
+    if (!m_loader.isMiddleBeamBroken()) {
+      m_loader.runSpeed(LoaderConstants.kInitLoaderSpeed);
+    }
+    m_indexer.enable();
     m_intake.enableIntake();
   }
 
@@ -50,12 +49,11 @@ public class LoaderToMiddleBB2 extends CommandBase {
   public void execute() {
 
     // stops the loader when the middle beam break is broken
-    /*if (m_loader.isMiddleBeamBroken() && !m_loader.isTopBeamBroken()) {
+    if (m_loader.isMiddleBeamBroken() && !m_loader.isTopBeamBroken()) {
       m_loader.disable();
     } else if (m_loader.isTopBeamBroken()) {
       m_loader.reverse(LoaderConstants.kReverseLoaderSpeed);
     }
-    */
 
   }
 

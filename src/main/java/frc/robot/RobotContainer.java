@@ -133,42 +133,28 @@ public class RobotContainer {
     /**
      * Nick's prefered controls
      */
-    // // right trigger --- shoot all balls
-    // new Trigger(() -> m_driverController.getTriggerAxis(Hand.kRight) >
-    // Constants.OIconstants.kRightTriggerThreshold)
-    // .whileActiveOnce(new ShootAllBalls(m_intake, m_indexer, m_loader,
-    // m_leftShooterPID, m_rightShooterPID, m_hood, m_limelight));
-    // right bumper --- Deter balls/run intake backwards
-    /*
+    // right bumper --- Deter balls/run intake backwards    
     new JoystickButton(m_driverController, Button.kBumperRight.value).whenPressed(() -> m_intake.reverseIntake())
-        .whenReleased(() -> m_intake.disableIntake());
+    .whenReleased(() -> m_intake.disableIntake());
+    // right trigger --- shoot all balls
     new Trigger(() -> m_driverController.getTriggerAxis(Hand.kLeft) > Constants.OIconstants.kLeftTriggerThreshold
         || m_driverController.getTriggerAxis(Hand.kRight) > Constants.OIconstants.kRightTriggerThreshold)
-            .whileActiveOnce(new VisionShoot(m_intake, m_indexer, m_loader, m_leftShooterPID, m_rightShooterPID, m_hood,
+            .whileActiveOnce(new VisionShoot(m_intake, m_indexer, m_loaderPID, m_leftShooterPID, m_rightShooterPID, m_hood,
                 m_limelight, m_drive,
                 () -> m_driverController.getTriggerAxis(Hand.kLeft) > Constants.OIconstants.kLeftTriggerThreshold,
                 () -> m_driverController.getTriggerAxis(Hand.kRight) > Constants.OIconstants.kRightTriggerThreshold));
     // left bumper --- intake balls(balls to middle bb)
     new JoystickButton(m_driverController, Button.kBumperLeft.value)
-        .whenHeld(new LoaderToMiddleBB(m_loader, m_intake, m_indexer));
-    */
-    // left trigger --- vision
-    // new Trigger(() -> m_driverController.getTriggerAxis(Hand.kLeft) >
-    // Constants.OIconstants.kLeftTriggerThreshold)
-    // .whileActiveOnce(new RunVision(m_limelight, m_drive, m_leftShooterPID,
-    // m_rightShooterPID, m_intake, m_indexer,
-    // m_loader, m_hood));
+        .whenHeld(new LoaderToMiddleBB2(m_loaderPID, m_intake, m_indexer));
     // A button -- Intake arm toggle
     new JoystickButton(m_driverController, Button.kA.value).whenPressed(new ToggleIntakeArms(m_arm));
-
     // B button --- climb
     new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> m_climber.enable())
         .whenReleased(() -> m_climber.disable());
     // X button --- unload/unjam
-    /*
     new JoystickButton(m_driverController, Button.kX.value)
-        .whenHeld(new ReverseEverything(m_loader, m_intake, m_indexer));
-    */
+        .whenHeld(new ReverseEverything(m_loaderPID, m_intake, m_indexer));
+    
     // Y button --- deploy buddy climbing
     // new JoystickButton(m_driverController, Button.kY.value).whenPressed(() ->
     // m_climber.enable())
