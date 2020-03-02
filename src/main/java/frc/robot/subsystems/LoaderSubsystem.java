@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -20,6 +21,7 @@ import frc.robot.Constants.SensorConstants;
 public class LoaderSubsystem extends SubsystemBase {
 
   private CANSparkMax m_loader;
+  private CANEncoder m_encoder;
 
   private DigitalInput m_shooterEmitter;
   private DigitalInput m_shooterReceiver;
@@ -41,6 +43,10 @@ public class LoaderSubsystem extends SubsystemBase {
 
     m_loader = new CANSparkMax(LoaderConstants.kLoaderMotor, MotorType.kBrushless);
     m_loader.setInverted(true);
+
+    m_encoder = new CANEncoder(m_loader);
+    m_encoder.setPosition(0);
+    m_encoder.setVelocityConversionFactor(0.2083);
 
     m_topEmitter = new DigitalInput(SensorConstants.topEmitter);
     m_topReceiver = new DigitalInput(SensorConstants.topReciever);
@@ -94,7 +100,8 @@ public class LoaderSubsystem extends SubsystemBase {
 
       SmartDashboard.putNumber("# of balls", getCount());
 
-      SmartDashboard.putNumber("loader", m_loader.get());
+      SmartDashboard.putNumber("Loader Out", m_loader.get());
+      SmartDashboard.putNumber("Loader RPM", m_encoder.getVelocity());
     }
   }
 

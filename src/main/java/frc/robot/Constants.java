@@ -69,11 +69,14 @@ public final class Constants {
         public final static double kInitLoaderSpeed = 0.5; // speed
         // This speed is used when reversing
         public final static double kReverseLoaderSpeed = 0.6; // speed
-		public final static double kP = 0.001;
-		public final static double kI = 0;
-		public final static double kD = 0;
-        public final static double kLoaderToleranceRPS = 30;
-        public final static double kLoaderSetpoint = 30;
+        // Loader PID 
+		public final static double kP = 0.007;
+		public final static double kI = 0.000;
+		public final static double kD = 0.001;
+        public final static double kLoaderToleranceRPS = 10;
+        public final static double kLoaderSetpoint = 2300;
+        public final static double KSVolts = 0.25; 
+        public final static double KVVoltSecondsPerRotation = 12 / (11000 / 4.8); 
 
     }
 
@@ -223,7 +226,7 @@ public final class Constants {
         public final static boolean kIntakeTelemetry = false;
         public final static boolean kLimelightTelemetry = false;
         public final static boolean kLoaderTelemetry = false;
-        public final static boolean kPIDLoaderTelemetry = false;
+        public final static boolean kPIDLoaderTelemetry = true;
         public final static boolean kServoTelemetry = false;
         public final static boolean kShooterPIDTelemetry = true;
     }

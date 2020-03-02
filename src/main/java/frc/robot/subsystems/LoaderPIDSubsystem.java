@@ -13,8 +13,10 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.controller.PIDController;
+import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Constants.DashboardConstants;
 import frc.robot.Constants.LoaderConstants;
 import frc.robot.Constants.SensorConstants;
@@ -36,6 +38,9 @@ public class LoaderPIDSubsystem extends PIDSubsystem {
 
   private int m_count;
 
+  private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(LoaderConstants.KSVolts,
+    LoaderConstants.KVVoltSecondsPerRotation);
+
   /**
    * Creates a new LoaderSubsystem.
    */
@@ -48,6 +53,7 @@ public class LoaderPIDSubsystem extends PIDSubsystem {
 
     m_encoder = new CANEncoder(m_loader);
     m_encoder.setPosition(0);
+    m_encoder.setVelocityConversionFactor(0.2083);
 
     getController().setTolerance(LoaderConstants.kLoaderToleranceRPS);
     setSetpoint(LoaderConstants.kLoaderSetpoint);
@@ -64,23 +70,14 @@ public class LoaderPIDSubsystem extends PIDSubsystem {
     m_bottomRightReceiver = new DigitalInput(SensorConstants.bottomReciever);
   }
 
-  public void enable() {
-    setSetpoint(LoaderConstants.kFeedLoaderSpeed);
-    super.enable();
-  }
 
   public void reverse(double speed) {
     setSetpoint(speed * -1);
     super.enable();
   }
 
-  public void enable(double speed) {
+  public void runSpeed(double speed) {
     setSetpoint(speed);
-    super.enable();
-  }
-
-  public void disable() {
-    setSetpoint(0);
     super.enable();
   }
 
@@ -109,6 +106,8 @@ public class LoaderPIDSubsystem extends PIDSubsystem {
 
   @Override
   protected void useOutput(double output, double setpoint) {
+    output += m_feedforward.calculate(setpoint);
+    //output = MathUtil.clamp(output, -6, 6);
     m_loader.setVoltage(output);
   }
 
@@ -150,8 +149,8 @@ public class LoaderPIDSubsystem extends PIDSubsystem {
       SmartDashboard.putNumber("# of balls", getCount());
 
       // This method will be called once per scheduler run
-      SmartDashboard.putNumber("loader", m_loader.get());
-      SmartDashboard.putNumber("loader RPM", m_encoder.getVelocity());
+      SmartDashboard.putNumber("Loader Out", m_loader.get());
+      SmartDashboard.putNumber("Loader RPM", m_encoder.getVelocity());
     }
   }
 

@@ -19,7 +19,9 @@ import frc.robot.Constants.OIconstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.autonomous.Auto;
 import frc.robot.commands.ballmovement.LoaderToMiddleBB;
+import frc.robot.commands.ballmovement.LoaderToMiddleBB2;
 import frc.robot.commands.ballmovement.ReverseEverything;
+import frc.robot.commands.ballmovement.RunShooter;
 import frc.robot.commands.ballmovement.ToggleIntakeArms;
 import frc.robot.commands.vision.VisionShoot;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -29,6 +31,7 @@ import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeArmPID;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
+import frc.robot.subsystems.LoaderPIDSubsystem;
 import frc.robot.subsystems.LoaderSubsystem;
 import frc.robot.subsystems.ServoSubsystem;
 import frc.robot.subsystems.ShooterPID;
@@ -45,7 +48,8 @@ public class RobotContainer {
   private final IndexerSubsystem m_indexer = new IndexerSubsystem();
   private final IntakeSubsystem m_intake = new IntakeSubsystem();
   private final DriveSubsystem m_drive = new DriveSubsystem();
-  private final LoaderSubsystem m_loader = new LoaderSubsystem();
+  //private final LoaderSubsystem m_loader = new LoaderSubsystem();
+  private final LoaderPIDSubsystem m_loaderPID = new LoaderPIDSubsystem();
   private final ShooterPID m_rightShooterPID = new ShooterPID(ShooterConstants.kRightShooter, "Right Shooter", true);
   private final ShooterPID m_leftShooterPID = new ShooterPID(ShooterConstants.kLeftShooter, "Left Shooter", false);
   private final ClimberSubsystem m_climber = new ClimberSubsystem();
@@ -91,7 +95,11 @@ public class RobotContainer {
     // RunHood(m_hood, -.1));
     // new JoystickButton(m_testController, Button.kB.value).whenHeld(new
     // RunHood(m_hood, 14));
-    new JoystickButton(m_testController, Button.kBumperRight.value).whenPressed(() -> m_servo.engage());
+    //new JoystickButton(m_testController, Button.kBumperRight.value).whenPressed(() -> m_servo.engage());
+
+    new JoystickButton(m_testController, Button.kBumperRight.value).whenHeld(new LoaderToMiddleBB2(m_loaderPID, m_intake, m_indexer));
+    new JoystickButton(m_testController, Button.kBumperLeft.value).whenHeld(new RunShooter(m_leftShooterPID, m_rightShooterPID, 5000));
+
     /**
      * DRIVER CONTROLLER
      */
@@ -131,6 +139,7 @@ public class RobotContainer {
     // .whileActiveOnce(new ShootAllBalls(m_intake, m_indexer, m_loader,
     // m_leftShooterPID, m_rightShooterPID, m_hood, m_limelight));
     // right bumper --- Deter balls/run intake backwards
+    /*
     new JoystickButton(m_driverController, Button.kBumperRight.value).whenPressed(() -> m_intake.reverseIntake())
         .whenReleased(() -> m_intake.disableIntake());
     new Trigger(() -> m_driverController.getTriggerAxis(Hand.kLeft) > Constants.OIconstants.kLeftTriggerThreshold
@@ -142,6 +151,7 @@ public class RobotContainer {
     // left bumper --- intake balls(balls to middle bb)
     new JoystickButton(m_driverController, Button.kBumperLeft.value)
         .whenHeld(new LoaderToMiddleBB(m_loader, m_intake, m_indexer));
+    */
     // left trigger --- vision
     // new Trigger(() -> m_driverController.getTriggerAxis(Hand.kLeft) >
     // Constants.OIconstants.kLeftTriggerThreshold)
@@ -155,8 +165,10 @@ public class RobotContainer {
     new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> m_climber.enable())
         .whenReleased(() -> m_climber.disable());
     // X button --- unload/unjam
+    /*
     new JoystickButton(m_driverController, Button.kX.value)
         .whenHeld(new ReverseEverything(m_loader, m_intake, m_indexer));
+    */
     // Y button --- deploy buddy climbing
     // new JoystickButton(m_driverController, Button.kY.value).whenPressed(() ->
     // m_climber.enable())
