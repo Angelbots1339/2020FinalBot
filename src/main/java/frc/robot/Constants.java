@@ -126,6 +126,8 @@ public final class Constants {
         public final static double kPositionTolerance = .35;
 		public final static double KSVolts = 0.13;
         public final static double KVVoltSecondsPerRotation = 12 * (12.5 / 11000); // Neo 550 - 11000 rpm, with 12.5:1 reduction
+
+		public static final double kLowSetpoint = 0;
     }
 
     public final static class ClimberConstants {

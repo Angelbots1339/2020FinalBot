@@ -8,6 +8,7 @@
 package frc.robot.commands.vision;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.HoodConstants;
 import frc.robot.subsystems.HoodPIDSubsystem;
 
 public class RunHood extends CommandBase {
@@ -45,7 +46,7 @@ public class RunHood extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_hoodPID.setSetpoint(0.1);
+    m_hoodPID.setSetpoint(HoodConstants.kLowSetpoint);
     m_hoodPID.enable();
   }
 
