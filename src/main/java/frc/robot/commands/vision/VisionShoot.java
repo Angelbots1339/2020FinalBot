@@ -104,6 +104,11 @@ public class VisionShoot extends CommandBase {
       cameraAlign.initialize();
       m_limelight.setAligning(true);
     }
+    if(m_isAligning.getAsBoolean()){
+      cameraAlign.execute();
+    }
+    runShooter.execute();
+    runHood.execute();
     if (m_isShooting.getAsBoolean()) {
       if (((m_leftShooter.atSetpoint() && m_rightShooter.atSetpoint())
           || m_limelight.getDistanceToVisionTarget() < ShooterConstants.kRapidShotThreshold) && m_hood.atSetpoint()
@@ -125,7 +130,7 @@ public class VisionShoot extends CommandBase {
       m_loader.disable();
     }
     if (!m_isAligning.getAsBoolean() && m_limelight.isAligning()) {
-      cameraAlign.cancel();
+      cameraAlign.end(false);
       m_limelight.setAligning(false);
     }
   }
@@ -169,9 +174,9 @@ public class VisionShoot extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    runShooter.cancel();
-    runHood.cancel();
-    cameraAlign.cancel();
+    runShooter.end(false);
+    runHood.end(false);
+    cameraAlign.end(false);
     m_limelight.setAligning(false);
     m_intake.disableIntake();
     m_indexer.disable();

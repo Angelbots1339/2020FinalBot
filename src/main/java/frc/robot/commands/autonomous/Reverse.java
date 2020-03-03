@@ -33,7 +33,7 @@ public class Reverse extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drive.arcadeDrive(-0.5, 0);
+    m_drive.arcadeDrive(-0.62, 0);
   }
 
   // Called once the command ends or is interrupted.
@@ -47,7 +47,7 @@ public class Reverse extends CommandBase {
   public boolean isFinished() {
     // ends command after 2 seconds of starting
     m_currentTime = Timer.getFPGATimestamp();
-    if(m_currentTime - m_startTime >= 2){
+    if(m_currentTime - m_startTime >= 1){
       m_drive.arcadeDrive(0, 0);
       return true;
     }
