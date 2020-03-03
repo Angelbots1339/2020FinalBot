@@ -18,6 +18,7 @@ import java.util.function.DoubleSupplier;
 import java.util.stream.Collectors;
 
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.ShooterConstants;
@@ -47,6 +48,8 @@ public class VisionShoot extends CommandBase {
   private final ShootingProfiles latestProfile;
   private final BooleanSupplier m_isAligning;
   private final BooleanSupplier m_isShooting;
+  private double m_startTime, m_currentTime;
+  private final double m_timeout;
 
   /**
    * Creates a new ShootAllBalls.
@@ -55,7 +58,7 @@ public class VisionShoot extends CommandBase {
    */
   public VisionShoot(IntakeSubsystem intake, IndexerSubsystem index, LoaderPIDSubsystem loader, ShooterPID leftShooter,
       ShooterPID rightShooter, HoodPIDSubsystem hood, LimelightSubsystem limelight, DriveSubsystem drive,
-      BooleanSupplier isAligning, BooleanSupplier isShooting, DoubleSupplier fwdMovement) {
+      BooleanSupplier isAligning, BooleanSupplier isShooting, DoubleSupplier fwdMovement, double timeout) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_intake = intake;
     addRequirements(m_intake);
@@ -68,8 +71,11 @@ public class VisionShoot extends CommandBase {
 
     m_leftShooter = leftShooter;
     m_rightShooter = rightShooter;
+    addRequirements(m_leftShooter, m_rightShooter);
     m_hood = hood;
+    addRequirements(m_hood);
     m_limelight = limelight;
+    addRequirements(m_limelight);
     m_drive = drive;
     m_isAligning = isAligning;
     m_isShooting = isShooting;
@@ -78,14 +84,16 @@ public class VisionShoot extends CommandBase {
     runShooter = new RunShooter(m_leftShooter, m_rightShooter, latestProfile);
     runHood = new RunHood(m_hood, latestProfile);
     cameraAlign = new CameraAlign(m_drive, m_limelight, latestProfile, fwdMovement);
+    m_timeout = timeout;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
     updateProfile();
-    runShooter.schedule();
-    runHood.schedule();
+    runShooter.initialize();
+    runHood.initialize();
+    m_startTime = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -93,7 +101,7 @@ public class VisionShoot extends CommandBase {
   public void execute() {
     updateProfile();
     if (m_isAligning.getAsBoolean() && !m_limelight.isAligning()) {
-      cameraAlign.schedule();
+      cameraAlign.initialize();
       m_limelight.setAligning(true);
     }
     if (m_isShooting.getAsBoolean()) {
@@ -173,6 +181,11 @@ public class VisionShoot extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    m_currentTime = Timer.getFPGATimestamp();
+    if(m_currentTime - m_startTime >= m_timeout){
+      m_drive.arcadeDrive(0, 0);
+      return true;
+    }
     return false;
   }
 }

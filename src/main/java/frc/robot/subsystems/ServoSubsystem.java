@@ -21,18 +21,17 @@ public class ServoSubsystem extends SubsystemBase {
   private Servo leftServo;
   private Servo rightServo;
   private boolean engageToggle = true;
+  ClimberSubsystem m_climber;
 
-  public ServoSubsystem() {
+  public ServoSubsystem(ClimberSubsystem climber) {
     leftServo = new Servo(ClimberConstants.kLeftServo);
     rightServo = new Servo(ClimberConstants.kRightServo);
-
+    m_climber = climber;
   }
 
   public void setBothAngle(double degrees) {
     leftServo.setAngle(degrees);
     rightServo.setAngle(degrees);
-    // rightServo.set(0.0);//need to find setpoints
-    // leftServo.set(0.0);
   }
 
   public double getLeftAngle() {
@@ -43,15 +42,27 @@ public class ServoSubsystem extends SubsystemBase {
     return rightServo.get();
   }
 
-  // Right Servo is correct
   public void engage() {
+    rightServo.setAngle(40);
+    leftServo.setAngle(100.0);
+  }
+
+  public void disengage() {
+    if (m_climber.isEnabled()) {
+      rightServo.setAngle(100);
+      leftServo.setAngle(40.0);
+    }
+  }
+
+  // Right Servo is correct
+  public void toggle() {
     if (getEngageToggled()) { // if false (engaged) set to unlocked position
-      rightServo.setAngle(90);// TODO this ain't final someone check this
-      leftServo.setAngle(0.0);// TODO this ain't final someone check this
+      rightServo.setAngle(40);
+      leftServo.setAngle(100);
       toggleEngage();
     } else { // else sets to locked
-      rightServo.setAngle(0);// TODO this ain't final someone check this
-      leftServo.setAngle(90.0);// TODO this ain't final someone check this
+      rightServo.setAngle(100);
+      leftServo.setAngle(40.0);
       toggleEngage();
     }
   }

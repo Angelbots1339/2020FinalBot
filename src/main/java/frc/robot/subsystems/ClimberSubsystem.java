@@ -27,6 +27,7 @@ public class ClimberSubsystem extends SubsystemBase {
   private double m_speed;
   private CANEncoder m_rightEncoder;
   private CANEncoder m_leftEncoder;
+  private boolean m_enabled = false;
 
   /**
    * TODO Need feedback to Driver Station in case of improper setup For Example,
@@ -47,6 +48,10 @@ public class ClimberSubsystem extends SubsystemBase {
     m_rightClimber.setIdleMode(IdleMode.kBrake);
   }
 
+  public boolean isEnabled() {
+    return m_enabled;
+  }
+
   /*
    * TODO - Needs to be verified for direction, enable() uses a negative value
    * public void enable(double speed){ m_rightClimber.set(speed);
@@ -54,8 +59,14 @@ public class ClimberSubsystem extends SubsystemBase {
    */
 
   public void enable() {
-    m_rightClimber.set(-1 * ClimberConstants.kClimberSpeed);
-    m_leftClimber.set(-1 * ClimberConstants.kClimberSpeed);
+    m_enabled = true;
+  }
+
+  public void run() {
+    if (m_enabled) {
+      m_rightClimber.set(-1 * ClimberConstants.kClimberSpeed);
+      m_leftClimber.set(-1 * ClimberConstants.kClimberSpeed);
+    }
   }
 
   @Override
@@ -70,7 +81,7 @@ public class ClimberSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void disable() {
+  public void stop() {
     m_rightClimber.set(0);
     m_leftClimber.set(0);
   }

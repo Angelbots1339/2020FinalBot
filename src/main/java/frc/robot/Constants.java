@@ -229,8 +229,8 @@ public final class Constants {
         public final static boolean kIntakeTelemetry = false;
         public final static boolean kLimelightTelemetry = false;
         public final static boolean kLoaderTelemetry = false;
-        public final static boolean kPIDLoaderTelemetry = true;
-        public final static boolean kServoTelemetry = false;
-        public final static boolean kShooterPIDTelemetry = true;
+        public final static boolean kPIDLoaderTelemetry = false;
+        public final static boolean kServoTelemetry = true;
+        public final static boolean kShooterPIDTelemetry = false;
     }
 }
