@@ -75,12 +75,17 @@ public class LimelightSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    if (LimelightConstants.kAutoZoom)
-      setPipeline(getDistanceToVisionTarget() > LimelightConstants.k2XZoomCutoff
-          ? getDistanceToVisionTarget() > LimelightConstants.k3XZoomCutoff ? 2 : 1
-          : 0);
-    if (!seesTarget())
-      setPipeline(0);
+    if (isAligning() || !LimelightConstants.autoColorVision) {
+      if (LimelightConstants.kAutoZoom)
+        setPipeline(getDistanceToVisionTarget() > LimelightConstants.k2XZoomCutoff
+            ? getDistanceToVisionTarget() > LimelightConstants.k3XZoomCutoff ? 2 : 1
+            : 0);
+      else setPipeline(0);
+      if (!seesTarget())
+        setPipeline(0);
+    } else {
+      setPipeline(3);
+    }
 
     if (DashboardConstants.kLimelightTelemetry) {
       SmartDashboard.putBoolean(LimelightConstants.kLimeTable + ": Has Target", seesTarget());

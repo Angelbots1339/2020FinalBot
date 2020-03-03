@@ -14,6 +14,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 import java.util.stream.Collectors;
 
 import edu.wpi.first.wpilibj.Filesystem;
@@ -54,7 +55,7 @@ public class VisionShoot extends CommandBase {
    */
   public VisionShoot(IntakeSubsystem intake, IndexerSubsystem index, LoaderPIDSubsystem loader, ShooterPID leftShooter,
       ShooterPID rightShooter, HoodPIDSubsystem hood, LimelightSubsystem limelight, DriveSubsystem drive,
-      BooleanSupplier isAligning, BooleanSupplier isShooting) {
+      BooleanSupplier isAligning, BooleanSupplier isShooting, DoubleSupplier fwdMovement) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_intake = intake;
     addRequirements(m_intake);
@@ -76,7 +77,7 @@ public class VisionShoot extends CommandBase {
     latestProfile = new ShootingProfiles(0, 0, 0, 0, 0, 0);
     runShooter = new RunShooter(m_leftShooter, m_rightShooter, latestProfile);
     runHood = new RunHood(m_hood, latestProfile);
-    cameraAlign = new CameraAlign(m_drive, m_limelight, latestProfile);
+    cameraAlign = new CameraAlign(m_drive, m_limelight, latestProfile, fwdMovement);
   }
 
   // Called when the command is initially scheduled.
@@ -96,7 +97,8 @@ public class VisionShoot extends CommandBase {
       m_limelight.setAligning(true);
     }
     if (m_isShooting.getAsBoolean()) {
-      if (((m_leftShooter.atSetpoint() && m_rightShooter.atSetpoint()) || m_limelight.getDistanceToVisionTarget() < ShooterConstants.kRapidShotThreshold) && m_hood.atSetpoint()
+      if (((m_leftShooter.atSetpoint() && m_rightShooter.atSetpoint())
+          || m_limelight.getDistanceToVisionTarget() < ShooterConstants.kRapidShotThreshold) && m_hood.atSetpoint()
           && (m_limelight.isAligned() || !m_isAligning.getAsBoolean())) {
         m_intake.enableIntake();
         m_indexer.enable(latestProfile.getIndexerSpeed());

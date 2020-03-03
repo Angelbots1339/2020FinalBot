@@ -182,7 +182,7 @@ public final class Constants {
         public final static double kLimeLightTilt = 25;
         public final static double k2XZoomCutoff = 3.785;// TODO
         public final static double k3XZoomCutoff = 5.436;// TODO
-        public final static double[] kPanningOffest = { 0, -9, -6 };// TODO
+        public final static double[] kPanningOffest = { 0, -9, -6 , 0};// TODO
         public final static boolean kAutoZoom = true;
 
         public final static double kMinEncoderValue = 0.1;
@@ -193,6 +193,7 @@ public final class Constants {
         public final static double kPositionTolerance = 0.075;
 
         public final static int kMaxHoodVolt = 7;
+		public static final boolean autoColorVision = false;
     }
 
     public final class SensorConstants {
