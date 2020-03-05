@@ -98,16 +98,12 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public boolean tankDrive(double left, double right, double threshold) {
-    SmartDashboard.putNumber("left Vision", left);
-    SmartDashboard.putNumber("right Vision", right);
     double leftSpeed = Math.abs(left) > threshold
         ? Math.copySign(Math.max(DriveConstants.kMinPower, Math.abs(left)), left)
         : 0;
     double rightSpeed = Math.abs(right) > threshold
         ? Math.copySign(Math.max(DriveConstants.kMinPower, Math.abs(right)), right)
         : 0;
-    SmartDashboard.putNumber("real left Vision", leftSpeed);
-    SmartDashboard.putNumber("real right Vision", rightSpeed);
 
     m_drive.tankDrive(leftSpeed, rightSpeed, false);
     // m_leftMotors.set(leftSpeed);

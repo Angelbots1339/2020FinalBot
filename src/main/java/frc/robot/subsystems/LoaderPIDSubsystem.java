@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DashboardConstants;
 import frc.robot.Constants.LoaderConstants;
 import frc.robot.Constants.SensorConstants;
@@ -38,12 +39,12 @@ public class LoaderPIDSubsystem extends PIDSubsystem {
   private int m_count;
 
   private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(LoaderConstants.KSVolts,
-    LoaderConstants.KVVoltSecondsPerRotation);
+      LoaderConstants.KVVoltSecondsPerRotation);
 
   /**
    * Creates a new LoaderSubsystem.
    */
-  public LoaderPIDSubsystem() {
+  public LoaderPIDSubsystem(ShooterPID shooter) {
     super(new PIDController(LoaderConstants.kP, LoaderConstants.kI, LoaderConstants.kD));
     m_count = 0;
 
@@ -67,8 +68,19 @@ public class LoaderPIDSubsystem extends PIDSubsystem {
     m_shooterReceiver = new DigitalInput(SensorConstants.ShooterReciever);
     m_bottomRightEmitter = new DigitalInput(SensorConstants.bottomEmitter);
     m_bottomRightReceiver = new DigitalInput(SensorConstants.bottomReciever);
-  }
 
+    Trigger bottomTrigger = new Trigger(() -> isBottomBroken());
+    bottomTrigger.and(new Trigger(() -> m_loader.get() >= 0)).whenActive(() -> m_count++);
+    
+    Trigger releaseBalls = bottomTrigger.and(new Trigger(() -> m_loader.get() < 0));
+    releaseBalls.whenActive(() -> m_count--);
+    //releaseBalls.and(new Trigger(() -> getCount() >= 5)).whenInactive(() -> m_count--);
+
+    Trigger topTrigger = new Trigger(() -> isTopBeamBroken());
+    topTrigger.and(new Trigger(() -> shooter.atSetpoint())).whenActive(() -> m_count--);
+    //releaseBalls.and(new Trigger(() -> getCount() >= 5)).whenInactive(() -> m_count--);
+  
+  }
 
   public void reverse(double speed) {
     m_loader.set(-speed);
@@ -101,7 +113,7 @@ public class LoaderPIDSubsystem extends PIDSubsystem {
   @Override
   protected void useOutput(double output, double setpoint) {
     output += m_feedforward.calculate(setpoint);
-    //output = MathUtil.clamp(output, -6, 6);
+    // output = MathUtil.clamp(output, -6, 6);
     m_loader.setVoltage(output);
   }
 
@@ -118,18 +130,10 @@ public class LoaderPIDSubsystem extends PIDSubsystem {
     super.setSetpoint(setpoint);
   }
 
-  
   public void periodic() {
     super.periodic();
 
-    // counting
-    if (isBottomBroken()) {
-      m_count++;
-    }
-    if (isShooterBeamBroken()) {
-      m_count--;
-    }
-    if (DashboardConstants.kPIDLoaderTelemetry) {
+    if (DashboardConstants.kLoaderTelemetry) {
       SmartDashboard.putBoolean("Top Emitter", m_topEmitter.get());
       SmartDashboard.putBoolean("Top Reciever", m_topReceiver.get());
       SmartDashboard.putBoolean("Middle Emitter", m_middleEmitter.get());

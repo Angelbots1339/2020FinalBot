@@ -9,9 +9,9 @@ package frc.robot.commands.vision;
 
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.Constants.LimelightConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
@@ -27,7 +27,8 @@ public class CameraAlign extends CommandBase {
   private ShootingProfiles m_targetProfile;
   private double driveError;
 
-  public CameraAlign(DriveSubsystem driveSubsystem, LimelightSubsystem cameraSubsystem, ShootingProfiles targetProfile, DoubleSupplier fwdMovement) {
+  public CameraAlign(DriveSubsystem driveSubsystem, LimelightSubsystem cameraSubsystem, ShootingProfiles targetProfile,
+      DoubleSupplier fwdMovement) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_driveSubsystem = driveSubsystem;
     addRequirements(m_driveSubsystem);
@@ -51,15 +52,13 @@ public class CameraAlign extends CommandBase {
     m_turn = 0;
 
     if (m_limeLight.seesTarget()) {
-      driveError = m_limeLight.getDistanceToVisionTarget() - m_targetProfile.getDistance();
       m_turn += m_targetProfile.getAngleP() * m_limeLight.getXTargetOffset();
-      // m_drive += driveError * Constants.LimelightConstants.kDriveP;
+      if (LimelightConstants.kDistanceAlign) {
+        driveError = m_limeLight.getDistanceToVisionTarget() - m_targetProfile.getDistance();
+        m_drive += driveError * Constants.LimelightConstants.kDriveP;
+      }
       m_drive -= m_fwdMovement.getAsDouble();
     }
-
-    SmartDashboard.putNumber("Vision Turn", m_turn);
-    SmartDashboard.putNumber("Vision Drive", m_drive);
-    SmartDashboard.putNumber("Vision Drive Error", driveError);
     m_limeLight.setAligned(m_driveSubsystem.arcadeDrive(m_drive, m_turn, Constants.LimelightConstants.kDriveTolerance));
   }
 

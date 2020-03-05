@@ -76,25 +76,29 @@ public class LimelightSubsystem extends SubsystemBase {
   @Override
   @SuppressWarnings("unused")
   public void periodic() {
-    if (isAligning() || !LimelightConstants.autoColorVision) {
+    if (isAligning() || !LimelightConstants.kAutoColorVision) {
       if (LimelightConstants.kAutoZoom)
         setPipeline(getDistanceToVisionTarget() > LimelightConstants.k2XZoomCutoff
             ? getDistanceToVisionTarget() > LimelightConstants.k3XZoomCutoff ? 2 : 1
             : 0);
-      else setPipeline(0);
+      else
+        setPipeline(0);
       if (!seesTarget())
         setPipeline(0);
     } else {
       setPipeline(3);
     }
 
+    if (LimelightConstants.kAutoLight)
+      setLed(isAligning() ? LedMode.PIPELINE : LedMode.OFF);
+
     if (DashboardConstants.kLimelightTelemetry) {
-      SmartDashboard.putBoolean(LimelightConstants.kLimeTable + ": Has Target", seesTarget());
       SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Pipeline Latency(ms)", getLatency());
       SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": X ", getXTargetOffset());
       SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Y", getYTargetOffset());
     }
     SmartDashboard.putString("profile", m_latestTargetProfile.toString());
+    SmartDashboard.putBoolean(LimelightConstants.kLimeTable + ": Has Target", seesTarget());
     SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Dist", getDistanceToVisionTarget());
   }
 

@@ -173,10 +173,13 @@ public final class Constants {
         public final static double kVerticalFOV = 49.7;
         public final static double kHorizontalFOV = 59.6;
         public final static double kLimeLightTilt = 25;
+
         public final static double k2XZoomCutoff = 3.785;
         public final static double k3XZoomCutoff = 5.436;
         public final static double[] kPanningOffest = { 0, -9, -6 , 0};
         public final static boolean kAutoZoom = true;
+        
+        public final static boolean kAutoLight = true;
 
         public final static double kMinEncoderValue = 0.1;
         public final static double kMaxEncoderValue = 17.5;
@@ -185,8 +188,8 @@ public final class Constants {
 
         public final static double kPositionTolerance = 0.075;
 
-        public final static int kMaxHoodVolt = 7;
-		public static final boolean autoColorVision = false;
+		public static final boolean kAutoColorVision = false;
+		public static final boolean kDistanceAlign = false;
     }
 
     public final class SensorConstants {
@@ -197,8 +200,8 @@ public final class Constants {
         public final static int middleReciever = 2;
         public final static int ShooterEmitter = 0; // 5; // right next to shooter, counts when balls leave
         public final static int ShooterReciever = 1;// 4;
-        public final static int bottomEmitter = 6;  // counts when balls enter
-        public final static int bottomReciever = 7;
+        public final static int bottomEmitter = 7;  // counts when balls enter
+        public final static int bottomReciever = 6;
 
     }
 
@@ -221,8 +224,7 @@ public final class Constants {
         public final static boolean kIntakeArmTelemetry = false;
         public final static boolean kIntakeTelemetry = false;
         public final static boolean kLimelightTelemetry = false;
-        public final static boolean kLoaderTelemetry = false;
-        public final static boolean kPIDLoaderTelemetry = false;
+        public final static boolean kLoaderTelemetry = true;
         public final static boolean kShooterPIDTelemetry = false;
     }
 }
