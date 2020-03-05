@@ -35,6 +35,6 @@ public class Auto extends SequentialCommandGroup {
     // Add your commands in the super() call, e.g.
 
     addCommands(new VisionShoot(intake, index, loader, leftShooter, rightShooter, hood, limelight, drive, () -> true,
-        () -> true, () -> 0, 4), new ToggleIntakeArms(arm), new Reverse(drive));
+        () -> true, () -> 0, 4), new ParallelCommandGroup(new ToggleIntakeArms(arm), new Reverse(drive)));
   }
 }

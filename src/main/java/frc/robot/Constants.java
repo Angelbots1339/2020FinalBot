@@ -49,8 +49,8 @@ public final class Constants {
         public final static double kI = 0;
         public final static double kD = 0;
         public final static double kIntakeArmMotorVolt = 5;
-        public final static double kMinEncoderValue = -10;
-        public final static double kMaxEncoderValue = -2;
+        public final static double kMinEncoderValue = -10.5;
+        public final static double kMaxEncoderValue = -0.5;
         public final static double kPositionTolerance = 0.2;
     }
     public final class IndexerConstants{
@@ -92,8 +92,6 @@ public final class Constants {
         public final static double kFF = 0;
 
         // setting up encoder
-        //public final static int[] kEncoderPorts = new int[] { 4, 5 }; // TODO
-        //public final static boolean kEnocderReversed = true;
         public final static int kEncoderCPR = 4096; // clicks per rotation
 
         // distance units int rotations
@@ -133,13 +131,8 @@ public final class Constants {
     public final static class ClimberConstants {
         public final static int kLeftClimberMotor = 10;
         public final static int kRightClimberMotor = 11;
-        public final static int kLeftServo = 0;     // TODO double check
-        public final static int kRightServo = 9;    // TODO doulbe check
-
-        public final static int[] kLeftEncoder = new int[] { 1, 2 }; // TODO find the ports
-        public final static int[] kRightEncoder = new int[] { 3, 4 };
-        public final static boolean kLeftEncoderReversed = false;   // TODO
-        public final static boolean kRightEncoderReversed = false;  // TODOs
+        public final static int kLeftServo = 0;
+        public final static int kRightServo = 6;
 
         public final static double kClimberSpeed = 0.7;
 
@@ -180,9 +173,9 @@ public final class Constants {
         public final static double kVerticalFOV = 49.7;
         public final static double kHorizontalFOV = 59.6;
         public final static double kLimeLightTilt = 25;
-        public final static double k2XZoomCutoff = 3.785;// TODO
-        public final static double k3XZoomCutoff = 5.436;// TODO
-        public final static double[] kPanningOffest = { 0, -9, -6 , 0};// TODO
+        public final static double k2XZoomCutoff = 3.785;
+        public final static double k3XZoomCutoff = 5.436;
+        public final static double[] kPanningOffest = { 0, -9, -6 , 0};
         public final static boolean kAutoZoom = true;
 
         public final static double kMinEncoderValue = 0.1;
@@ -223,14 +216,13 @@ public final class Constants {
         public final static boolean kBuddyClimbTelemetry = false;
         public final static boolean kClimberTelemetry = false;
         public final static boolean kDriveTelemetry = false;
-        public final static boolean kHoodPIDTelemetry = true;
+        public final static boolean kHoodPIDTelemetry = false;
         public final static boolean kIndexerTelemetry = false;
         public final static boolean kIntakeArmTelemetry = false;
         public final static boolean kIntakeTelemetry = false;
         public final static boolean kLimelightTelemetry = false;
         public final static boolean kLoaderTelemetry = false;
         public final static boolean kPIDLoaderTelemetry = false;
-        public final static boolean kServoTelemetry = true;
         public final static boolean kShooterPIDTelemetry = false;
     }
 }

@@ -8,29 +8,79 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
- // uses a servo power module
- //https://docs.wpilib.org/en/latest/docs/software/actuators/servos.html
-import frc.robot.Constants.BuddyClimbConstants;
+import frc.robot.Constants.ClimberConstants;
+import frc.robot.Constants.DashboardConstants;
 
 public class BuddyClimbSubsystem extends SubsystemBase {
-
-  private Servo m_servo;
   /**
-   * Creates a new BuddyClimbSubsystem.
+   * Creates a new ServoSubsystem.
    */
-  public BuddyClimbSubsystem() {
-    m_servo = new Servo(BuddyClimbConstants.kServoPort);
 
+  private Servo leftServo;
+  private Servo rightServo;
+  private boolean engageToggle = true;
+  ClimberSubsystem m_climber;
+
+  public BuddyClimbSubsystem(ClimberSubsystem climber) {
+    leftServo = new Servo(ClimberConstants.kLeftServo);
+    rightServo = new Servo(ClimberConstants.kRightServo);
+    m_climber = climber;
+  }
+
+  public void setBothAngle(double degrees) {
+    leftServo.setAngle(degrees);
+    rightServo.setAngle(degrees);
+  }
+
+  public double getLeftAngle() {
+    return leftServo.get();
+  }
+
+  public double getRightAngle() {
+    return rightServo.get();
+  }
+
+  public void engage() {
+    rightServo.setAngle(140);
+    leftServo.setAngle(10.0);
+  }
+
+  public void disengage() {
+    if (m_climber.isEnabled()) {
+      rightServo.setAngle(40);
+      leftServo.setAngle(110.0);
+    }
+  }
+
+  // Right Servo is correct
+  public void toggle() {
+    if (getEngageToggled()) { // if false (engaged) set to unlocked position
+      rightServo.setAngle(40);
+      leftServo.setAngle(100);
+      toggleEngage();
+    } else { // else sets to locked
+      rightServo.setAngle(100);
+      leftServo.setAngle(40.0);
+      toggleEngage();
+    }
+  }
+
+  public void toggleEngage() {
+    engageToggle = !engageToggle;
+  }
+
+  public boolean getEngageToggled() {
+    return engageToggle;
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-  }
 
-  public void DropClimber(){
-    // TODO check the angle 
-    m_servo.set(BuddyClimbConstants.kServoPort);
+    if (DashboardConstants.kBuddyClimbTelemetry) {
+      SmartDashboard.putNumber("L Servo Pos", leftServo.get());
+      SmartDashboard.putNumber("R Servo Pos", rightServo.get());
+    }
   }
 }

@@ -75,6 +75,11 @@ public class IntakeArmPID extends PIDSubsystem {
     return m_rightEncoder.getPosition();
   }
 
+  public void setEncoderPosition(double pos) {
+    // Return the process variable measurement here
+    m_rightEncoder.setPosition(pos);
+  }
+
   public boolean atSetpoint() {
     return m_controller.atSetpoint();
   }

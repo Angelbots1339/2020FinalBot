@@ -126,7 +126,7 @@ public class LoaderSubsystem extends SubsystemBase {
   }
 
   public boolean isBottomBroken() {
-    return false; // TODO needs to be corrected
+    return !(m_bottomRightReceiver.get());
   }
 
 }

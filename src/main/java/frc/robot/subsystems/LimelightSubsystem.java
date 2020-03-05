@@ -74,6 +74,7 @@ public class LimelightSubsystem extends SubsystemBase {
   }
 
   @Override
+  @SuppressWarnings("unused")
   public void periodic() {
     if (isAligning() || !LimelightConstants.autoColorVision) {
       if (LimelightConstants.kAutoZoom)

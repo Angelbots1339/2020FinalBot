@@ -62,10 +62,6 @@ public class IndexerSubsystem extends SubsystemBase {
 
   }
 
-  /**
-   * Returns true if the current spikes in the indexer TODO - this needs to be
-   * checked for the actual stall current, do not use otherwise
-   */
   public boolean isCurrentSpike() {
     return (m_leftIndexer.getOutputCurrent() > IndexerConstants.kAcceptableCurrentSpike)
         || (m_rightIndexer.getOutputCurrent() > IndexerConstants.kAcceptableCurrentSpike);

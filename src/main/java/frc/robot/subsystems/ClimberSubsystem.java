@@ -29,12 +29,7 @@ public class ClimberSubsystem extends SubsystemBase {
   private CANEncoder m_leftEncoder;
   private boolean m_enabled = false;
 
-  /**
-   * TODO Need feedback to Driver Station in case of improper setup For Example,
-   * if climber is ran for xxx seconds but encoder does not register then kill the
-   * climb? Mechanically, this setup would mean the motors are back-driving into
-   * the wrench ratchet
-   */
+
   public ClimberSubsystem() {
     // m_rightEncoder = new CANEncoder(m_rightClimber);
     // m_leftEncoder = new CANEncoder(m_leftClimber);
@@ -51,12 +46,6 @@ public class ClimberSubsystem extends SubsystemBase {
   public boolean isEnabled() {
     return m_enabled;
   }
-
-  /*
-   * TODO - Needs to be verified for direction, enable() uses a negative value
-   * public void enable(double speed){ m_rightClimber.set(speed);
-   * m_leftClimber.set(speed); m_speed = speed; }
-   */
 
   public void enable() {
     m_enabled = true;

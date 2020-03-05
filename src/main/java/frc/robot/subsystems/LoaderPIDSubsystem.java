@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
-import edu.wpi.first.wpiutil.math.MathUtil;
 import frc.robot.Constants.DashboardConstants;
 import frc.robot.Constants.LoaderConstants;
 import frc.robot.Constants.SensorConstants;
@@ -88,15 +87,15 @@ public class LoaderPIDSubsystem extends PIDSubsystem {
   }
 
   public boolean isTopBeamBroken() {
-    return !(m_topReceiver.get());
+    return !m_topReceiver.get();
   }
 
   public boolean isMiddleBeamBroken() {
-    return !(m_middleReceiver.get());
+    return !m_middleReceiver.get();
   }
 
   public boolean isBottomBroken() {
-    return false; // TODO needs to be corrected
+    return !m_bottomRightReceiver.get();
   }
 
   @Override
