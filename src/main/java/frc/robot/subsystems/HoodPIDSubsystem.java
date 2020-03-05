@@ -70,7 +70,7 @@ public class HoodPIDSubsystem extends PIDSubsystem {
   public void periodic() {
     super.periodic();
     if (m_hood.getOutputCurrent() > HoodConstants.kMinResistedVoltage) {
-      m_encoder.setPosition(m_hood.getOutputCurrent() > 0 ? HoodConstants.kmaxEncoderValue
+      m_encoder.setPosition(m_hood.getAppliedOutput() > 0 ? HoodConstants.kmaxEncoderValue
           : HoodConstants.kMinEncoderValue);
     }
     if (DashboardConstants.kHoodPIDTelemetry) {

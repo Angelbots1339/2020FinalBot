@@ -20,11 +20,12 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-.gradle/6.0.1/executionHistory/executionHistory.bin
-.gradle/6.0.1/executionHistory/executionHistory.lock
+.gradle/6.0.1/executionHistory/*
 .gradle/6.0.1/fileHashes/fileHashes.bin
 .gradle/6.0.1/fileHashes/fileHashes.lock
 .gradle/6.0.1/javaCompile/classAnalysis.bin
 .gradle/6.0.1/javaCompile/javaCompile.lock
-.gradle/buildOutputCleanup/buildOutputCleanup.lock
-build/libs/2020FinalBot.jar
+.gradle/buildOutputCleanup/*
+build/libs/*.jar
+build/debug/desktopinfo.json
+build/debug/partial/2020FinalBot_java.json
