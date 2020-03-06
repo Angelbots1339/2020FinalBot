@@ -22,6 +22,7 @@ public class LimelightSubsystem extends SubsystemBase {
   private boolean m_isAligned = true;
   private boolean m_isAligning = false;
   private ShootingProfile m_latestTargetProfile = new ShootingProfile(3, 0, 0, 0, 0, 0);
+  private boolean hasSeenTarget = false;
 
   /**
    * Creates a new Limelight.
@@ -62,6 +63,8 @@ public class LimelightSubsystem extends SubsystemBase {
   }
 
   public double getDistanceToVisionTarget() {
+    if (!hasSeenTarget)
+      return LimelightConstants.kDefaultDistance;
     return LimelightConstants.kLimelightToTargetHeight / Math.tan(Math.toRadians(
         getYTargetOffset() + LimelightConstants.kLimeLightTilt + LimelightConstants.kPanningOffest[getPipeline()]));
   }
@@ -91,6 +94,9 @@ public class LimelightSubsystem extends SubsystemBase {
     } else {
       setPipeline(LimelightConstants.kColorPipeline);
     }
+
+    if (seesTarget())
+      hasSeenTarget = true;
 
     if (LimelightConstants.kAutoLight)
       setLed(isAligning() ? LedMode.PIPELINE : LedMode.OFF);
@@ -127,5 +133,12 @@ public class LimelightSubsystem extends SubsystemBase {
 
   public ShootingProfile getLatestProfile() {
     return m_latestTargetProfile;
+  }
+
+  public void reset() {
+    mLedMode = LedMode.PIPELINE;
+    m_isAligned = true;
+    m_isAligning = false;
+    hasSeenTarget = false;
   }
 }
