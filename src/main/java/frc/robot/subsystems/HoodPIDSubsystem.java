@@ -29,17 +29,14 @@ public class HoodPIDSubsystem extends PIDSubsystem {
   /**
    * Creates a new HoodPID.
    */
-  public HoodPIDSubsystem(double setpoint) {
+  public HoodPIDSubsystem() {
     super(new PIDController(HoodConstants.kP, HoodConstants.kI, HoodConstants.kD));
     m_hood = new CANSparkMax(HoodConstants.kHoodPort, MotorType.kBrushless);
     m_encoder = new CANEncoder(m_hood);
     m_encoder.setPosition(0);
 
     getController().setTolerance(HoodConstants.kPositionTolerance);
-
-    // Regardless of what's passed in, clamp to the min and max
-    MathUtil.clamp(setpoint, HoodConstants.kMinEncoderValue, HoodConstants.kmaxEncoderValue);
-    setSetpoint(setpoint);
+    setSetpoint(0);
   }
 
   @Override

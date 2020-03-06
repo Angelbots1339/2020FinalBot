@@ -14,13 +14,14 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LoaderPIDSubsystem;
 
 public class ReverseEverything extends CommandBase {
-  /**
-   * Creates a new ReverseEverything.
-   */
+  
   private IntakeSubsystem m_intake;
   private IndexerSubsystem m_index;
   private LoaderPIDSubsystem m_loader;
-
+  
+  /**
+   * Reverses loader, intake, and indexer
+   */
   public ReverseEverything(LoaderPIDSubsystem loader, IntakeSubsystem intake, IndexerSubsystem indexer) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_intake = intake;
@@ -38,7 +39,7 @@ public class ReverseEverything extends CommandBase {
   public void initialize() {
     m_intake.reverseIntake();
     m_index.reverse();
-    m_loader.reverse(LoaderConstants.kReverseLoaderSpeed);
+    m_loader.reverse(LoaderConstants.kFullSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

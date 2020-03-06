@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DashboardConstants;
 import frc.robot.Constants.LimelightConstants;
-import frc.robot.commands.vision.ShootingProfiles;;
+import frc.robot.commands.vision.ShootingProfile;;
 
 public class LimelightSubsystem extends SubsystemBase {
 
@@ -21,7 +21,7 @@ public class LimelightSubsystem extends SubsystemBase {
   private LedMode mLedMode = LedMode.PIPELINE;
   private boolean m_isAligned = true;
   private boolean m_isAligning = false;
-  private ShootingProfiles m_latestTargetProfile = new ShootingProfiles(3, 0, 0, 0, 0, 0);
+  private ShootingProfile m_latestTargetProfile = new ShootingProfile(3, 0, 0, 0, 0, 0);
 
   /**
    * Creates a new Limelight.
@@ -29,6 +29,7 @@ public class LimelightSubsystem extends SubsystemBase {
   public LimelightSubsystem() {
     mNetworkTable = NetworkTableInstance.getDefault().getTable(LimelightConstants.kLimeTable);
     setLed(mLedMode);
+    setPipeline(LimelightConstants.kDefaultPipeline);
   }
 
   public enum LedMode {
@@ -76,17 +77,19 @@ public class LimelightSubsystem extends SubsystemBase {
   @Override
   @SuppressWarnings("unused")
   public void periodic() {
-    if (isAligning() || !LimelightConstants.kAutoColorVision) {
-      if (LimelightConstants.kAutoZoom)
-        setPipeline(getDistanceToVisionTarget() > LimelightConstants.k2XZoomCutoff
-            ? getDistanceToVisionTarget() > LimelightConstants.k3XZoomCutoff ? 2 : 1
-            : 0);
-      else
-        setPipeline(0);
+    if (!LimelightConstants.kAutoColorVision) {
+      if (!isAligning()) {
+        if (LimelightConstants.kAutoZoom)
+          setPipeline(getDistanceToVisionTarget() > LimelightConstants.k2XZoomCutoff
+              ? getDistanceToVisionTarget() > LimelightConstants.k3XZoomCutoff ? 2 : 1
+              : 0);
+        else
+          setPipeline(0);
+      }
       if (!seesTarget())
         setPipeline(0);
     } else {
-      setPipeline(3);
+      setPipeline(LimelightConstants.kColorPipeline);
     }
 
     if (LimelightConstants.kAutoLight)
@@ -118,11 +121,11 @@ public class LimelightSubsystem extends SubsystemBase {
     return m_isAligning;
   }
 
-  public void setActiveProfile(ShootingProfiles latestTargetProfile) {
+  public void setActiveProfile(ShootingProfile latestTargetProfile) {
     m_latestTargetProfile = latestTargetProfile;
   }
 
-  public ShootingProfiles getLatestProfile() {
+  public ShootingProfile getLatestProfile() {
     return m_latestTargetProfile;
   }
 }

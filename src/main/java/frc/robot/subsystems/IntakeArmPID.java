@@ -52,15 +52,6 @@ public class IntakeArmPID extends PIDSubsystem {
     return m_setpoint;
   }
 
-  public void runIntakeArms() {
-
-    /*
-     * if(m_rightEncoder.getPosition() <= -1){
-     * setSetpoint(IntakeConstants.kMaxEncoderValue); enable(); }else{
-     * setSetpoint(IntakeConstants.kMinEncoderValue); enable(); }
-     */
-  }
-
   @Override
   public void useOutput(double output, double setpoint) {
     output = MathUtil.clamp(output, -IntakeConstants.kIntakeArmMotorVolt, IntakeConstants.kIntakeArmMotorVolt);

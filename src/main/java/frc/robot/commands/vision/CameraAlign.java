@@ -16,18 +16,18 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 
 public class CameraAlign extends CommandBase {
-  /**
-   * Creates a new Align.
-   */
   private final DriveSubsystem m_driveSubsystem;
   private final LimelightSubsystem m_limeLight;
   private final DoubleSupplier m_fwdMovement;
   private double m_turn;
   public double m_drive;
-  private ShootingProfiles m_targetProfile;
+  private ShootingProfile m_targetProfile;
   private double driveError;
-
-  public CameraAlign(DriveSubsystem driveSubsystem, LimelightSubsystem cameraSubsystem, ShootingProfiles targetProfile,
+  
+  /**
+   * Creates a new Align. Aligns and focuses the camera to aim at target
+   */
+  public CameraAlign(DriveSubsystem driveSubsystem, LimelightSubsystem cameraSubsystem, ShootingProfile targetProfile,
       DoubleSupplier fwdMovement) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_driveSubsystem = driveSubsystem;
@@ -55,11 +55,11 @@ public class CameraAlign extends CommandBase {
       m_turn += m_targetProfile.getAngleP() * m_limeLight.getXTargetOffset();
       if (LimelightConstants.kDistanceAlign) {
         driveError = m_limeLight.getDistanceToVisionTarget() - m_targetProfile.getDistance();
-        m_drive += driveError * Constants.LimelightConstants.kDriveP;
+        m_drive += driveError * LimelightConstants.kDriveP;
       }
       m_drive -= m_fwdMovement.getAsDouble();
     }
-    m_limeLight.setAligned(m_driveSubsystem.arcadeDrive(m_drive, m_turn, Constants.LimelightConstants.kDriveTolerance));
+    m_limeLight.setAligned(m_driveSubsystem.arcadeDrive(m_drive, m_turn, LimelightConstants.kDriveTolerance, LimelightConstants.kShootTolerance));
   }
 
   // Called once the command ends or is interrupted.

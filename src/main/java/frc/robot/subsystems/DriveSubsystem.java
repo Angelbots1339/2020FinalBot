@@ -89,26 +89,26 @@ public class DriveSubsystem extends SubsystemBase {
    * @param rot
    * @param threshold
    */
-  public boolean arcadeDrive(double fwd, double rot, double threshold) {
-    return tankDrive(fwd + rot, fwd - rot, threshold);
+  public boolean arcadeDrive(double fwd, double rot, double moveThreshold, double reportThreshold) {
+    return tankDrive(fwd + rot, fwd - rot, moveThreshold, reportThreshold);
   }
 
   public void tankDrive(double left, double right) {
     m_drive.tankDrive(left, right);
   }
 
-  public boolean tankDrive(double left, double right, double threshold) {
-    double leftSpeed = Math.abs(left) > threshold
+  public boolean tankDrive(double left, double right, double moveThreshold, double reportThreshold) {
+    double leftSpeed = Math.abs(left) > moveThreshold
         ? Math.copySign(Math.max(DriveConstants.kMinPower, Math.abs(left)), left)
         : 0;
-    double rightSpeed = Math.abs(right) > threshold
+    double rightSpeed = Math.abs(right) > moveThreshold
         ? Math.copySign(Math.max(DriveConstants.kMinPower, Math.abs(right)), right)
         : 0;
 
     m_drive.tankDrive(leftSpeed, rightSpeed, false);
     // m_leftMotors.set(leftSpeed);
     // m_rightMotors.set(rightSpeed);
-    return Math.abs(left) < threshold && Math.abs(right) < threshold;
+    return Math.abs(left) < reportThreshold && Math.abs(right) < reportThreshold;
   }
   /**
    * Resets the drive encoders to currently read a position of 0.

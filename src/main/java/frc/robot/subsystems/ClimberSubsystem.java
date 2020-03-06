@@ -53,8 +53,8 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public void run() {
     if (m_enabled) {
-      m_rightClimber.set(-1 * ClimberConstants.kClimberSpeed);
-      m_leftClimber.set(-1 * ClimberConstants.kClimberSpeed);
+      m_rightClimber.set(-ClimberConstants.kClimberSpeed);
+      m_leftClimber.set(-ClimberConstants.kClimberSpeed);
     }
   }
 

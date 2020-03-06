@@ -14,12 +14,12 @@ import frc.robot.subsystems.HoodPIDSubsystem;
 public class RunHood extends CommandBase {
 
   private final HoodPIDSubsystem m_hoodPID;
-  private ShootingProfiles m_targetProfile;
+  private ShootingProfile m_targetProfile;
 
   /**
-   * Creates a new RunHood.
+   * Aligns hood with shooting preferences
    */
-  public RunHood(HoodPIDSubsystem hoodPID, ShootingProfiles targetProfile) {
+  public RunHood(HoodPIDSubsystem hoodPID, ShootingProfile targetProfile) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_hoodPID = hoodPID;
     addRequirements(m_hoodPID);
@@ -28,7 +28,7 @@ public class RunHood extends CommandBase {
   }
 
   public RunHood(HoodPIDSubsystem hoodPID, double targetHood){
-    this(hoodPID, new ShootingProfiles(-1, -1, targetHood, 0, 0, 0));
+    this(hoodPID, new ShootingProfile(-1, -1, targetHood, 0, 0, 0));
   }
 
   // Called when the command is initially scheduled.

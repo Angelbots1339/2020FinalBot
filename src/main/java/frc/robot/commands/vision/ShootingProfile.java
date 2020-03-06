@@ -2,7 +2,7 @@ package frc.robot.commands.vision;
 
 import java.util.regex.Pattern;
 
-public class ShootingProfiles {
+public class ShootingProfile {
     private double distance;
     private double shooterSpeed;
     private double hoodvalue;
@@ -10,7 +10,7 @@ public class ShootingProfiles {
     private double indexerSpeed;
     private double loaderSpeed;
 
-    public ShootingProfiles(double distance, double shooterSpeed, double hoodvalue, double angleP, double indexerSpeed,
+    public ShootingProfile(double distance, double shooterSpeed, double hoodvalue, double angleP, double indexerSpeed,
             double loaderSpeed) {
         this.distance = distance;
         this.shooterSpeed = shooterSpeed;
@@ -20,7 +20,11 @@ public class ShootingProfiles {
         this.loaderSpeed = loaderSpeed;
     }
 
-    public ShootingProfiles(String info) {
+    /**
+     * pulls data from shooting profiles and sets speed
+     */
+
+    public ShootingProfile(String info) {
         this(getProperty(info, "m"), getProperty(info, "rpm"), getProperty(info, "hr"), getProperty(info, "aP"),
                 getProperty(info, "IS"), getProperty(info, "LS"));
     }
@@ -56,7 +60,7 @@ public class ShootingProfiles {
         return indexerSpeed;
     }
 
-    public void set(ShootingProfiles shootingProfiles) {
+    public void set(ShootingProfile shootingProfiles) {
         distance = shootingProfiles.getDistance();
         shooterSpeed = shootingProfiles.getShooterSpeed();
         hoodvalue = shootingProfiles.getHoodvalue();

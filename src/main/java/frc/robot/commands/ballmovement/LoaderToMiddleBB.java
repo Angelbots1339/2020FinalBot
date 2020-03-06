@@ -20,7 +20,10 @@ public class LoaderToMiddleBB extends CommandBase {
   private final LoaderPIDSubsystem m_loader;
   private final IntakeSubsystem m_intake;
   private final IndexerSubsystem m_indexer;
- 
+
+  /**
+   * loads balls from intake all the way to the middle beam break, ready to shoot but not able to yet.
+   */
   public LoaderToMiddleBB(LoaderPIDSubsystem loader, IntakeSubsystem intake, IndexerSubsystem indexer) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_loader = loader;
@@ -68,11 +71,6 @@ public class LoaderToMiddleBB extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // checks to see if Bottom beam break is broken
-    // may need a filter
-    // may need to add a timeout
-    // return m_loader.isTopBeamBroken();
-    // stops when button stops being held
     return false;
   }
 }

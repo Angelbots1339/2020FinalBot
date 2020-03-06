@@ -9,15 +9,16 @@ package frc.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.DriveSubsystem;
 
 public class Reverse extends CommandBase {
-  /**
-   * Creates a new Reverse.
-   */
   private final DriveSubsystem m_drive;
   private double m_startTime, m_currentTime;
-
+  
+  /**
+   * Drives backwards and ends after 2 seconds
+   */
   public Reverse(DriveSubsystem drive) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_drive = drive;
@@ -33,7 +34,7 @@ public class Reverse extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drive.arcadeDrive(-0.62, 0);
+    m_drive.arcadeDrive(-AutoConstants.kReverseSpeed, 0);
   }
 
   // Called once the command ends or is interrupted.
@@ -45,12 +46,7 @@ public class Reverse extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    // ends command after 2 seconds of starting
     m_currentTime = Timer.getFPGATimestamp();
-    if(m_currentTime - m_startTime >= 1){
-      m_drive.arcadeDrive(0, 0);
-      return true;
-    }
-    return false;
+    return m_currentTime - m_startTime >= AutoConstants.kReverseTime;
   }
 }

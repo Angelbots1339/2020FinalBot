@@ -9,16 +9,16 @@ package frc.robot.commands.ballmovement;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.IntakeArmPID;
+
 /**
  * currently testing this one
  */
-
 public class RunIntakeArms extends CommandBase {
 
   private final IntakeArmPID m_arm;
   private double m_setpoint;
   /**
-   * Creates a new RunIntakeArms.
+   * Creates a setpoint for the IntakeArm to move to
    */
   public RunIntakeArms(IntakeArmPID arm, double setpoint){
     // Use addRequirements() here to declare subsystem dependencies.

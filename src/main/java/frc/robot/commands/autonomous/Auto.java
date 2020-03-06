@@ -9,6 +9,7 @@ package frc.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.commands.ballmovement.ToggleIntakeArms;
 import frc.robot.commands.vision.VisionShoot;
 import frc.robot.subsystems.DriveSubsystem;
@@ -26,15 +27,12 @@ import frc.robot.subsystems.ShooterPID;
 
 public class Auto extends SequentialCommandGroup {
   /**
-   * Creates a new Auto.
+   * Runs VisionShoot, then runs parallel command to drive robot in reverse and lower intake arm
    */
-
   public Auto(IntakeArmPID arm, IntakeSubsystem intake, IndexerSubsystem index, LoaderPIDSubsystem loader,
       ShooterPID leftShooter, ShooterPID rightShooter, HoodPIDSubsystem hood, LimelightSubsystem limelight,
       DriveSubsystem drive) {
-    // Add your commands in the super() call, e.g.
-
-    addCommands(new VisionShoot(intake, index, loader, leftShooter, rightShooter, hood, limelight, drive, () -> true,
-        () -> true, () -> 0, 4), new ParallelCommandGroup(new ToggleIntakeArms(arm), new Reverse(drive)));
+    addCommands(new VisionShoot(intake, index, loader, leftShooter, rightShooter, hood, limelight, drive, () -> false,
+        () -> true, () -> 0, AutoConstants.kVisionTime), new ParallelCommandGroup(new ToggleIntakeArms(arm), new Reverse(drive)));
   }
 }

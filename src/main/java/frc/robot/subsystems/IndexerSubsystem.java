@@ -41,8 +41,8 @@ public class IndexerSubsystem extends SubsystemBase {
   }
 
   public void reverse() {
-    m_leftIndexer.set(IndexerConstants.kMaxIndexSpeed * -1);
-    m_rightIndexer.set(IndexerConstants.kMaxIndexSpeed * -1);
+    m_leftIndexer.set(-IndexerConstants.kMaxIndexSpeed);
+    m_rightIndexer.set(-IndexerConstants.kMaxIndexSpeed);
   }
 
   public void disable() {

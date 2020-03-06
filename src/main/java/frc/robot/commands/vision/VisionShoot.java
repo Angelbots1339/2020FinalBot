@@ -33,7 +33,7 @@ import frc.robot.subsystems.ShooterPID;
 
 public class VisionShoot extends CommandBase {
 
-  private static final ArrayList<ShootingProfiles> data = getData();
+  private static final ArrayList<ShootingProfile> data = getData();
   private final IntakeSubsystem m_intake;
   private final IndexerSubsystem m_indexer;
   private final LoaderPIDSubsystem m_loader;
@@ -45,14 +45,14 @@ public class VisionShoot extends CommandBase {
   private final Command runShooter;
   private final Command runHood;
   private final Command cameraAlign;
-  private final ShootingProfiles latestProfile;
+  private final ShootingProfile latestProfile;
   private final BooleanSupplier m_isAligning;
   private final BooleanSupplier m_isShooting;
   private double m_startTime, m_currentTime;
   private final double m_timeout;
 
   /**
-   * Creates a new ShootAllBalls.
+   * Shoots balls when aligned with the right perameters. If aligned and hood is at correct set point it shoots. 
    * 
    * @param m_targetProfile
    */
@@ -80,7 +80,7 @@ public class VisionShoot extends CommandBase {
     m_isAligning = isAligning;
     m_isShooting = isShooting;
 
-    latestProfile = new ShootingProfiles(0, 0, 0, 0, 0, 0);
+    latestProfile = new ShootingProfile(0, 0, 0, 0, 0, 0);
     runShooter = new RunShooter(m_leftShooter, m_rightShooter, latestProfile);
     runHood = new RunHood(m_hood, latestProfile);
     cameraAlign = new CameraAlign(m_drive, m_limelight, latestProfile, fwdMovement);
@@ -148,15 +148,15 @@ public class VisionShoot extends CommandBase {
     latestProfile.set(m_limelight.getLatestProfile());
   }
 
-  public static ArrayList<ShootingProfiles> getData() {
-    var profilesArr = new ArrayList<ShootingProfiles>();
+  public static ArrayList<ShootingProfile> getData() {
+    var profilesArr = new ArrayList<ShootingProfile>();
     try {
       var br = new BufferedReader( // type of reader to read text file
           new FileReader(Filesystem.getDeployDirectory().getCanonicalPath() + File.separator + "shooterProfiles.data"));
       String line;
       while ((line = br.readLine()) != null) {
         if (!line.startsWith("//"))
-          profilesArr.add(new ShootingProfiles(line)); // hr = hoodRotations
+          profilesArr.add(new ShootingProfile(line)); // hr = hoodRotations
       }
       br.close(); // stops the reader
     }
@@ -187,10 +187,6 @@ public class VisionShoot extends CommandBase {
   @Override
   public boolean isFinished() {
     m_currentTime = Timer.getFPGATimestamp();
-    if(m_currentTime - m_startTime >= m_timeout){
-      m_drive.arcadeDrive(0, 0);
-      return true;
-    }
-    return false;
+    return m_currentTime - m_startTime >= m_timeout;
   }
 }
