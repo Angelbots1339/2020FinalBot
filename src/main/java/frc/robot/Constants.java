@@ -151,8 +151,8 @@ public final class Constants {
         public final static int kRightServo = 6;
         public final static double kLeftEngagePos = 10;
         public final static double kLeftDisengagePos = 110;
-        public final static double kRightEngagePos = 140;
-        public final static double kRightDisengagePos = 40;
+        public final static double kRightEngagePos = 154;
+        public final static double kRightDisengagePos = 54;
     }
 
     public final static class LimelightConstants {
