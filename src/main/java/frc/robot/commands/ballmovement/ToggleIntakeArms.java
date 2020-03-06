@@ -13,10 +13,11 @@ import frc.robot.subsystems.IntakeArmPID;
 public class ToggleIntakeArms extends CommandBase {
 
   private final IntakeArmPID m_arm;
+
   /**
    * toggles the intake arms
    */
-  public ToggleIntakeArms(IntakeArmPID arm){
+  public ToggleIntakeArms(IntakeArmPID arm) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_arm = arm;
     addRequirements(m_arm);

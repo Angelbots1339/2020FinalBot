@@ -135,8 +135,6 @@ public final class Constants {
     public final static class ClimberConstants {
         public final static int kLeftClimberMotor = 10;
         public final static int kRightClimberMotor = 11;
-        public final static int kLeftServo = 0;
-        public final static int kRightServo = 6;
 
         public final static double kClimberSpeed = 0.7;
 
@@ -149,8 +147,12 @@ public final class Constants {
     }
 
     public final class BuddyClimbConstants {
-        public final static int kServoPort = 0;
-        public final static double kServoValue = 0;
+        public final static int kLeftServo = 0;
+        public final static int kRightServo = 6;
+        public final static double kLeftEngagePos = 10;
+        public final static double kLeftDisengagePos = 110;
+        public final static double kRightEngagePos = 140;
+        public final static double kRightDisengagePos = 40;
     }
 
     public final static class LimelightConstants {
@@ -179,8 +181,8 @@ public final class Constants {
 
         public static final boolean kAutoColorVision = false;
         public static final boolean kDistanceAlign = false;
-		public static final double kLongTimeout = 60;
-		public static final int kColorPipeline = 3;
+        public static final double kLongTimeout = 60;
+        public static final int kColorPipeline = 3;
     }
 
     public final class SensorConstants {
@@ -198,8 +200,8 @@ public final class Constants {
 
     public final class AutoConstants {
         public final static double kReverseTime = 1.5;
-		public static final double kVisionTime = 4;
-		public static final double kReverseSpeed = 0.62;
+        public static final double kVisionTime = 4;
+        public static final double kReverseSpeed = 0.62;
     }
 
     public final class OIconstants {

@@ -22,7 +22,8 @@ public class LoaderToMiddleBB extends CommandBase {
   private final IndexerSubsystem m_indexer;
 
   /**
-   * loads balls from intake all the way to the middle beam break, ready to shoot but not able to yet.
+   * loads balls from intake all the way to the middle beam break, ready to shoot
+   * but not able to yet.
    */
   public LoaderToMiddleBB(LoaderPIDSubsystem loader, IntakeSubsystem intake, IndexerSubsystem indexer) {
     // Use addRequirements() here to declare subsystem dependencies.

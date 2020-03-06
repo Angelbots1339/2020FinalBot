@@ -29,7 +29,6 @@ public class ClimberSubsystem extends SubsystemBase {
   private CANEncoder m_leftEncoder;
   private boolean m_enabled = false;
 
-
   public ClimberSubsystem() {
     // m_rightEncoder = new CANEncoder(m_rightClimber);
     // m_leftEncoder = new CANEncoder(m_leftClimber);
@@ -51,11 +50,14 @@ public class ClimberSubsystem extends SubsystemBase {
     m_enabled = true;
   }
 
+  public void setSpeed(double speed) {
+    m_rightClimber.set(speed);
+    m_leftClimber.set(speed);
+  }
+
   public void run() {
-    if (m_enabled) {
-      m_rightClimber.set(-ClimberConstants.kClimberSpeed);
-      m_leftClimber.set(-ClimberConstants.kClimberSpeed);
-    }
+    if (m_enabled)
+      setSpeed(-ClimberConstants.kClimberSpeed);
   }
 
   @Override
@@ -71,7 +73,6 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void stop() {
-    m_rightClimber.set(0);
-    m_leftClimber.set(0);
+    setSpeed(0);
   }
 }

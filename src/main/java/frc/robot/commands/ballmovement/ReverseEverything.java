@@ -14,11 +14,11 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LoaderPIDSubsystem;
 
 public class ReverseEverything extends CommandBase {
-  
+
   private IntakeSubsystem m_intake;
   private IndexerSubsystem m_index;
   private LoaderPIDSubsystem m_loader;
-  
+
   /**
    * Reverses loader, intake, and indexer
    */

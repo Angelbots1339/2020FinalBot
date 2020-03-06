@@ -16,6 +16,7 @@ public class RunShooter extends CommandBase {
   private final ShooterPID m_leftPID;
   private final ShooterPID m_rightPID;
   private ShootingProfile m_targetProfile;
+
   /**
    * Creats a set speed for the left and right motors for the shooter to fire.
    */
@@ -29,6 +30,7 @@ public class RunShooter extends CommandBase {
 
     m_targetProfile = targetProfile;
   }
+
   /**
    * Creates a new RunShooter.
    */

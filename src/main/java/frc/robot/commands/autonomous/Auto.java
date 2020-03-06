@@ -27,12 +27,15 @@ import frc.robot.subsystems.ShooterPID;
 
 public class Auto extends SequentialCommandGroup {
   /**
-   * Runs VisionShoot, then runs parallel command to drive robot in reverse and lower intake arm
+   * Runs VisionShoot, then runs parallel command to drive robot in reverse and
+   * lower intake arm
    */
   public Auto(IntakeArmPID arm, IntakeSubsystem intake, IndexerSubsystem index, LoaderPIDSubsystem loader,
       ShooterPID leftShooter, ShooterPID rightShooter, HoodPIDSubsystem hood, LimelightSubsystem limelight,
       DriveSubsystem drive) {
-    addCommands(new VisionShoot(intake, index, loader, leftShooter, rightShooter, hood, limelight, drive, () -> false,
-        () -> true, () -> 0, AutoConstants.kVisionTime), new ParallelCommandGroup(new ToggleIntakeArms(arm), new Reverse(drive)));
+    addCommands(
+        new VisionShoot(intake, index, loader, leftShooter, rightShooter, hood, limelight, drive, () -> false,
+            () -> true, () -> 0, AutoConstants.kVisionTime),
+        new ParallelCommandGroup(new ToggleIntakeArms(arm), new Reverse(drive)));
   }
 }

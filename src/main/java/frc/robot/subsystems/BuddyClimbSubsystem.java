@@ -10,7 +10,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ClimberConstants;
+import frc.robot.Constants.BuddyClimbConstants;
 import frc.robot.Constants.DashboardConstants;
 
 public class BuddyClimbSubsystem extends SubsystemBase {
@@ -24,14 +24,9 @@ public class BuddyClimbSubsystem extends SubsystemBase {
   ClimberSubsystem m_climber;
 
   public BuddyClimbSubsystem(ClimberSubsystem climber) {
-    leftServo = new Servo(ClimberConstants.kLeftServo);
-    rightServo = new Servo(ClimberConstants.kRightServo);
+    leftServo = new Servo(BuddyClimbConstants.kLeftServo);
+    rightServo = new Servo(BuddyClimbConstants.kRightServo);
     m_climber = climber;
-  }
-
-  public void setBothAngle(double degrees) {
-    leftServo.setAngle(degrees);
-    rightServo.setAngle(degrees);
   }
 
   public double getLeftAngle() {
@@ -43,26 +38,24 @@ public class BuddyClimbSubsystem extends SubsystemBase {
   }
 
   public void engage() {
-    rightServo.setAngle(140);
-    leftServo.setAngle(10.0);
+    rightServo.setAngle(BuddyClimbConstants.kRightEngagePos);
+    leftServo.setAngle(BuddyClimbConstants.kLeftEngagePos);
   }
 
   public void disengage() {
     if (m_climber.isEnabled()) {
-      rightServo.setAngle(40);
-      leftServo.setAngle(110.0);
+      rightServo.setAngle(BuddyClimbConstants.kRightDisengagePos);
+      leftServo.setAngle(BuddyClimbConstants.kLeftDisengagePos);
     }
   }
 
   // Right Servo is correct
   public void toggle() {
     if (getEngageToggled()) { // if false (engaged) set to unlocked position
-      rightServo.setAngle(40);
-      leftServo.setAngle(100);
+      disengage();
       toggleEngage();
     } else { // else sets to locked
-      rightServo.setAngle(100);
-      leftServo.setAngle(40.0);
+      engage();
       toggleEngage();
     }
   }

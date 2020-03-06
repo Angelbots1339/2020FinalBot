@@ -49,7 +49,6 @@ public class RobotContainer {
         private final IndexerSubsystem m_indexer = new IndexerSubsystem();
         private final IntakeSubsystem m_intake = new IntakeSubsystem();
         private final DriveSubsystem m_drive = new DriveSubsystem();
-        // private final LoaderSubsystem m_loader = new LoaderSubsystem();
         private final ShooterPID m_rightShooterPID = new ShooterPID(ShooterConstants.kRightShooter, "Right Shooter",
                         true);
         private final ShooterPID m_leftShooterPID = new ShooterPID(ShooterConstants.kLeftShooter, "Left Shooter",
@@ -104,7 +103,6 @@ public class RobotContainer {
                  * 
                  */
 
-
                 /**
                  * DRIVER CONTROLLER -- Nick's prefered controls
                  */
@@ -121,7 +119,8 @@ public class RobotContainer {
                 new Trigger(leftTrigger).or(new Trigger(rightTrigger))
                                 .whileActiveOnce(new VisionShoot(m_intake, m_indexer, m_loaderPID, m_leftShooterPID,
                                                 m_rightShooterPID, m_hood, m_limelight, m_drive, leftTrigger,
-                                                rightTrigger, () -> m_driverController.getY(Hand.kLeft), LimelightConstants.kLongTimeout));
+                                                rightTrigger, () -> m_driverController.getY(Hand.kLeft),
+                                                LimelightConstants.kLongTimeout));
                 // left bumper --- intake balls(balls to middle bb)
                 new JoystickButton(m_driverController, Button.kBumperLeft.value)
                                 .whenHeld(new LoaderToMiddleBB(m_loaderPID, m_intake, m_indexer));
@@ -138,8 +137,6 @@ public class RobotContainer {
                                 .whenHeld(new ReverseEverything(m_loaderPID, m_intake, m_indexer));
                 // Y button --- deploy buddy climbing
                 new JoystickButton(m_driverController, Button.kY.value).whenPressed(() -> m_servo.disengage(), m_servo);
-                // .whenReleased(() -> m_climber.disable()); ---doesn't work yet
-
         }
 
         /**

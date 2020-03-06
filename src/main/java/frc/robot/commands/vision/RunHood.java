@@ -27,7 +27,7 @@ public class RunHood extends CommandBase {
     m_targetProfile = targetProfile;
   }
 
-  public RunHood(HoodPIDSubsystem hoodPID, double targetHood){
+  public RunHood(HoodPIDSubsystem hoodPID, double targetHood) {
     this(hoodPID, new ShootingProfile(-1, -1, targetHood, 0, 0, 0));
   }
 

@@ -59,16 +59,15 @@ public class HoodPIDSubsystem extends PIDSubsystem {
 
   public void setSetpoint(double setpoint) {
     // Regardless of what's passed in, clamp to the min and max
-    setpoint = MathUtil.clamp(setpoint, HoodConstants.kMinEncoderValue,
-        HoodConstants.kmaxEncoderValue);
+    setpoint = MathUtil.clamp(setpoint, HoodConstants.kMinEncoderValue, HoodConstants.kmaxEncoderValue);
     super.setSetpoint(setpoint);
   }
 
   public void periodic() {
     super.periodic();
     if (m_hood.getOutputCurrent() > HoodConstants.kMinResistedVoltage) {
-      m_encoder.setPosition(m_hood.getAppliedOutput() > 0 ? HoodConstants.kmaxEncoderValue
-          : HoodConstants.kMinEncoderValue);
+      m_encoder
+          .setPosition(m_hood.getAppliedOutput() > 0 ? HoodConstants.kmaxEncoderValue : HoodConstants.kMinEncoderValue);
     }
     if (DashboardConstants.kHoodPIDTelemetry) {
       SmartDashboard.putNumber("HoodEncoder", getMeasurement());

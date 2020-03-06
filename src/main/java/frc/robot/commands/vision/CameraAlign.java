@@ -10,7 +10,6 @@ package frc.robot.commands.vision;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.Constants.LimelightConstants;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
@@ -23,7 +22,7 @@ public class CameraAlign extends CommandBase {
   public double m_drive;
   private ShootingProfile m_targetProfile;
   private double driveError;
-  
+
   /**
    * Creates a new Align. Aligns and focuses the camera to aim at target
    */
@@ -59,7 +58,8 @@ public class CameraAlign extends CommandBase {
       }
       m_drive -= m_fwdMovement.getAsDouble();
     }
-    m_limeLight.setAligned(m_driveSubsystem.arcadeDrive(m_drive, m_turn, LimelightConstants.kDriveTolerance, LimelightConstants.kShootTolerance));
+    m_limeLight.setAligned(m_driveSubsystem.arcadeDrive(m_drive, m_turn, LimelightConstants.kDriveTolerance,
+        LimelightConstants.kShootTolerance));
   }
 
   // Called once the command ends or is interrupted.

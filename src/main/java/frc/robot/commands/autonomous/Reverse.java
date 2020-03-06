@@ -15,7 +15,7 @@ import frc.robot.subsystems.DriveSubsystem;
 public class Reverse extends CommandBase {
   private final DriveSubsystem m_drive;
   private double m_startTime, m_currentTime;
-  
+
   /**
    * Drives backwards and ends after 2 seconds
    */
@@ -24,7 +24,7 @@ public class Reverse extends CommandBase {
     m_drive = drive;
     addRequirements(m_drive);
   }
-  
+
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {

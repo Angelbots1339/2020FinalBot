@@ -52,7 +52,8 @@ public class VisionShoot extends CommandBase {
   private final double m_timeout;
 
   /**
-   * Shoots balls when aligned with the right perameters. If aligned and hood is at correct set point it shoots. 
+   * Shoots balls when aligned with the right perameters. If aligned and hood is
+   * at correct set point it shoots.
    * 
    * @param m_targetProfile
    */
@@ -104,7 +105,7 @@ public class VisionShoot extends CommandBase {
       cameraAlign.initialize();
       m_limelight.setAligning(true);
     }
-    if(m_isAligning.getAsBoolean()){
+    if (m_isAligning.getAsBoolean()) {
       cameraAlign.execute();
     }
     runShooter.execute();

@@ -2,12 +2,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-//import edu.wpi.first.wpilibj.ADXRS450_Gyro;
-//import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-//import edu.wpi.first.wpilibj.interfaces.Gyro;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DashboardConstants;
 import frc.robot.Constants.DriveConstants;
@@ -106,8 +103,6 @@ public class DriveSubsystem extends SubsystemBase {
         : 0;
 
     m_drive.tankDrive(leftSpeed, rightSpeed, false);
-    // m_leftMotors.set(leftSpeed);
-    // m_rightMotors.set(rightSpeed);
     return Math.abs(left) < reportThreshold && Math.abs(right) < reportThreshold;
   }
   /**

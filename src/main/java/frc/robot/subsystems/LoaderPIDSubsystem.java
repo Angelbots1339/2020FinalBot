@@ -71,15 +71,17 @@ public class LoaderPIDSubsystem extends PIDSubsystem {
 
     Trigger bottomTrigger = new Trigger(() -> isBottomBroken());
     bottomTrigger.and(new Trigger(() -> m_loader.get() >= 0)).whenActive(() -> m_count++);
-    
+
     Trigger releaseBalls = bottomTrigger.and(new Trigger(() -> m_loader.get() < 0));
     releaseBalls.whenActive(() -> m_count--);
-    //releaseBalls.and(new Trigger(() -> getCount() >= 5)).whenInactive(() -> m_count--);
+    // releaseBalls.and(new Trigger(() -> getCount() >= 5)).whenInactive(() ->
+    // m_count--);
 
     Trigger topTrigger = new Trigger(() -> isTopBeamBroken());
     topTrigger.and(new Trigger(() -> shooter.atSetpoint())).whenActive(() -> m_count--);
-    //releaseBalls.and(new Trigger(() -> getCount() >= 5)).whenInactive(() -> m_count--);
-  
+    // releaseBalls.and(new Trigger(() -> getCount() >= 5)).whenInactive(() ->
+    // m_count--);
+
   }
 
   public void reverse(double speed) {
