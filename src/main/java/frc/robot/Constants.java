@@ -144,6 +144,7 @@ public final class Constants {
         public final static double kClimberToleranceRPS = 0;
         public final static double kEncoderDistancePerPulse = 0;
         public final static double kClimberTargetRPS = 0;
+		public static final double kClimberResetSpeed = 0.35;
     }
 
     public final class BuddyClimbConstants {
@@ -171,6 +172,7 @@ public final class Constants {
         public final static double kVerticalFOV = 49.7;
         public final static double kHorizontalFOV = 59.6;
         public final static double kLimeLightTilt = 25;
+        public final static double kDefaultDistance = 3;
 
         public final static double k2XZoomCutoff = 3.785;
         public final static double k3XZoomCutoff = 5.436;
@@ -212,7 +214,7 @@ public final class Constants {
 
         public final static double kLeftTriggerThreshold = 0.5;
         public final static double kRightTriggerThreshold = 0.5;
-
+ 
         public final static boolean kTestControllerEnabled = false;
     }
 

@@ -102,6 +102,19 @@ public class RobotContainer {
                  * TEST CONTROLLER
                  * 
                  */
+                if (!OIconstants.kTestControllerEnabled && Math.floor(1) == 0) {
+                        int i = 0; // generate warning if test controller is enabled
+                        i = i + 0;
+                }
+
+                if(OIconstants.kTestControllerEnabled){
+                        // Start Button --- Enable climbing
+                        new JoystickButton(m_testController, Button.kStart.value).whenPressed(() -> m_climber.enable(),
+                                        m_climber);
+                        // B button --- climb
+                        new JoystickButton(m_testController, Button.kB.value).whenPressed(() -> m_climber.runInverted(), m_climber)
+                                        .whenReleased(() -> m_climber.stop(), m_climber);
+                }
 
                 /**
                  * DRIVER CONTROLLER -- Nick's prefered controls

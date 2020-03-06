@@ -156,7 +156,7 @@ public class VisionShoot extends CommandBase {
           new FileReader(Filesystem.getDeployDirectory().getCanonicalPath() + File.separator + "shooterProfiles.data"));
       String line;
       while ((line = br.readLine()) != null) {
-        if (!line.startsWith("//"))
+        if (!line.startsWith("//") || line.isBlank())
           profilesArr.add(new ShootingProfile(line)); // hr = hoodRotations
       }
       br.close(); // stops the reader

@@ -75,4 +75,9 @@ public class ClimberSubsystem extends SubsystemBase {
   public void stop() {
     setSpeed(0);
   }
+
+  public void runInverted() {
+    if (m_enabled)
+      setSpeed(ClimberConstants.kClimberResetSpeed);
+  }
 }
