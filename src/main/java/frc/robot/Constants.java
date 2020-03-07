@@ -26,6 +26,11 @@ public final class Constants {
         public final static int kRightFrontMotor = 12;
         public final static int kRightBackMotor = 15;
 
+        public final static int kClicksPerRotation = 2048;
+        public final static double kGearRatio = 5.45;
+        public final static double kWheelDiameter = 0.1016;
+        public final static double kMetersPerClick = Math.PI * kWheelDiameter / kClicksPerRotation / kGearRatio;
+
         public final static double kMaxDriveSpeed = 0.6; // speed
 
         public final static double kMinPower = 0.2; // speed
@@ -144,7 +149,7 @@ public final class Constants {
         public final static double kClimberToleranceRPS = 0;
         public final static double kEncoderDistancePerPulse = 0;
         public final static double kClimberTargetRPS = 0;
-		public static final double kClimberResetSpeed = 0.35;
+        public static final double kClimberResetSpeed = 0.35;
     }
 
     public final class BuddyClimbConstants {
@@ -214,7 +219,7 @@ public final class Constants {
 
         public final static double kLeftTriggerThreshold = 0.5;
         public final static double kRightTriggerThreshold = 0.5;
- 
+
         public final static boolean kTestControllerEnabled = false;
     }
 
@@ -229,5 +234,6 @@ public final class Constants {
         public final static boolean kLimelightTelemetry = false;
         public final static boolean kLoaderTelemetry = true;
         public final static boolean kShooterPIDTelemetry = true;
+		public static final boolean kExcessDriveTelemetry = false;
     }
 }

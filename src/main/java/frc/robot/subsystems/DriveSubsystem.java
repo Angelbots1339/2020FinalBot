@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
@@ -25,18 +26,6 @@ public class DriveSubsystem extends SubsystemBase {
   // The robot's drive
   private final DifferentialDrive m_drive = new DifferentialDrive(m_leftMotors, m_rightMotors);
 
-  /*
-   * // The left-side drive encoder private final Encoder m_leftEncoder = new
-   * Encoder(DriveConstants.kLeftEncoderPorts[0],
-   * DriveConstants.kLeftEncoderPorts[1], DriveConstants.kLeftEncoderReversed);
-   * 
-   * // The right-side drive encoder private final Encoder m_rightEncoder = new
-   * Encoder(DriveConstants.kRightEncoderPorts[0],
-   * DriveConstants.kRightEncoderPorts[1], DriveConstants.kRightEncoderReversed);
-   * 
-   * // The gyro sensor //private final Gyro m_gyro = new ADXRS450_Gyro();
-   */
-
   /**
    * Creates a new DriveSubsystem.
    */
@@ -51,6 +40,12 @@ public class DriveSubsystem extends SubsystemBase {
     // Wooooah there - Chad implemented this for speed control on initial testing
     setMaxOutput(DriveConstants.kMaxDriveSpeed);
     m_drive.setDeadband(DriveConstants.kMinPower);
+
+    m_leftFront.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+    m_leftBack.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+    m_rightFront.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+    m_rightBack.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
+
     m_leftFront.configOpenloopRamp(0);
     m_leftBack.configOpenloopRamp(0);
     m_rightFront.configOpenloopRamp(0);
@@ -105,39 +100,6 @@ public class DriveSubsystem extends SubsystemBase {
     m_drive.tankDrive(leftSpeed, rightSpeed, false);
     return Math.abs(left) < reportThreshold && Math.abs(right) < reportThreshold;
   }
-  /**
-   * Resets the drive encoders to currently read a position of 0.
-   */
-  /*
-   * public void resetEncoders() { //m_leftEncoder.reset();
-   * //m_rightEncoder.reset(); }
-   */
-  /**
-   * Gets the average distance of the two encoders.
-   *
-   * @return the average of the two encoder readings
-   */
-  /*
-   * public double getAverageEncoderDistance() { return
-   * (m_leftEncoder.getDistance() + m_rightEncoder.getDistance()) / 2.0; }
-   */
-
-  /**
-   * Gets the left drive encoder.
-   *
-   * @return the left drive encoder
-   */
-  /*
-   * public Encoder getLeftEncoder() { return m_leftEncoder; }
-   */
-  /**
-   * Gets the right drive encoder.
-   *
-   * @return the right drive encoder
-   */
-  /*
-   * public Encoder getRightEncoder() { return m_rightEncoder; }
-   */
 
   /**
    * Sets the max output of the drive. Useful for scaling the drive to drive more
@@ -150,54 +112,46 @@ public class DriveSubsystem extends SubsystemBase {
     m_drive.setMaxOutput(maxOutput);
   }
 
-  /**
-   * Zeroes the heading of the robot.
-   */
-  /*
-   * public void zeroHeading() { m_gyro.reset(); }
-   */
+  public double getLeftMeters() {
+    return DriveConstants.kMetersPerClick
+        * (m_leftFront.getSelectedSensorPosition() + m_leftBack.getSelectedSensorPosition()) / 2;
+  }
 
-  /**
-   * Returns the heading of the robot.
-   *
-   * @return the robot's heading in degrees, from 180 to 180
-   */
-  /*
-   * public double getHeading() { return Math.IEEEremainder(m_gyro.getAngle(),
-   * 360) * (DriveConstants.kGyroReversed ? -1.0 : 1.0); }
-   */
-  /**
-   * Returns the turn rate of the robot.
-   *
-   * @return The turn rate of the robot, in degrees per second
-   */
-  /*
-   * public double getTurnRate() { return m_gyro.getRate() *
-   * (DriveConstants.kGyroReversed ? -1.0 : 1.0); }
-   */
+  public double getRightMeters() {
+    return DriveConstants.kMetersPerClick
+        * (m_rightFront.getSelectedSensorPosition() + m_rightBack.getSelectedSensorPosition()) / 2;
+  }
 
   public void periodic() {
     if (DashboardConstants.kDriveTelemetry) {
       SmartDashboard.putNumber("left front speed", m_leftFront.get());
-      SmartDashboard.putNumber("left back speed", m_rightBack.get());
       SmartDashboard.putNumber("right front speed", m_rightFront.get());
+      
+      SmartDashboard.putNumber("left front temp", m_leftFront.getTemperature());
+      SmartDashboard.putNumber("right front temp", m_rightFront.getTemperature());
+      
+      SmartDashboard.putNumber("left front volt", m_leftFront.getBusVoltage());
+      SmartDashboard.putNumber("right front volt", m_rightFront.getBusVoltage());
+      
+      SmartDashboard.putNumber("left front percent output", m_leftFront.getMotorOutputPercent());
+      SmartDashboard.putNumber("right front percent output", m_rightFront.getMotorOutputPercent());
+
+      SmartDashboard.putNumber("left position", getLeftMeters());
+      SmartDashboard.putNumber("right position", getRightMeters());
+    }
+    
+    if (DashboardConstants.kExcessDriveTelemetry){
+      SmartDashboard.putNumber("left back speed", m_rightBack.get());
       SmartDashboard.putNumber("right back speed", m_rightFront.get());
 
-      SmartDashboard.putNumber("left front temp", m_leftFront.getTemperature());
       SmartDashboard.putNumber("left back temp", m_rightBack.getTemperature());
-      SmartDashboard.putNumber("right front temp", m_rightFront.getTemperature());
       SmartDashboard.putNumber("right back temp", m_rightFront.getTemperature());
 
-      SmartDashboard.putNumber("left front volt", m_leftFront.getBusVoltage());
       SmartDashboard.putNumber("left back volt", m_rightBack.getBusVoltage());
-      SmartDashboard.putNumber("right front volt", m_rightFront.getBusVoltage());
       SmartDashboard.putNumber("right back volt", m_rightFront.getBusVoltage());
 
-      SmartDashboard.putNumber("left front percent output", m_leftFront.getMotorOutputPercent());
       SmartDashboard.putNumber("left back percent output", m_rightBack.getMotorOutputPercent());
-      SmartDashboard.putNumber("right front percent output", m_rightFront.getMotorOutputPercent());
       SmartDashboard.putNumber("right back percent output", m_rightFront.getMotorOutputPercent());
     }
-
   }
 }
