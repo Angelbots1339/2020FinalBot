@@ -140,7 +140,7 @@ public class RobotContainer {
                                                 m_loader, m_leftShooter, m_rightShooter, m_hood, m_limelight, m_drive,
                                                 () -> false, () -> true, () -> 0, LimelightConstants.kLongTimeout)));
                 // right stck down --- shoot close no vision
-                new JoystickButton(m_driverController, Button.kBack.value).whileActiveOnce(
+                new JoystickButton(m_driverController, Button.kStickRight.value).whileActiveOnce(
                                 new RunCommand(() -> m_limelight.reset(0)).alongWith(new VisionShoot(m_intake, m_indexer,
                                                 m_loader, m_leftShooter, m_rightShooter, m_hood, m_limelight, m_drive,
                                                 () -> false, () -> true, () -> 0, LimelightConstants.kLongTimeout)));

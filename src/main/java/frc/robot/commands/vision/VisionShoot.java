@@ -112,8 +112,9 @@ public class VisionShoot extends CommandBase {
     runHood.execute();
     if (m_isShooting.getAsBoolean()) {
       if (((m_leftShooter.atSetpoint() && m_rightShooter.atSetpoint())
-          || m_limelight.getDistanceToVisionTarget() < ShooterConstants.kRapidShotThreshold) && m_hood.atSetpoint()
-          && (m_limelight.isAligned() || !m_isAligning.getAsBoolean())) {
+          || (m_limelight.getDistanceToVisionTarget() < ShooterConstants.kRapidShotThreshold
+              && m_leftShooter.hasGottenToSetpoint() && m_rightShooter.hasGottenToSetpoint()))
+          && m_hood.atSetpoint() && (m_limelight.isAligned() || !m_isAligning.getAsBoolean())) {
         m_intake.enableIntake();
         m_indexer.enable(latestProfile.getIndexerSpeed());
         m_loader.setSetpoint(latestProfile.getLoaderSpeed());
@@ -157,16 +158,12 @@ public class VisionShoot extends CommandBase {
       String line;
       while ((line = br.readLine()) != null) {
         if (!line.startsWith("//") || line.isBlank())
-          profilesArr.add(new ShootingProfile(line)); // hr = hoodRotations
+          profilesArr.add(new ShootingProfile(line));
       }
       br.close(); // stops the reader
-    }
-    // if file is not found, stack trace is printed
-    catch (FileNotFoundException e) {
-      e.printStackTrace(); // list of methods that happened up to error
-    }
-    // fail to read file
-    catch (IOException e) {
+    }catch (FileNotFoundException e) {
+      e.printStackTrace();
+    }catch (IOException e) {
       e.printStackTrace();
     }
     return profilesArr;

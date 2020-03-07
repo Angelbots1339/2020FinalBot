@@ -21,7 +21,8 @@ public class ShooterPID extends PIDSubsystem {
 
   private final CANSparkMax m_motor;
   private final CANEncoder m_encoder;
-  private String m_name;
+  private final String m_name;
+  private boolean hasGottenToSetpoint = false;
   private final SimpleMotorFeedforward m_shooterFeedforward = new SimpleMotorFeedforward(ShooterConstants.KSVolts,
       ShooterConstants.KVVoltSecondsPerRotation);
 
@@ -51,6 +52,12 @@ public class ShooterPID extends PIDSubsystem {
     return m_encoder.getVelocity(); // m_shooterEncoder.getRate();
   }
 
+  @Override
+  public void setSetpoint(double setpoint) {
+    super.setSetpoint(setpoint);
+    hasGottenToSetpoint = false;
+  }
+
   public boolean atSetpoint() {
     return m_controller.atSetpoint();
   }
@@ -65,11 +72,16 @@ public class ShooterPID extends PIDSubsystem {
 
   public void periodic() {
     super.periodic();
+    if(atSetpoint()) hasGottenToSetpoint = true;
     if (DashboardConstants.kShooterPIDTelemetry) {
       SmartDashboard.putNumber(m_name + " RPM", getMeasurement());
       SmartDashboard.putNumber(m_name + " Set", m_controller.getSetpoint());
       SmartDashboard.putBoolean(m_name + " OnT", atSetpoint());
     }
+  }
+
+  public boolean hasGottenToSetpoint() {
+    return hasGottenToSetpoint;
   }
 
 }
