@@ -23,6 +23,7 @@ public class LimelightSubsystem extends SubsystemBase {
   private boolean m_isAligning = false;
   private ShootingProfile m_latestTargetProfile = new ShootingProfile(3, 0, 0, 0, 0, 0);
   private boolean hasSeenTarget = false;
+  private double m_defaultDistance = LimelightConstants.kDefaultDistance;
 
   /**
    * Creates a new Limelight.
@@ -64,7 +65,7 @@ public class LimelightSubsystem extends SubsystemBase {
 
   public double getDistanceToVisionTarget() {
     if (!hasSeenTarget)
-      return LimelightConstants.kDefaultDistance;
+      return m_defaultDistance;
     return LimelightConstants.kLimelightToTargetHeight / Math.tan(Math.toRadians(
         getYTargetOffset() + LimelightConstants.kLimeLightTilt + LimelightConstants.kPanningOffest[getPipeline()]));
   }
@@ -135,10 +136,15 @@ public class LimelightSubsystem extends SubsystemBase {
     return m_latestTargetProfile;
   }
 
-  public void reset() {
+  public void reset(double defaultDistance) {
     mLedMode = LedMode.PIPELINE;
     m_isAligned = true;
     m_isAligning = false;
     hasSeenTarget = false;
+    m_defaultDistance = defaultDistance;
+  }
+
+  public void reset() {
+    reset(LimelightConstants.kDefaultDistance);
   }
 }

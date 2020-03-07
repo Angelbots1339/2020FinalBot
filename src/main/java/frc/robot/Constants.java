@@ -35,6 +35,13 @@ public final class Constants {
 
         public final static double kMinPower = 0.2; // speed
         public final static double kTurnInPlaceThreshold = 0.2;
+
+        public final static double kPDrive = 0.1;
+        public final static double kIDrive = 0.0;
+        public final static double kDDrive = 0.0;
+        public final static double kPTurn = 0.1;
+        public final static double kITurn = 0.0;
+        public final static double kDTurn = 0.0;
     }
 
     public final class IntakeConstants {
@@ -205,7 +212,7 @@ public final class Constants {
 
     }
 
-    public final class AutoConstants {
+    public final static class AutoConstants {
         public final static double kReverseTime = 1.5;
         public static final double kVisionTime = 4;
         public static final double kReverseSpeed = 0.62;
