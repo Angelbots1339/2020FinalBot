@@ -34,6 +34,7 @@ import frc.robot.subsystems.HoodPIDSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeArmPID;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.IntakingSystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.LoaderPIDSubsystem;
 import frc.robot.subsystems.Shooter;
@@ -48,13 +49,12 @@ import frc.robot.subsystems.ShooterSide;
  */
 public class RobotContainer {
         // The robot's subsystems and commands are defined here...
-        private final IndexerSubsystem m_indexer = new IndexerSubsystem();
-        private final IntakeSubsystem m_intake = new IntakeSubsystem();
         private final DriveSubsystem m_drive = new DriveSubsystem();
         private final Shooter m_shooter = new Shooter(
                         new ShooterSide(ShooterConstants.kRightShooter, "Right Shooter", true),
                         new ShooterSide(ShooterConstants.kLeftShooter, "Left Shooter", false));
-        private final LoaderPIDSubsystem m_loader = new LoaderPIDSubsystem(m_shooter);
+        private final IntakingSystem m_intaker = new IntakingSystem(new IndexerSubsystem(), new IntakeSubsystem(),
+                        new LoaderPIDSubsystem(), m_shooter);
         private final ClimberSubsystem m_climber = new ClimberSubsystem();
         private final BuddyClimbSubsystem m_servo = new BuddyClimbSubsystem(m_climber);
         private final HoodPIDSubsystem m_hood = new HoodPIDSubsystem();
@@ -84,6 +84,7 @@ public class RobotContainer {
                                 // Left Y Axis needs to be inverted for driving forward
                                 new RunCommand(() -> m_drive.curvatureDrive(-m_driverController.getY(Hand.kLeft),
                                                 m_driverController.getX(Hand.kRight)), m_drive));
+                new RunCommand(() -> m_intaker.telemetry()).schedule();//TODO
                 m_servo.engage();
                 m_arm.setEncoderPosition(-1);
                 // m_arm.setSetpoint(0);
@@ -123,30 +124,29 @@ public class RobotContainer {
                  */
                 // right bumper --- Deter balls/run intake backwards
                 new JoystickButton(m_driverController, Button.kBumperRight.value)
-                                .whenPressed(() -> m_intake.reverseIntake())
-                                .whenReleased(() -> m_intake.disableIntake());
+                                .whenPressed(() -> m_intaker.reverseIntake())
+                                .whenReleased(() -> m_intaker.disableIntake());
                 // left trigger --- Align to target
                 // right trigger --- shoot all balls
                 BooleanSupplier leftTrigger = () -> m_driverController
                                 .getTriggerAxis(Hand.kLeft) > Constants.OIconstants.kLeftTriggerThreshold;
                 BooleanSupplier rightTrigger = () -> m_driverController
                                 .getTriggerAxis(Hand.kRight) > Constants.OIconstants.kRightTriggerThreshold;
-                new Trigger(leftTrigger).or(new Trigger(rightTrigger)).whileActiveOnce(new VisionShoot(m_intake,
-                                m_indexer, m_loader, m_shooter, m_hood, m_limelight, m_drive, leftTrigger, rightTrigger,
-                                () -> m_driverController.getY(Hand.kLeft), LimelightConstants.kLongTimeout));
+                new Trigger(leftTrigger).or(new Trigger(rightTrigger))
+                                .whileActiveOnce(new VisionShoot(m_intaker, m_shooter, m_hood, m_limelight, m_drive,
+                                                leftTrigger, rightTrigger, () -> m_driverController.getY(Hand.kLeft),
+                                                LimelightConstants.kLongTimeout));
                 // back button --- shoot line no vision
                 new JoystickButton(m_driverController, Button.kBack.value).whileActiveOnce(
-                                new VisionShoot(m_intake,
-                                                m_indexer, m_loader, m_shooter, m_hood, m_limelight, m_drive,
-                                                () -> false, () -> true, () -> 0, LimelightConstants.kLongTimeout, false, 3));
+                                new VisionShoot(m_intaker, m_shooter, m_hood, m_limelight, m_drive, () -> false,
+                                                () -> true, () -> 0, LimelightConstants.kLongTimeout, false, 3));
                 // right stck down --- shoot close no vision
                 new JoystickButton(m_driverController, Button.kStickRight.value).whileActiveOnce(
-                                new VisionShoot(m_intake,
-                                                m_indexer, m_loader, m_shooter, m_hood, m_limelight, m_drive,
-                                                () -> false, () -> true, () -> 0, LimelightConstants.kLongTimeout, false, 0));
+                                new VisionShoot(m_intaker, m_shooter, m_hood, m_limelight, m_drive, () -> false,
+                                                () -> true, () -> 0, LimelightConstants.kLongTimeout, false, 0));
                 // left bumper --- intake balls(balls to middle bb)
                 new JoystickButton(m_driverController, Button.kBumperLeft.value)
-                                .whenHeld(new LoaderToMiddleBB(m_loader, m_intake, m_indexer));
+                                .whenHeld(new LoaderToMiddleBB(m_intaker));
                 // A button -- Intake arm toggle
                 new JoystickButton(m_driverController, Button.kA.value).whenPressed(new ToggleIntakeArms(m_arm));
                 // Start Button --- Enable climbing
@@ -157,7 +157,7 @@ public class RobotContainer {
                                 .whenReleased(() -> m_climber.stop(), m_climber);
                 // X button --- unload/unjam
                 new JoystickButton(m_driverController, Button.kX.value)
-                                .whenHeld(new ReverseEverything(m_loader, m_intake, m_indexer));
+                                .whenHeld(new ReverseEverything(m_intaker));
                 // Y button --- deploy buddy climbing
                 new JoystickButton(m_driverController, Button.kY.value).whenPressed(() -> m_servo.disengage(), m_servo);
         }
@@ -175,9 +175,7 @@ public class RobotContainer {
 
         @SuppressWarnings("unused")
         private class Autos {
-                public final Command timeout = new Auto(m_arm, m_intake, m_indexer, m_loader, m_shooter, m_hood,
-                                m_limelight, m_drive),
-                                encoder = new ControlledAuto(m_arm, m_intake, m_indexer, m_loader, m_shooter, m_hood,
-                                                m_limelight, m_drive);
+                public final Command timeout = new Auto(m_arm, m_intaker, m_shooter, m_hood, m_limelight, m_drive),
+                                encoder = new ControlledAuto(m_arm, m_intaker, m_shooter, m_hood, m_limelight, m_drive);
         }
 }

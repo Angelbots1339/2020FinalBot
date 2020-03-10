@@ -11,32 +11,17 @@ import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.PIDSubsystem;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DashboardConstants;
 import frc.robot.Constants.LoaderConstants;
-import frc.robot.Constants.SensorConstants;
 
 public class LoaderPIDSubsystem extends PIDSubsystem {
 
   private CANSparkMax m_loader;
   private final CANEncoder m_encoder;
-
-  private DigitalInput m_shooterEmitter;
-  private DigitalInput m_shooterReceiver;
-  private DigitalInput m_bottomRightEmitter;
-  private DigitalInput m_bottomRightReceiver;
-
-  private DigitalInput m_middleEmitter;
-  private DigitalInput m_middleReceiver;
-  private DigitalInput m_topEmitter;
-  private DigitalInput m_topReceiver;
-
-  private int m_count;
 
   private final SimpleMotorFeedforward m_feedforward = new SimpleMotorFeedforward(LoaderConstants.KSVolts,
       LoaderConstants.KVVoltSecondsPerRotation);
@@ -44,9 +29,8 @@ public class LoaderPIDSubsystem extends PIDSubsystem {
   /**
    * Creates a new LoaderSubsystem.
    */
-  public LoaderPIDSubsystem(Shooter shooter) {
+  public LoaderPIDSubsystem() {
     super(new PIDController(LoaderConstants.kP, LoaderConstants.kI, LoaderConstants.kD));
-    m_count = 0;
 
     m_loader = new CANSparkMax(LoaderConstants.kLoaderMotor, MotorType.kBrushless);
     m_loader.setInverted(true);
@@ -58,30 +42,6 @@ public class LoaderPIDSubsystem extends PIDSubsystem {
     getController().setTolerance(LoaderConstants.kLoaderToleranceRPM);
     setSetpoint(LoaderConstants.kLoaderSetpoint);
 
-    m_topEmitter = new DigitalInput(SensorConstants.topEmitter);
-    m_topReceiver = new DigitalInput(SensorConstants.topReciever);
-
-    m_middleEmitter = new DigitalInput(SensorConstants.middleEmitter);
-    m_middleReceiver = new DigitalInput(SensorConstants.middleReciever);
-
-    m_shooterEmitter = new DigitalInput(SensorConstants.ShooterEmitter);
-    m_shooterReceiver = new DigitalInput(SensorConstants.ShooterReciever);
-    m_bottomRightEmitter = new DigitalInput(SensorConstants.bottomEmitter);
-    m_bottomRightReceiver = new DigitalInput(SensorConstants.bottomReciever);
-
-    Trigger bottomTrigger = new Trigger(() -> isBottomBroken());
-    bottomTrigger.and(new Trigger(() -> m_loader.get() >= 0)).whenActive(() -> m_count++);
-
-    Trigger releaseBalls = bottomTrigger.and(new Trigger(() -> m_loader.get() < 0));
-    releaseBalls.whenActive(() -> m_count--);
-    // releaseBalls.and(new Trigger(() -> getCount() >= 5)).whenInactive(() ->
-    // m_count--);
-
-    Trigger topTrigger = new Trigger(() -> isTopBeamBroken());
-    topTrigger.and(new Trigger(() -> shooter.atSetpoint())).whenActive(() -> m_count--);
-    // releaseBalls.and(new Trigger(() -> getCount() >= 5)).whenInactive(() ->
-    // m_count--);
-
   }
 
   public void reverse(double speed) {
@@ -90,26 +50,6 @@ public class LoaderPIDSubsystem extends PIDSubsystem {
 
   public void runSpeed(double speed) {
     m_loader.set(speed);
-  }
-
-  public int getCount() {
-    return m_count;
-  }
-
-  public boolean isShooterBeamBroken() {
-    return !(m_shooterReceiver.get());
-  }
-
-  public boolean isTopBeamBroken() {
-    return !m_topReceiver.get();
-  }
-
-  public boolean isMiddleBeamBroken() {
-    return !m_middleReceiver.get();
-  }
-
-  public boolean isBottomBroken() {
-    return !m_bottomRightReceiver.get();
   }
 
   @Override
@@ -136,22 +76,15 @@ public class LoaderPIDSubsystem extends PIDSubsystem {
     super.periodic();
 
     if (DashboardConstants.kLoaderTelemetry) {
-      SmartDashboard.putBoolean("Top Emitter", m_topEmitter.get());
-      SmartDashboard.putBoolean("Top Reciever", m_topReceiver.get());
-      SmartDashboard.putBoolean("Middle Emitter", m_middleEmitter.get());
-      SmartDashboard.putBoolean("Middle Reciever", m_middleReceiver.get());
-
-      SmartDashboard.putBoolean("Bottom Emitter", m_bottomRightEmitter.get());
-      SmartDashboard.putBoolean("Bottom Reciever", m_bottomRightReceiver.get());
-      SmartDashboard.putBoolean("Shooter Emitter", m_shooterEmitter.get());
-      SmartDashboard.putBoolean("Shooter Reciever", m_shooterReceiver.get());
-
-      SmartDashboard.putNumber("# of balls", getCount());
 
       // This method will be called once per scheduler run
       SmartDashboard.putNumber("Loader Out", m_loader.get());
       SmartDashboard.putNumber("Loader RPM", m_encoder.getVelocity());
     }
+  }
+
+  public double get() {
+    return m_loader.get();
   }
 
 }

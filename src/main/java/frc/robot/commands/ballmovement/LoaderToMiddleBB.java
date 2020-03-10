@@ -17,35 +17,27 @@ public class LoaderToMiddleBB extends CommandBase {
   // the middle beam break is right before the ball reaches the shooter, so the
   // ball is not touching the shooter
 
-  private final LoaderPIDSubsystem m_loader;
-  private final IntakeSubsystem m_intake;
-  private final IndexerSubsystem m_indexer;
+  private final IntakingSystem m_intaker;
 
   /**
    * loads balls from intake all the way to the middle beam break, ready to shoot
    * but not able to yet.
    */
-  public LoaderToMiddleBB(LoaderPIDSubsystem loader, IntakeSubsystem intake, IndexerSubsystem indexer) {
+  public LoaderToMiddleBB(IntakingSystem intaker) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_loader = loader;
-    addRequirements(m_loader);
 
-    m_intake = intake;
-    addRequirements(m_intake);
-
-    m_indexer = indexer;
-    addRequirements(m_indexer);
-
+    m_intaker = intaker;
+    addRequirements(m_intaker.getIndexer(), m_intaker.getIntake(), m_intaker.getLoader());
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (!m_loader.isMiddleBeamBroken()) {
-      m_loader.runSpeed(LoaderConstants.kInitLoaderSpeed);
+    if (!m_intaker.isMiddleBeamBroken()) {
+      m_intaker.getLoader().runSpeed(LoaderConstants.kInitLoaderSpeed);
     }
-    m_indexer.enable();
-    m_intake.enableIntake();
+    m_intaker.getIndexer().enable();
+    m_intaker.getIntake().enableIntake();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -53,10 +45,10 @@ public class LoaderToMiddleBB extends CommandBase {
   public void execute() {
 
     // stops the loader when the middle beam break is broken
-    if (m_loader.isMiddleBeamBroken() && !m_loader.isTopBeamBroken()) {
-      m_loader.disable();
-    } else if (m_loader.isTopBeamBroken()) {
-      m_loader.reverse(LoaderConstants.kReverseLoaderSpeed);
+    if (m_intaker.isMiddleBeamBroken() && !m_intaker.isTopBeamBroken()) {
+      m_intaker.getLoader().disable();
+    } else if (m_intaker.isTopBeamBroken()) {
+      m_intaker.getLoader().reverse(LoaderConstants.kReverseLoaderSpeed);
     }
 
   }
@@ -64,9 +56,7 @@ public class LoaderToMiddleBB extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_loader.disable();
-    m_intake.disableIntake();
-    m_indexer.disable();
+    m_intaker.disable();
   }
 
   // Returns true when the command should end.
