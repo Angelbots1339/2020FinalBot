@@ -19,7 +19,7 @@ import frc.robot.subsystems.IntakeArmPID;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.LoaderPIDSubsystem;
-import frc.robot.subsystems.ShooterPID;
+import frc.robot.subsystems.Shooter;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -31,10 +31,10 @@ public class Auto extends SequentialCommandGroup {
    * lower intake arm
    */
   public Auto(IntakeArmPID arm, IntakeSubsystem intake, IndexerSubsystem index, LoaderPIDSubsystem loader,
-      ShooterPID leftShooter, ShooterPID rightShooter, HoodPIDSubsystem hood, LimelightSubsystem limelight,
+      Shooter shooter, HoodPIDSubsystem hood, LimelightSubsystem limelight,
       DriveSubsystem drive) {
     addCommands(
-        new VisionShoot(intake, index, loader, leftShooter, rightShooter, hood, limelight, drive, () -> false,
+        new VisionShoot(intake, index, loader, shooter, hood, limelight, drive, () -> false,
             () -> true, () -> 0, AutoConstants.kVisionTime),
         new ParallelCommandGroup(new ToggleIntakeArms(arm), new Reverse(drive)));
   }

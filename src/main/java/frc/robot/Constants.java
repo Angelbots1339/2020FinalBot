@@ -110,14 +110,17 @@ public final class Constants {
 
         // distance units int rotations
         public final static double kEncoderDistancePerPulse = 1.0 / (double) kEncoderCPR;
-        public final static double kShooterFreeRPS = 5676;
+        public final static double kShooterFreeRPM = 5676;
         public final static double kShooterTargetRPM = 5450; // ~5500 is max speed, rotations per second, 3 to 2 gear
                                                              // ratio
-        public final static double kShooterToleranceRPS = 22;
+        public static final double kBaseRPM = 2500;
+        public final static double kShooterToleranceSlope = 22. / 1000;
 
         // 0.18 to 0.23 seems to be a sweet spot, varies based on Battery?
-        public final static double KSVolts = 0.23; // ~0.23 was found empirically, working well
-        public final static double KVVoltSecondsPerRotation = 12 / kShooterFreeRPS; // 12 V is working well
+        // ~0.23 was found empirically, working well prior to Utah.
+        // Post Utah, not hitting set point, changed from 0.23 to 0.37
+        public final static double KSVolts = 0.23; 
+        public final static double KVVoltSecondsPerRotation = 12 / kShooterFreeRPM; // 12 V is working well
         public final static double kMaxShooterSpeed = 0.5;
 
     }
@@ -136,8 +139,8 @@ public final class Constants {
         public final static double kmaxEncoderValue = 17.4;
 
         public final static double kMinResistedVoltage = 60;
-        public final static double kPositionTolerance = .35;
-        public final static double KSVolts = 0.13;
+        public final static double kPositionTolerance = .3;
+        public final static double KSVolts = 0.15;
         public final static double KVVoltSecondsPerRotation = 12 * (12.5 / 11000); // Neo 550 - 11000 rpm, with 12.5:1
                                                                                    // reduction
 
@@ -234,13 +237,13 @@ public final class Constants {
         public final static boolean kBuddyClimbTelemetry = false;
         public final static boolean kClimberTelemetry = false;
         public final static boolean kDriveTelemetry = false;
-        public final static boolean kHoodPIDTelemetry = false;
+        public final static boolean kHoodPIDTelemetry = true;
         public final static boolean kIndexerTelemetry = false;
         public final static boolean kIntakeArmTelemetry = false;
         public final static boolean kIntakeTelemetry = false;
         public final static boolean kLimelightTelemetry = false;
-        public final static boolean kLoaderTelemetry = true;
+        public final static boolean kLoaderTelemetry = false;
         public final static boolean kShooterPIDTelemetry = true;
-		public static final boolean kExcessDriveTelemetry = false;
+        public static final boolean kExcessDriveTelemetry = false;
     }
 }

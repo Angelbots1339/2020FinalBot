@@ -36,7 +36,8 @@ import frc.robot.subsystems.IntakeArmPID;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.LoaderPIDSubsystem;
-import frc.robot.subsystems.ShooterPID;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.ShooterSide;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -50,9 +51,10 @@ public class RobotContainer {
         private final IndexerSubsystem m_indexer = new IndexerSubsystem();
         private final IntakeSubsystem m_intake = new IntakeSubsystem();
         private final DriveSubsystem m_drive = new DriveSubsystem();
-        private final ShooterPID m_rightShooter = new ShooterPID(ShooterConstants.kRightShooter, "Right Shooter", true);
-        private final ShooterPID m_leftShooter = new ShooterPID(ShooterConstants.kLeftShooter, "Left Shooter", false);
-        private final LoaderPIDSubsystem m_loader = new LoaderPIDSubsystem(m_rightShooter);
+        private final Shooter m_shooter = new Shooter(
+                        new ShooterSide(ShooterConstants.kRightShooter, "Right Shooter", true),
+                        new ShooterSide(ShooterConstants.kLeftShooter, "Left Shooter", false));
+        private final LoaderPIDSubsystem m_loader = new LoaderPIDSubsystem(m_shooter);
         private final ClimberSubsystem m_climber = new ClimberSubsystem();
         private final BuddyClimbSubsystem m_servo = new BuddyClimbSubsystem(m_climber);
         private final HoodPIDSubsystem m_hood = new HoodPIDSubsystem();
@@ -129,21 +131,19 @@ public class RobotContainer {
                                 .getTriggerAxis(Hand.kLeft) > Constants.OIconstants.kLeftTriggerThreshold;
                 BooleanSupplier rightTrigger = () -> m_driverController
                                 .getTriggerAxis(Hand.kRight) > Constants.OIconstants.kRightTriggerThreshold;
-                new Trigger(leftTrigger).or(new Trigger(rightTrigger))
-                                .whileActiveOnce(new VisionShoot(m_intake, m_indexer, m_loader, m_leftShooter,
-                                                m_rightShooter, m_hood, m_limelight, m_drive, leftTrigger, rightTrigger,
-                                                () -> m_driverController.getY(Hand.kLeft),
-                                                LimelightConstants.kLongTimeout));
+                new Trigger(leftTrigger).or(new Trigger(rightTrigger)).whileActiveOnce(new VisionShoot(m_intake,
+                                m_indexer, m_loader, m_shooter, m_hood, m_limelight, m_drive, leftTrigger, rightTrigger,
+                                () -> m_driverController.getY(Hand.kLeft), LimelightConstants.kLongTimeout));
                 // back button --- shoot line no vision
                 new JoystickButton(m_driverController, Button.kBack.value).whileActiveOnce(
-                                new RunCommand(() -> m_limelight.reset()).alongWith(new VisionShoot(m_intake, m_indexer,
-                                                m_loader, m_leftShooter, m_rightShooter, m_hood, m_limelight, m_drive,
-                                                () -> false, () -> true, () -> 0, LimelightConstants.kLongTimeout)));
+                                new VisionShoot(m_intake,
+                                                m_indexer, m_loader, m_shooter, m_hood, m_limelight, m_drive,
+                                                () -> false, () -> true, () -> 0, LimelightConstants.kLongTimeout, false, 7));
                 // right stck down --- shoot close no vision
                 new JoystickButton(m_driverController, Button.kStickRight.value).whileActiveOnce(
-                                new RunCommand(() -> m_limelight.reset(0)).alongWith(new VisionShoot(m_intake, m_indexer,
-                                                m_loader, m_leftShooter, m_rightShooter, m_hood, m_limelight, m_drive,
-                                                () -> false, () -> true, () -> 0, LimelightConstants.kLongTimeout)));
+                                new VisionShoot(m_intake,
+                                                m_indexer, m_loader, m_shooter, m_hood, m_limelight, m_drive,
+                                                () -> false, () -> true, () -> 0, LimelightConstants.kLongTimeout, false, 0));
                 // left bumper --- intake balls(balls to middle bb)
                 new JoystickButton(m_driverController, Button.kBumperLeft.value)
                                 .whenHeld(new LoaderToMiddleBB(m_loader, m_intake, m_indexer));
@@ -175,9 +175,9 @@ public class RobotContainer {
 
         @SuppressWarnings("unused")
         private class Autos {
-                public final Command timeout = new Auto(m_arm, m_intake, m_indexer, m_loader, m_leftShooter,
-                                m_rightShooter, m_hood, m_limelight, m_drive),
-                                encoder = new ControlledAuto(m_arm, m_intake, m_indexer, m_loader, m_leftShooter,
-                                                m_rightShooter, m_hood, m_limelight, m_drive);
+                public final Command timeout = new Auto(m_arm, m_intake, m_indexer, m_loader, m_shooter, m_hood,
+                                m_limelight, m_drive),
+                                encoder = new ControlledAuto(m_arm, m_intake, m_indexer, m_loader, m_shooter, m_hood,
+                                                m_limelight, m_drive);
         }
 }

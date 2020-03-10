@@ -44,7 +44,7 @@ public class LoaderPIDSubsystem extends PIDSubsystem {
   /**
    * Creates a new LoaderSubsystem.
    */
-  public LoaderPIDSubsystem(ShooterPID shooter) {
+  public LoaderPIDSubsystem(Shooter shooter) {
     super(new PIDController(LoaderConstants.kP, LoaderConstants.kI, LoaderConstants.kD));
     m_count = 0;
 

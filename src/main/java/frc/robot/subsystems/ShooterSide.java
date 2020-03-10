@@ -17,19 +17,18 @@ import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.Constants.DashboardConstants;
 import frc.robot.Constants.ShooterConstants;
 
-public class ShooterPID extends PIDSubsystem {
+public class ShooterSide extends PIDSubsystem {
 
   private final CANSparkMax m_motor;
   private final CANEncoder m_encoder;
   private final String m_name;
-  private boolean hasGottenToSetpoint = false;
   private final SimpleMotorFeedforward m_shooterFeedforward = new SimpleMotorFeedforward(ShooterConstants.KSVolts,
       ShooterConstants.KVVoltSecondsPerRotation);
 
   /**
    * The shooter subsystem for the robot.
    */
-  public ShooterPID(int motorID, String name, boolean inverted) {
+  public ShooterSide(int motorID, String name, boolean inverted) {
     super(new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD));
     m_motor = new CANSparkMax(motorID, MotorType.kBrushless);
     m_encoder = new CANEncoder(m_motor);
@@ -38,7 +37,6 @@ public class ShooterPID extends PIDSubsystem {
     // Spark 3 - Inverted - Yes
     m_motor.setInverted(inverted);
 
-    getController().setTolerance(ShooterConstants.kShooterToleranceRPS);
     setSetpoint(ShooterConstants.kShooterTargetRPM);
   }
 
@@ -54,8 +52,8 @@ public class ShooterPID extends PIDSubsystem {
 
   @Override
   public void setSetpoint(double setpoint) {
+    if(getController() != null) getController().setTolerance((setpoint-ShooterConstants.kBaseRPM)*ShooterConstants.kShooterToleranceSlope);
     super.setSetpoint(setpoint);
-    hasGottenToSetpoint = false;
   }
 
   public boolean atSetpoint() {
@@ -72,16 +70,11 @@ public class ShooterPID extends PIDSubsystem {
 
   public void periodic() {
     super.periodic();
-    if(atSetpoint()) hasGottenToSetpoint = true;
     if (DashboardConstants.kShooterPIDTelemetry) {
       SmartDashboard.putNumber(m_name + " RPM", getMeasurement());
       SmartDashboard.putNumber(m_name + " Set", m_controller.getSetpoint());
       SmartDashboard.putBoolean(m_name + " OnT", atSetpoint());
     }
-  }
-
-  public boolean hasGottenToSetpoint() {
-    return hasGottenToSetpoint;
   }
 
 }
