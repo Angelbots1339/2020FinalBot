@@ -26,6 +26,7 @@ import frc.robot.commands.autonomous.ControlledAuto;
 import frc.robot.commands.ballmovement.LoaderToMiddleBB;
 import frc.robot.commands.ballmovement.ReverseEverything;
 import frc.robot.commands.ballmovement.ToggleIntakeArms;
+import frc.robot.commands.utils.DriveControl;
 import frc.robot.commands.vision.VisionShoot;
 import frc.robot.subsystems.BuddyClimbSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -34,9 +35,11 @@ import frc.robot.subsystems.HoodPIDSubsystem;
 import frc.robot.subsystems.IndexerSubsystem;
 import frc.robot.subsystems.IntakeArmPID;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.IntakingSystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.LoaderPIDSubsystem;
-import frc.robot.subsystems.ShooterPID;
+import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.ShooterSide;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -47,12 +50,12 @@ import frc.robot.subsystems.ShooterPID;
  */
 public class RobotContainer {
         // The robot's subsystems and commands are defined here...
-        private final IndexerSubsystem m_indexer = new IndexerSubsystem();
-        private final IntakeSubsystem m_intake = new IntakeSubsystem();
         private final DriveSubsystem m_drive = new DriveSubsystem();
-        private final ShooterPID m_rightShooter = new ShooterPID(ShooterConstants.kRightShooter, "Right Shooter", true);
-        private final ShooterPID m_leftShooter = new ShooterPID(ShooterConstants.kLeftShooter, "Left Shooter", false);
-        private final LoaderPIDSubsystem m_loader = new LoaderPIDSubsystem(m_rightShooter);
+        private final Shooter m_shooter = new Shooter(
+                        new ShooterSide(ShooterConstants.kRightShooter, "Right Shooter", true),
+                        new ShooterSide(ShooterConstants.kLeftShooter, "Left Shooter", false));
+        private final IntakingSystem m_intaker = new IntakingSystem(new IndexerSubsystem(), new IntakeSubsystem(),
+                        new LoaderPIDSubsystem(), m_shooter);
         private final ClimberSubsystem m_climber = new ClimberSubsystem();
         private final BuddyClimbSubsystem m_servo = new BuddyClimbSubsystem(m_climber);
         private final HoodPIDSubsystem m_hood = new HoodPIDSubsystem();
@@ -63,6 +66,9 @@ public class RobotContainer {
         XboxController m_testController = OIconstants.kTestControllerEnabled
                         ? new XboxController(OIconstants.kTestControllerPort)
                         : null;
+
+        private final DriveControl m_driveControl = new DriveControl(() -> -m_driverController.getY(Hand.kLeft),
+                        () -> m_driverController.getX(Hand.kRight));
 
         /**
          * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -80,8 +86,8 @@ public class RobotContainer {
                                 // A split-stick arcade command, with forward/backward controlled by the left
                                 // hand, and turning controlled by the right.
                                 // Left Y Axis needs to be inverted for driving forward
-                                new RunCommand(() -> m_drive.curvatureDrive(-m_driverController.getY(Hand.kLeft),
-                                                m_driverController.getX(Hand.kRight)), m_drive));
+                                new RunCommand(() -> m_drive.curvatureDrive(m_driveControl), m_drive));
+                new RunCommand(() -> m_intaker.telemetry()).schedule();// TODO
                 m_servo.engage();
                 m_arm.setEncoderPosition(-1);
                 // m_arm.setSetpoint(0);
@@ -121,8 +127,8 @@ public class RobotContainer {
                  */
                 // right bumper --- Deter balls/run intake backwards
                 new JoystickButton(m_driverController, Button.kBumperRight.value)
-                                .whenPressed(() -> m_intake.reverseIntake())
-                                .whenReleased(() -> m_intake.disableIntake());
+                                .whenPressed(() -> m_intaker.reverseIntake())
+                                .whenReleased(() -> m_intaker.disableIntake());
                 // left trigger --- Align to target
                 // right trigger --- shoot all balls
                 BooleanSupplier leftTrigger = () -> m_driverController
@@ -130,23 +136,20 @@ public class RobotContainer {
                 BooleanSupplier rightTrigger = () -> m_driverController
                                 .getTriggerAxis(Hand.kRight) > Constants.OIconstants.kRightTriggerThreshold;
                 new Trigger(leftTrigger).or(new Trigger(rightTrigger))
-                                .whileActiveOnce(new VisionShoot(m_intake, m_indexer, m_loader, m_leftShooter,
-                                                m_rightShooter, m_hood, m_limelight, m_drive, leftTrigger, rightTrigger,
-                                                () -> m_driverController.getY(Hand.kLeft),
+                                .whileActiveOnce(new VisionShoot(m_intaker, m_shooter, m_hood, m_limelight, m_drive,
+                                                leftTrigger, rightTrigger, m_driveControl,
                                                 LimelightConstants.kLongTimeout));
                 // back button --- shoot line no vision
                 new JoystickButton(m_driverController, Button.kBack.value).whileActiveOnce(
-                                new RunCommand(() -> m_limelight.reset()).alongWith(new VisionShoot(m_intake, m_indexer,
-                                                m_loader, m_leftShooter, m_rightShooter, m_hood, m_limelight, m_drive,
-                                                () -> false, () -> true, () -> 0, LimelightConstants.kLongTimeout)));
+                                new VisionShoot(m_intaker, m_shooter, m_hood, m_limelight, m_drive, () -> false,
+                                                () -> true, DriveControl.empty, LimelightConstants.kLongTimeout, false, 3));
                 // right stck down --- shoot close no vision
                 new JoystickButton(m_driverController, Button.kStickRight.value).whileActiveOnce(
-                                new RunCommand(() -> m_limelight.reset(0)).alongWith(new VisionShoot(m_intake, m_indexer,
-                                                m_loader, m_leftShooter, m_rightShooter, m_hood, m_limelight, m_drive,
-                                                () -> false, () -> true, () -> 0, LimelightConstants.kLongTimeout)));
+                                new VisionShoot(m_intaker, m_shooter, m_hood, m_limelight, m_drive, () -> false,
+                                                () -> true, DriveControl.empty, LimelightConstants.kLongTimeout, false, 0));
                 // left bumper --- intake balls(balls to middle bb)
                 new JoystickButton(m_driverController, Button.kBumperLeft.value)
-                                .whenHeld(new LoaderToMiddleBB(m_loader, m_intake, m_indexer));
+                                .whenHeld(new LoaderToMiddleBB(m_intaker));
                 // A button -- Intake arm toggle
                 new JoystickButton(m_driverController, Button.kA.value).whenPressed(new ToggleIntakeArms(m_arm));
                 // Start Button --- Enable climbing
@@ -156,8 +159,7 @@ public class RobotContainer {
                 new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> m_climber.run(), m_climber)
                                 .whenReleased(() -> m_climber.stop(), m_climber);
                 // X button --- unload/unjam
-                new JoystickButton(m_driverController, Button.kX.value)
-                                .whenHeld(new ReverseEverything(m_loader, m_intake, m_indexer));
+                new JoystickButton(m_driverController, Button.kX.value).whenHeld(new ReverseEverything(m_intaker));
                 // Y button --- deploy buddy climbing
                 new JoystickButton(m_driverController, Button.kY.value).whenPressed(() -> m_servo.disengage(), m_servo);
         }
@@ -175,9 +177,7 @@ public class RobotContainer {
 
         @SuppressWarnings("unused")
         private class Autos {
-                public final Command timeout = new Auto(m_arm, m_intake, m_indexer, m_loader, m_leftShooter,
-                                m_rightShooter, m_hood, m_limelight, m_drive),
-                                encoder = new ControlledAuto(m_arm, m_intake, m_indexer, m_loader, m_leftShooter,
-                                                m_rightShooter, m_hood, m_limelight, m_drive);
+                public final Command timeout = new Auto(m_arm, m_intaker, m_shooter, m_hood, m_limelight, m_drive),
+                                encoder = new ControlledAuto(m_arm, m_intaker, m_shooter, m_hood, m_limelight, m_drive);
         }
 }

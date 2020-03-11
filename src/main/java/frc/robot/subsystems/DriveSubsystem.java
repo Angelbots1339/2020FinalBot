@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DashboardConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.commands.utils.DriveControl;
 
 public class DriveSubsystem extends SubsystemBase {
   // The motors on the left side of the drive.
@@ -30,9 +31,6 @@ public class DriveSubsystem extends SubsystemBase {
    * Creates a new DriveSubsystem.
    */
   public DriveSubsystem() {
-    // Sets the distance per pulse for the encoders
-    // m_leftEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
-    // m_rightEncoder.setDistancePerPulse(DriveConstants.kEncoderDistancePerPulse);
 
     // Practice bot is wired and mounted in a way where nothing is inverted
     // Left Axis of joystick response needs to be inverted though
@@ -126,21 +124,21 @@ public class DriveSubsystem extends SubsystemBase {
     if (DashboardConstants.kDriveTelemetry) {
       SmartDashboard.putNumber("left front speed", m_leftFront.get());
       SmartDashboard.putNumber("right front speed", m_rightFront.get());
-      
+
       SmartDashboard.putNumber("left front temp", m_leftFront.getTemperature());
       SmartDashboard.putNumber("right front temp", m_rightFront.getTemperature());
-      
+
       SmartDashboard.putNumber("left front volt", m_leftFront.getBusVoltage());
       SmartDashboard.putNumber("right front volt", m_rightFront.getBusVoltage());
-      
+
       SmartDashboard.putNumber("left front percent output", m_leftFront.getMotorOutputPercent());
       SmartDashboard.putNumber("right front percent output", m_rightFront.getMotorOutputPercent());
 
       SmartDashboard.putNumber("left position", getLeftMeters());
       SmartDashboard.putNumber("right position", getRightMeters());
     }
-    
-    if (DashboardConstants.kExcessDriveTelemetry){
+
+    if (DashboardConstants.kExcessDriveTelemetry) {
       SmartDashboard.putNumber("left back speed", m_rightBack.get());
       SmartDashboard.putNumber("right back speed", m_rightFront.get());
 
@@ -153,5 +151,9 @@ public class DriveSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("left back percent output", m_rightBack.getMotorOutputPercent());
       SmartDashboard.putNumber("right back percent output", m_rightFront.getMotorOutputPercent());
     }
+  }
+
+  public void curvatureDrive(DriveControl driveControl) {
+    curvatureDrive(driveControl.getDrive(), driveControl.getTurn());
   }
 }

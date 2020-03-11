@@ -29,6 +29,10 @@ public class ShootingProfile {
                 getProperty(info, "IS"), getProperty(info, "LS"));
     }
 
+    public ShootingProfile() {
+        this(0, 0, 0, 0, 0, 0);
+    }
+
     /**
      * uses regxr to look through the text file
      * 

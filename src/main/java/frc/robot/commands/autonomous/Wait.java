@@ -11,13 +11,13 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public class Wait extends CommandBase {
-  private double m_startTime, m_currentTime, m_timeout;
+  private double m_startTime, m_currentTime;
+  private final double m_timeout;
 
   /**
-   * Drives backwards and ends after 2 seconds
+   * Wait
    */
   public Wait(double timeout) {
-    // Use addRequirements() here to declare subsystem dependencies.
     m_timeout = timeout;
   }
 

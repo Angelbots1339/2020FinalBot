@@ -17,12 +17,9 @@ public class TestDrive extends SequentialCommandGroup {
   /**
    * Creates a new TestDrive.
    */
-  
-  //private DriveSubsystem m_drive;
 
   public TestDrive(DriveSubsystem drive) {
     // Add your commands in the super() call, e.g.
-    // super(new FooCommand(), new BarCommand());
     super(new Forward(drive), new Reverse(drive), new Forward(drive), new Reverse(drive));
   }
 }

@@ -112,17 +112,14 @@ public class LoaderSubsystem extends SubsystemBase {
 
   public boolean isShooterBeamBroken() {
     return !(m_shooterReceiver.get());
-    // return false;
   }
 
   public boolean isTopBeamBroken() {
     return !(m_topReceiver.get());
-    // return false;
   }
 
   public boolean isMiddleBeamBroken() {
     return !(m_middleReceiver.get());
-    // return false;
   }
 
   public boolean isBottomBroken() {

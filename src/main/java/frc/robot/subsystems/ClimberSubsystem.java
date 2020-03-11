@@ -7,7 +7,6 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -25,13 +24,9 @@ public class ClimberSubsystem extends SubsystemBase {
   private CANSparkMax m_rightClimber;
   private CANSparkMax m_leftClimber;
   private double m_speed;
-  private CANEncoder m_rightEncoder;
-  private CANEncoder m_leftEncoder;
   private boolean m_enabled = false;
 
   public ClimberSubsystem() {
-    // m_rightEncoder = new CANEncoder(m_rightClimber);
-    // m_leftEncoder = new CANEncoder(m_leftClimber);
     m_rightClimber = new CANSparkMax(ClimberConstants.kRightClimberMotor, MotorType.kBrushless);
     m_leftClimber = new CANSparkMax(ClimberConstants.kLeftClimberMotor, MotorType.kBrushless);
 
@@ -66,8 +61,6 @@ public class ClimberSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("Left Climb Amp", m_leftClimber.getOutputCurrent());
       SmartDashboard.putNumber("Right Climb Amp", m_rightClimber.getOutputCurrent());
       SmartDashboard.putNumber("Climber Speed", m_speed);
-      SmartDashboard.putNumber("Left Climb Encoder", m_leftEncoder.getPosition());
-      SmartDashboard.putNumber("Right Climb Encoder", m_rightEncoder.getPosition());
     }
     // This method will be called once per scheduler run
   }

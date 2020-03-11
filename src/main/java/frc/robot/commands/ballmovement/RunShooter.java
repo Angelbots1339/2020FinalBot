@@ -9,24 +9,21 @@ package frc.robot.commands.ballmovement;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.commands.vision.ShootingProfile;
-import frc.robot.subsystems.ShooterPID;
+import frc.robot.subsystems.Shooter;
 
 public class RunShooter extends CommandBase {
 
-  private final ShooterPID m_leftPID;
-  private final ShooterPID m_rightPID;
+  private final Shooter m_shooter;
   private ShootingProfile m_targetProfile;
 
   /**
    * Creats a set speed for the left and right motors for the shooter to fire.
    */
-  public RunShooter(ShooterPID leftPID, ShooterPID rightPID, ShootingProfile targetProfile) {
+  public RunShooter(Shooter shooter, ShootingProfile targetProfile) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_leftPID = leftPID;
-    addRequirements(m_leftPID);
-
-    m_rightPID = rightPID;
-    addRequirements(m_rightPID);
+    m_shooter = shooter;
+    addRequirements(m_shooter.getLeft());
+    addRequirements(m_shooter.getRight());
 
     m_targetProfile = targetProfile;
   }
@@ -34,17 +31,16 @@ public class RunShooter extends CommandBase {
   /**
    * Creates a new RunShooter.
    */
-  public RunShooter(ShooterPID leftPID, ShooterPID rightPID, double targetSpeed) {
-    this(leftPID, rightPID, new ShootingProfile(-1, targetSpeed, -1, 0, 0, 0));
+  public RunShooter(Shooter shooter, double targetSpeed) {
+    this(shooter, new ShootingProfile(-1, targetSpeed, -1, 0, 0, 0));
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_leftPID.setSetpoint(m_targetProfile.getShooterSpeed());
-    m_rightPID.setSetpoint(m_targetProfile.getShooterSpeed());
-    m_leftPID.enable();
-    m_rightPID.enable();
+    m_shooter.setSetpoint(m_targetProfile.getShooterSpeed());
+    m_shooter.enable();
+    m_shooter.calculate();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -55,8 +51,7 @@ public class RunShooter extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_leftPID.disable();
-    m_rightPID.disable();
+    m_shooter.disable();
   }
 
   // Returns true when the command should end.
