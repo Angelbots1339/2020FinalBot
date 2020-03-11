@@ -22,6 +22,7 @@ import frc.robot.Constants.LimelightConstants;
 import frc.robot.Constants.OIconstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.autonomous.Auto;
+import frc.robot.commands.autonomous.AutoTest;
 import frc.robot.commands.autonomous.ControlledAuto;
 import frc.robot.commands.ballmovement.LoaderToMiddleBB;
 import frc.robot.commands.ballmovement.ReverseEverything;
@@ -177,7 +178,8 @@ public class RobotContainer {
 
         @SuppressWarnings("unused")
         private class Autos {
-                public final Command timeout = new Auto(m_arm, m_intaker, m_shooter, m_hood, m_limelight, m_drive),
-                                encoder = new ControlledAuto(m_arm, m_intaker, m_shooter, m_hood, m_limelight, m_drive);
+                //public final Command timeout = new Auto(m_arm, m_intaker, m_shooter, m_hood, m_limelight, m_drive),
+                 //               encoder = new ControlledAuto(m_arm, m_intaker, m_shooter, m_hood, m_limelight, m_drive);
+                 public final Command timeout = new AutoTest(m_drive);
         }
 }
