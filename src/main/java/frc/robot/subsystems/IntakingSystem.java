@@ -31,29 +31,29 @@ public class IntakingSystem {
         this.m_intake = intake;
         this.m_loader = loader;
 
-        m_topEmitter = new DigitalInput(SensorConstants.topEmitter);
-        m_topReceiver = new DigitalInput(SensorConstants.topReciever);
+        m_topEmitter = new DigitalInput(SensorConstants.kTopEmitter);
+        m_topReceiver = new DigitalInput(SensorConstants.kTopReciever);
 
-        m_middleEmitter = new DigitalInput(SensorConstants.middleEmitter);
-        m_middleReceiver = new DigitalInput(SensorConstants.middleReciever);
+        m_middleEmitter = new DigitalInput(SensorConstants.kMiddleEmitter);
+        m_middleReceiver = new DigitalInput(SensorConstants.kMiddleReciever);
 
-        m_shooterEmitter = new DigitalInput(SensorConstants.ShooterEmitter);
-        m_shooterReceiver = new DigitalInput(SensorConstants.ShooterReciever);
-        m_bottomRightEmitter = new DigitalInput(SensorConstants.bottomEmitter);
-        m_bottomRightReceiver = new DigitalInput(SensorConstants.bottomReciever);
+        m_shooterEmitter = new DigitalInput(SensorConstants.kShooterEmitter);
+        m_shooterReceiver = new DigitalInput(SensorConstants.kShooterReciever);
+        m_bottomRightEmitter = new DigitalInput(SensorConstants.kBottomEmitter);
+        m_bottomRightReceiver = new DigitalInput(SensorConstants.kBottomReciever);
 
         Trigger bottomTrigger = new Trigger(() -> isBottomBroken());
         bottomTrigger.and(new Trigger(() -> loader.get() >= 0)).whenActive(() -> m_count++);
 
         Trigger releaseBalls = bottomTrigger.and(new Trigger(() -> loader.get() < 0));
         releaseBalls.whenActive(() -> m_count--);
-        // releaseBalls.and(new Trigger(() -> getCount() >= 5)).whenInactive(() ->
-        // m_count--);
+        releaseBalls.and(new Trigger(() -> getCount() >= 5)).whenInactive(() ->
+        m_count--);
 
         Trigger topTrigger = new Trigger(() -> isTopBeamBroken());
         topTrigger.and(new Trigger(() -> shooter.atSetpoint())).whenActive(() -> m_count--);
-        // releaseBalls.and(new Trigger(() -> getCount() >= 5)).whenInactive(() ->
-        // m_count--);
+        releaseBalls.and(new Trigger(() -> getCount() >= 5)).whenInactive(() ->
+        m_count--);
     }
 
     public IndexerSubsystem getIndexer() {

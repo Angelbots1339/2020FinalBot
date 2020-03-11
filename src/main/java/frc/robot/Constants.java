@@ -57,7 +57,7 @@ public final class Constants {
         public final static double kMaxNormalCurrent = 12;
 
         // Intake Arm Constants
-        public final static double kP = 0.4;// 45; //98;
+        public final static double kP = 0.4;
         public final static double kI = 0;
         public final static double kD = 0;
         public final static double kIntakeArmMotorVolt = 5;
@@ -204,14 +204,14 @@ public final class Constants {
 
     public final class SensorConstants {
 
-        public final static int topEmitter = 5; // 1; broke them so we had to switch the ports
-        public final static int topReciever = 4; // 0;
-        public final static int middleEmitter = 3;
-        public final static int middleReciever = 2;
-        public final static int ShooterEmitter = 0; // 5; // right next to shooter, counts when balls leave
-        public final static int ShooterReciever = 1;// 4;
-        public final static int bottomEmitter = 7; // counts when balls enter
-        public final static int bottomReciever = 6;
+        public final static int kTopEmitter = 5;
+        public final static int kTopReciever = 4;
+        public final static int kMiddleEmitter = 3;
+        public final static int kMiddleReciever = 2;
+        public final static int kShooterEmitter = 0;// right next to shooter, counts when balls leave
+        public final static int kShooterReciever = 1;
+        public final static int kBottomEmitter = 7; // counts when balls enter
+        public final static int kBottomReciever = 6;
 
     }
 

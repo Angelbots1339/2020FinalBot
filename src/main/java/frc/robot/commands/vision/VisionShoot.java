@@ -14,7 +14,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.function.BooleanSupplier;
-import java.util.function.DoubleSupplier;
 import java.util.stream.Collectors;
 
 import edu.wpi.first.wpilibj.Filesystem;
@@ -22,6 +21,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.ballmovement.RunShooter;
+import frc.robot.commands.utils.DriveControl;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HoodPIDSubsystem;
 import frc.robot.subsystems.IntakingSystem;
@@ -53,7 +53,7 @@ public class VisionShoot extends CommandBase {
    * @param m_targetProfile
    */
   public VisionShoot(IntakingSystem intaker, Shooter shooter, HoodPIDSubsystem hood, LimelightSubsystem limelight,
-      DriveSubsystem drive, BooleanSupplier isAligning, BooleanSupplier isShooting, DoubleSupplier fwdMovement,
+      DriveSubsystem drive, BooleanSupplier isAligning, BooleanSupplier isShooting, DriveControl driveControl,
       double timeout, boolean useVision, double setDistance) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_intaker = intaker;
@@ -69,20 +69,19 @@ public class VisionShoot extends CommandBase {
     m_isAligning = isAligning;
     m_isShooting = isShooting;
 
-    latestProfile = new ShootingProfile(0, 0, 0, 0, 0, 0);
+    latestProfile = new ShootingProfile();
     runShooter = new RunShooter(m_shooter, latestProfile);
     runHood = new RunHood(m_hood, latestProfile);
-    cameraAlign = new CameraAlign(m_drive, m_limelight, latestProfile, fwdMovement);
+    cameraAlign = new CameraAlign(m_drive, m_limelight, latestProfile, driveControl);
     m_timeout = timeout;
     m_useVision = useVision;
     m_setDistance = setDistance;
   }
 
-  public VisionShoot(IntakingSystem intaker, Shooter shooter,
-      HoodPIDSubsystem hood, LimelightSubsystem limelight, DriveSubsystem drive, BooleanSupplier isAligning,
-      BooleanSupplier isShooting, DoubleSupplier fwdMovement, double timeout) {
-    this(intaker, shooter, hood, limelight, drive, isAligning, isShooting, fwdMovement, timeout, true,
-        -1);
+  public VisionShoot(IntakingSystem intaker, Shooter shooter, HoodPIDSubsystem hood, LimelightSubsystem limelight,
+      DriveSubsystem drive, BooleanSupplier isAligning, BooleanSupplier isShooting, DriveControl driveControl,
+      double timeout) {
+    this(intaker, shooter, hood, limelight, drive, isAligning, isShooting, driveControl, timeout, true, -1);
   }
 
   // Called when the command is initially scheduled.
@@ -99,11 +98,11 @@ public class VisionShoot extends CommandBase {
   public void execute() {
     updateProfile();
 
-    if (m_isAligning.getAsBoolean() && !m_limelight.isAligning()) {
-      cameraAlign.initialize();
-      m_limelight.setAligning(true);
-    }
     if (m_isAligning.getAsBoolean()) {
+      if (!m_limelight.isAligning()) {
+        cameraAlign.initialize();
+        m_limelight.setAligning(true);
+      }
       cameraAlign.execute();
     }
     if (!m_isAligning.getAsBoolean() && m_limelight.isAligning()) {
@@ -113,17 +112,19 @@ public class VisionShoot extends CommandBase {
 
     runShooter.execute();
     runHood.execute();
-    
+
     if (m_isShooting.getAsBoolean()) {
-      if (m_shooter.atSetpoint() && m_hood.atSetpoint() && (m_limelight.isAligned() || !m_isAligning.getAsBoolean())) {
+      if (atSetpoint())
         m_intaker.enable(latestProfile.getIndexerSpeed(), latestProfile.getLoaderSpeed());
-      } else if (m_limelight.getDistanceToVisionTarget() > ShooterConstants.kRapidShotThreshold
-          && m_intaker.isMiddleBeamBroken()) {
-        disableIntaking();
-      }
-    } else {
-      disableIntaking();
-    }
+      else if (m_limelight.getDistanceToVisionTarget() > ShooterConstants.kRapidShotThreshold
+          && m_intaker.isMiddleBeamBroken())
+        m_intaker.disable();
+    } else
+      m_intaker.disable();
+  }
+
+  private boolean atSetpoint() {
+    return m_shooter.atSetpoint() && m_hood.atSetpoint() && (m_limelight.isAligned() || !m_isAligning.getAsBoolean());
   }
 
   private void updateProfile() {
@@ -163,12 +164,10 @@ public class VisionShoot extends CommandBase {
   public void end(boolean interrupted) {
     runShooter.end(interrupted);
     runHood.end(interrupted);
-    cameraAlign.end(interrupted);
-    m_limelight.setAligning(false);
-    disableIntaking();
-  }
-
-  public void disableIntaking() {
+    if (m_limelight.isAligning()) {
+      cameraAlign.end(interrupted);
+      m_limelight.setAligning(false);
+    }
     m_intaker.disable();
   }
 

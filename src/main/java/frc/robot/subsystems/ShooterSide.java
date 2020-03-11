@@ -47,7 +47,7 @@ public class ShooterSide extends PIDSubsystem {
 
   @Override
   public double getMeasurement() {
-    return m_encoder.getVelocity(); // m_shooterEncoder.getRate();
+    return m_encoder.getVelocity();
   }
 
   @Override

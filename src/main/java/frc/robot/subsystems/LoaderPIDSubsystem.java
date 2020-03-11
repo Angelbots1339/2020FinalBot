@@ -55,7 +55,6 @@ public class LoaderPIDSubsystem extends PIDSubsystem {
   @Override
   protected void useOutput(double output, double setpoint) {
     output += m_feedforward.calculate(setpoint);
-    // output = MathUtil.clamp(output, -6, 6);
     m_loader.setVoltage(output);
   }
 

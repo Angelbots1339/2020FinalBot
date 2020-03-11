@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.Constants.LimelightConstants;
 import frc.robot.commands.ballmovement.RunShooter;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HoodPIDSubsystem;
@@ -57,7 +58,7 @@ public class RunVision extends ParallelCommandGroup {
 
     @Override
     public void initialize() {
-        //m_limeLight.setLed(LedMode.PIPELINE);
+        if(LimelightConstants.kAutoLight) m_limeLight.setLed(LedMode.PIPELINE);
         double currentDist = m_limeLight.getDistanceToVisionTarget();
         SmartDashboard.putNumber("current Dist", currentDist);
         /**
@@ -104,7 +105,7 @@ public class RunVision extends ParallelCommandGroup {
 
     @Override
     public void end(boolean interrupted) {
-        //m_limeLight.setLed(LedMode.OFF);
+        if(LimelightConstants.kAutoLight) m_limeLight.setLed(LedMode.OFF);
         super.end(interrupted);
         m_limeLight.setAligning(false);
 
