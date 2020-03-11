@@ -98,7 +98,7 @@ public final class Constants {
         public final static int kLeftShooter = 1;
         public final static int kRightShooter = 3;
 
-        public final static double kRapidShotThreshold = 6.1; // in meters
+        public final static double kRapidShotThreshold = 9; // in meters
         // PID values
         public final static double kP = 0.0008; // all good
         public final static double kI = 0.00001;
@@ -171,8 +171,7 @@ public final class Constants {
     public final static class LimelightConstants {
         // Ensure that the limelight hostname is just "limelight", otherwise there will
         // be nothing on networktable for data. Check network table data in Shuffleboard
-        // when
-        // troubleshooting
+        // when troubleshooting. CHECK THE TEAM NUMBER
         public final static String kLimeTable = "limelight";
         public final static int kDefaultPipeline = 0;
         public final static double kDriveP = 0.25;
@@ -227,7 +226,7 @@ public final class Constants {
         public final static double kLeftTriggerThreshold = 0.5;
         public final static double kRightTriggerThreshold = 0.5;
 
-        public final static boolean kTestControllerEnabled = false;
+        public final static boolean kTestControllerEnabled = true;
     }
 
     public final class DashboardConstants {

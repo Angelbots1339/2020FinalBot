@@ -34,6 +34,7 @@ public class Auto extends SequentialCommandGroup {
       ShooterPID leftShooter, ShooterPID rightShooter, HoodPIDSubsystem hood, LimelightSubsystem limelight,
       DriveSubsystem drive) {
     addCommands(
+        // new Wait(2),
         new VisionShoot(intake, index, loader, leftShooter, rightShooter, hood, limelight, drive, () -> false,
             () -> true, () -> 0, AutoConstants.kVisionTime),
         new ParallelCommandGroup(new ToggleIntakeArms(arm), new Reverse(drive)));
