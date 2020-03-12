@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj2.command.Subsystem;
+
 /**
  * Shooter
  */
@@ -43,5 +45,9 @@ public class Shooter {
 
     public boolean atSetpoint() {
         return m_leftShooter.atSetpoint() && m_rightShooter.atSetpoint();
+    }
+
+    public Subsystem[] getRequirements() {
+        return new Subsystem[]{m_leftShooter, m_rightShooter};
     }
 }

@@ -213,7 +213,6 @@ public final class Constants {
 
         public static final boolean kAutoColorVision = false;
         public static final boolean kDistanceAlign = false;
-        public static final double kLongTimeout = 60;
         public static final int kColorPipeline = 3;
     }
 
@@ -245,7 +244,7 @@ public final class Constants {
         public final static double kLeftTriggerThreshold = 0.5;
         public final static double kRightTriggerThreshold = 0.5;
 
-        public final static boolean kTestControllerEnabled = true;
+        public final static boolean kTestControllerEnabled = false;
     }
 
     public final class DashboardConstants {

@@ -20,7 +20,7 @@ public class ReverseEverything extends CommandBase {
   public ReverseEverything(IntakingSystem intaker) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_intaker = intaker;
-    addRequirements(m_intaker.getIndexer(), m_intaker.getIntake(), m_intaker.getLoader());
+    addRequirements(m_intaker.getRequirements());
   }
 
   // Called when the command is initially scheduled.

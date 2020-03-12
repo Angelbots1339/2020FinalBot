@@ -8,10 +8,10 @@
 package frc.robot.commands.autonomous;
 
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.commands.ballmovement.ToggleIntakeArms;
-import frc.robot.commands.utils.DriveControl;
 import frc.robot.commands.vision.VisionShoot;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HoodPIDSubsystem;
@@ -31,7 +31,12 @@ public class Auto extends SequentialCommandGroup {
    */
   public Auto(IntakeArmPID arm, IntakingSystem intaker, Shooter shooter, HoodPIDSubsystem hood,
       LimelightSubsystem limelight, DriveSubsystem drive) {
-    addCommands(new VisionShoot(intaker, shooter, hood, limelight, drive, () -> false, () -> true, DriveControl.empty,
-        AutoConstants.kVisionTime), new ParallelCommandGroup(new ToggleIntakeArms(arm), new Reverse(drive)));
+    addCommands(
+        new Timeout(
+            new VisionShoot(intaker, shooter, hood, limelight, drive, false, true),
+            AutoConstants.kVisionTime),
+        new ParallelCommandGroup(new ToggleIntakeArms(arm),
+            new Timeout(new RunCommand(() -> drive.arcadeDrive(-AutoConstants.kReverseSpeed, 0), drive),
+                AutoConstants.kReverseTime).andThen(() -> drive.stop(), drive)));
   }
 }

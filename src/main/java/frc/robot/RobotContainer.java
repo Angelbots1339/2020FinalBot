@@ -14,9 +14,9 @@ import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.controller.RamseteController;
 import edu.wpi.first.wpilibj.controller.SimpleMotorFeedforward;
-import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.geometry.Pose2d;
 import edu.wpi.first.wpilibj.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.geometry.Translation2d;
@@ -31,15 +31,11 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.LimelightConstants;
 import frc.robot.Constants.OIconstants;
 import frc.robot.Constants.ShooterConstants;
-import frc.robot.commands.autonomous.Auto;
 import frc.robot.commands.autonomous.AutoTest;
-import frc.robot.commands.autonomous.ControlledAuto;
 import frc.robot.commands.autonomous.PIDDrive;
 import frc.robot.commands.ballmovement.LoaderToMiddleBB;
-import frc.robot.commands.ballmovement.ReverseEverything;
 import frc.robot.commands.ballmovement.ToggleIntakeArms;
 import frc.robot.commands.utils.DriveControl;
 import frc.robot.commands.vision.VisionShoot;
@@ -137,15 +133,12 @@ public class RobotContainer {
                                         .whenReleased(() -> m_climber.stop(), m_climber);
 
                 }
-                new JoystickButton(m_testController, Button.kA.value)
-                                .whenPressed(new PIDDrive(m_drive, 90, 0, () -> (m_drive.getRotation()),
-                                                () -> (m_drive.getLeftMeters() + m_drive.getRightMeters()), 1));
-                new JoystickButton(m_testController, Button.kX.value)
-                                .whenPressed(new PIDDrive(m_drive, -90, 0, () -> (m_drive.getRotation()),
-                                                () -> (m_drive.getLeftMeters() + m_drive.getRightMeters()), 1));
-                new JoystickButton(m_testController, Button.kY.value)
-                                .whenPressed(new PIDDrive(m_drive, 0, 1, () -> (m_drive.getRotation()),
-                                                () -> (m_drive.getLeftMeters() + m_drive.getRightMeters()), 1));
+                new JoystickButton(m_testController, Button.kA.value).whileHeld(
+                                new PIDDrive(m_drive, 90, 0, m_drive::getRotation, m_drive::getForwardMeters));
+                new JoystickButton(m_testController, Button.kX.value).whileHeld(
+                                new PIDDrive(m_drive, -90, 0, m_drive::getRotation, m_drive::getForwardMeters));
+                new JoystickButton(m_testController, Button.kY.value).whileHeld(
+                                new PIDDrive(m_drive, 0, 1, m_drive::getRotation, m_drive::getForwardMeters));
 
                 /**
                  * DRIVER CONTROLLER -- Nick's prefered controls
@@ -155,38 +148,37 @@ public class RobotContainer {
                                 .whenPressed(() -> m_intaker.reverseIntake())
                                 .whenReleased(() -> m_intaker.disableIntake());
                 // left trigger --- Align to target
-                // right trigger --- shoot all balls
+                // right trigger --- shoot balls
                 BooleanSupplier leftTrigger = () -> m_driverController
                                 .getTriggerAxis(Hand.kLeft) > Constants.OIconstants.kLeftTriggerThreshold;
                 BooleanSupplier rightTrigger = () -> m_driverController
                                 .getTriggerAxis(Hand.kRight) > Constants.OIconstants.kRightTriggerThreshold;
-                new Trigger(leftTrigger).or(new Trigger(rightTrigger))
-                                .whileActiveOnce(new VisionShoot(m_intaker, m_shooter, m_hood, m_limelight, m_drive,
-                                                leftTrigger, rightTrigger, m_driveControl,
-                                                LimelightConstants.kLongTimeout));
+                new Trigger(leftTrigger).or(new Trigger(rightTrigger)).whileActiveOnce(new VisionShoot(m_intaker,
+                                m_shooter, m_hood, m_limelight, m_drive, leftTrigger, rightTrigger, m_driveControl));
                 // back button --- shoot line no vision
-                new JoystickButton(m_driverController, Button.kBack.value).whileActiveOnce(new VisionShoot(m_intaker,
-                                m_shooter, m_hood, m_limelight, m_drive, () -> false, () -> true, DriveControl.empty,
-                                LimelightConstants.kLongTimeout, false, 3));
-                // right stck down --- shoot close no vision
-                new JoystickButton(m_driverController, Button.kStickRight.value).whileActiveOnce(new VisionShoot(
-                                m_intaker, m_shooter, m_hood, m_limelight, m_drive, () -> false, () -> true,
-                                DriveControl.empty, LimelightConstants.kLongTimeout, false, 0));
+                new JoystickButton(m_driverController, Button.kBack.value)
+                                .whileActiveOnce(new VisionShoot(m_intaker, m_shooter, m_hood, m_limelight, m_drive,
+                                                () -> false, () -> true, DriveControl.empty, false, 3));
+                // right stick down --- shoot close no vision
+                new JoystickButton(m_driverController, Button.kStickRight.value)
+                                .whileActiveOnce(new VisionShoot(m_intaker, m_shooter, m_hood, m_limelight, m_drive,
+                                                () -> false, () -> true, DriveControl.empty, false, 0));
                 // left bumper --- intake balls(balls to middle bb)
                 new JoystickButton(m_driverController, Button.kBumperLeft.value)
                                 .whenHeld(new LoaderToMiddleBB(m_intaker));
                 // A button -- Intake arm toggle
                 new JoystickButton(m_driverController, Button.kA.value).whenPressed(new ToggleIntakeArms(m_arm));
                 // Start Button --- Enable climbing
-                new JoystickButton(m_driverController, Button.kStart.value).whenPressed(() -> m_climber.enable(),
-                                m_climber);
+                new JoystickButton(m_driverController, Button.kStart.value).whenPressed(m_climber::enable, m_climber);
                 // B button --- climb
-                new JoystickButton(m_driverController, Button.kB.value).whenPressed(() -> m_climber.run(), m_climber)
-                                .whenReleased(() -> m_climber.stop(), m_climber);
+                new JoystickButton(m_driverController, Button.kB.value).whenPressed(m_climber::run, m_climber)
+                                .whenReleased(m_climber::stop, m_climber);
                 // X button --- unload/unjam
-                new JoystickButton(m_driverController, Button.kX.value).whenHeld(new ReverseEverything(m_intaker));
+                new JoystickButton(m_driverController, Button.kX.value)
+                                .whenPressed(m_intaker::reverse, m_intaker.getRequirements())
+                                .whenReleased(m_intaker::disable, m_intaker.getRequirements());
                 // Y button --- deploy buddy climbing
-                new JoystickButton(m_driverController, Button.kY.value).whenPressed(() -> m_servo.disengage(), m_servo);
+                new JoystickButton(m_driverController, Button.kY.value).whenPressed(m_servo::disengage, m_servo);
         }
 
         /**
@@ -195,9 +187,7 @@ public class RobotContainer {
          * @return the command to run in autonomous
          */
         public Command getAutonomousCommand() {
-                //return autos.timeout;
-
-                
+                // return autos.timeout;
 
                 // Trajectory command - not working yet
                 // Need to create a basic command to drive forward
@@ -205,7 +195,8 @@ public class RobotContainer {
                 // Create a voltage constraint to ensure we don't accelerate too fast
                 // 10 V used here to account for battery sag
                 var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
-                                new SimpleMotorFeedforward(DriveConstants.ksVolts_WPI, DriveConstants.kvVoltSecondsPerMeter_WPI,
+                                new SimpleMotorFeedforward(DriveConstants.ksVolts_WPI,
+                                                DriveConstants.kvVoltSecondsPerMeter_WPI,
                                                 DriveConstants.kaVoltSecondsSquaredPerMeter_WPI),
                                 DriveConstants.kDriveKinematics, 10);
 
@@ -219,33 +210,25 @@ public class RobotContainer {
 
                 // An example trajectory to follow. All units in meters.
                 Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-                        // Start at the origin facing the +X direction
-                        new Pose2d(0, 0, new Rotation2d(0)),
-                        List.of(
-                                new Translation2d(1, 0)
-                                ),
-                        // End 2 meters straight ahead of where we started, facing forward
-                        new Pose2d(2, 0, new Rotation2d(0)),
-                        // Pass config
-                        config);
-                RamseteCommand ramseteCommand = new RamseteCommand(
-                        exampleTrajectory, 
-                        m_drive::getPose,
-                        new RamseteController(DriveConstants.kRamseteB_WPI, DriveConstants.kRamseteZeta_WPI),
-                        new SimpleMotorFeedforward(DriveConstants.ksVolts_WPI, 
-                                DriveConstants.kvVoltSecondsPerMeter_WPI,
-                                DriveConstants.kaVoltSecondsSquaredPerMeter_WPI),
-                        DriveConstants.kDriveKinematics, 
-                        m_drive::getWheelSpeeds,
-                        new PIDController(DriveConstants.kPDriveVel_WPI, 0, 0),
-                        new PIDController(DriveConstants.kPDriveVel_WPI, 0, 0),
-                        // RamseteCommand passes volts to the callback
-                        m_drive::tankDriveVolts, 
-                        m_drive);
+                                // Start at the origin facing the +X direction
+                                new Pose2d(0, 0, new Rotation2d(0)), List.of(new Translation2d(1, 0)),
+                                // End 2 meters straight ahead of where we started, facing forward
+                                new Pose2d(2, 0, new Rotation2d(0)),
+                                // Pass config
+                                config);
+                RamseteCommand ramseteCommand = new RamseteCommand(exampleTrajectory, m_drive::getPose,
+                                new RamseteController(DriveConstants.kRamseteB_WPI, DriveConstants.kRamseteZeta_WPI),
+                                new SimpleMotorFeedforward(DriveConstants.ksVolts_WPI,
+                                                DriveConstants.kvVoltSecondsPerMeter_WPI,
+                                                DriveConstants.kaVoltSecondsSquaredPerMeter_WPI),
+                                DriveConstants.kDriveKinematics, m_drive::getWheelSpeeds,
+                                new PIDController(DriveConstants.kPDriveVel_WPI, 0, 0),
+                                new PIDController(DriveConstants.kPDriveVel_WPI, 0, 0),
+                                // RamseteCommand passes volts to the callback
+                                m_drive::tankDriveVolts, m_drive);
 
                 // Run path following command, then stop at the end.
                 return ramseteCommand.andThen(() -> m_drive.tankDriveVolts(0, 0));
-
 
         }
 

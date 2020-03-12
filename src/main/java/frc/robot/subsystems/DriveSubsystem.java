@@ -36,7 +36,6 @@ public class DriveSubsystem extends SubsystemBase {
 
   private final DifferentialDriveOdometry m_odometry;
 
-
   /**
    * Creates a new DriveSubsystem.
    */
@@ -125,7 +124,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void tankDriveVolts(double leftVolts, double rightVolts) {
     m_leftMotors.setVoltage(leftVolts);
-    m_rightMotors.setVoltage(rightVolts);  // TODO - Double check need for negative volts
+    m_rightMotors.setVoltage(rightVolts); // TODO - Double check need for negative volts
     m_drive.feed();
   }
 
@@ -139,6 +138,10 @@ public class DriveSubsystem extends SubsystemBase {
 
     m_drive.tankDrive(leftSpeed, rightSpeed, false);
     return Math.abs(left) < reportThreshold && Math.abs(right) < reportThreshold;
+  }
+
+  public void stop() {
+    tankDrive(0, 0);
   }
 
   /**
@@ -155,7 +158,7 @@ public class DriveSubsystem extends SubsystemBase {
   /**
    * Get Left Drive-side Encoder Values
    * 
-   * @return Average Left Encoder values in meters 
+   * @return Average Left Encoder values in meters
    */
   public double getLeftMeters() {
     return DriveConstants.kMetersPerClick
@@ -163,7 +166,8 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   /**
-   * Get Right Drive-side Encoder Values, sign is inverted based on drivetrain setup
+   * Get Right Drive-side Encoder Values, sign is inverted based on drivetrain
+   * setup
    * 
    * @return Average Right Encoder Values in meters
    */
@@ -172,8 +176,13 @@ public class DriveSubsystem extends SubsystemBase {
         * (m_rightFront.getSelectedSensorPosition() + m_rightBack.getSelectedSensorPosition()) / 2;
   }
 
+  public double getForwardMeters() {
+    return (getLeftMeters() + getRightMeters()) / 2;
+  }
+
   /**
    * TODO - CHECK this calc
+   * 
    * @return
    */
   public double getLeftVelocityMeters() {
@@ -206,18 +215,17 @@ public class DriveSubsystem extends SubsystemBase {
    * 
    * @return gyro angle (deg)
    */
-  public double getRotation(){
+  public double getRotation() {
     return m_gyro.getAngle();
   }
 
-  /** 
+  /**
    * Zeroes the heading (gyro) of the robot
    */
   public void zeroHeading() {
     m_gyro.reset();
   }
 
-  
   public void resetEncoders() {
     m_rightBack.setSelectedSensorPosition(0);
     m_rightFront.setSelectedSensorPosition(0);
@@ -246,7 +254,7 @@ public class DriveSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("left vel", getLeftVelocityMeters());
       SmartDashboard.putNumber("right vel", getRightVelocityMeters());
       SmartDashboard.putNumber("gyro rotation", getRotation());
- 
+
     }
 
     if (DashboardConstants.kExcessDriveTelemetry) {
@@ -261,12 +269,11 @@ public class DriveSubsystem extends SubsystemBase {
 
       SmartDashboard.putNumber("left back percent output", m_rightBack.getMotorOutputPercent());
       SmartDashboard.putNumber("right back percent output", m_rightFront.getMotorOutputPercent());
-   }
+    }
   }
 
   public void curvatureDrive(DriveControl driveControl) {
     curvatureDrive(driveControl.getDrive(), driveControl.getTurn());
   }
-
 
 }

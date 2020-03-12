@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.LoaderConstants;
 import frc.robot.Constants.SensorConstants;
@@ -127,5 +128,9 @@ public class IntakingSystem {
   
     public void reverseIntake() {
       m_intake.reverseIntake();
+    }
+
+    public Subsystem[] getRequirements() {
+        return new Subsystem[]{m_indexer, m_intake, m_loader};
     }
 }

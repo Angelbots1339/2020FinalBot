@@ -20,6 +20,7 @@ public class AutoTest extends SequentialCommandGroup {
   public AutoTest(DriveSubsystem drive) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new PIDDrive(drive, 90, 0, () -> (drive.getLeftMeters()+drive.getRightMeters())/2, () -> (drive.getRotation()), 3));
+    super(new Timeout(
+        new PIDDrive(drive, 90, 0, drive::getForwardMeters, drive::getRotation), 3));
   }
 }

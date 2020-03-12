@@ -9,7 +9,6 @@ package frc.robot.commands.autonomous;
 
 import java.util.function.DoubleSupplier;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
@@ -18,7 +17,6 @@ import frc.robot.subsystems.DriveSubsystem;
 //TODO
 public class PIDDrive extends CommandBase {
     private final DriveSubsystem m_drive;
-    private double m_startTime, m_currentTime, m_timeout;
     PIDController m_turnController, m_driveController;
     DoubleSupplier m_turnSupplier, m_driveSupplier;
 
@@ -30,13 +28,13 @@ public class PIDDrive extends CommandBase {
      * @param drive
      * @param turnSetpoint
      * @param driveSetpoint
-     * @param turnSupplier returns the current value of turn 
+     * @param turnSupplier  returns the current value of turn
      * @param driveSupplier returns current drive value
      * @param timeout
      */
-    
+
     public PIDDrive(DriveSubsystem drive, double turnSetpoint, double driveSetpoint, DoubleSupplier turnSupplier,
-            DoubleSupplier driveSupplier, double timeout) {
+            DoubleSupplier driveSupplier) {
         // Use addRequirements() here to declare subsystem dependencies.
         m_drive = drive;
         addRequirements(m_drive);
@@ -46,14 +44,12 @@ public class PIDDrive extends CommandBase {
         m_driveController.setSetpoint(driveSetpoint);
         m_turnSupplier = turnSupplier;
         m_driveSupplier = driveSupplier;
-        m_timeout = timeout;
     }
 
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
         m_drive.zeroHeading();
-        m_startTime = Timer.getFPGATimestamp();
     }
 
     // Called every time the scheduler runs while the command is scheduled.
@@ -66,14 +62,12 @@ public class PIDDrive extends CommandBase {
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        m_drive.arcadeDrive(0, 0);
+        m_drive.stop();
     }
 
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {
-        m_currentTime = Timer.getFPGATimestamp();
-        return m_currentTime - m_startTime >= m_timeout
-                || (m_driveController.atSetpoint() && m_turnController.atSetpoint());
+        return m_driveController.atSetpoint() && m_turnController.atSetpoint();
     }
 }

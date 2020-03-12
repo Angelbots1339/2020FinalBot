@@ -22,8 +22,7 @@ public class RunShooter extends CommandBase {
   public RunShooter(Shooter shooter, ShootingProfile targetProfile) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_shooter = shooter;
-    addRequirements(m_shooter.getLeft());
-    addRequirements(m_shooter.getRight());
+    addRequirements(m_shooter.getRequirements());
 
     m_targetProfile = targetProfile;
   }
