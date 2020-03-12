@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
  * numerical or boolean constants. This class should not be used for any other
@@ -19,7 +21,7 @@ package frc.robot;
  */
 public final class Constants {
 
-    public final class DriveConstants {
+    public static final class DriveConstants {
         // TalonFX Motors
         public final static int kLeftFrontMotor = 13;
         public final static int kLeftBackMotor = 14;
@@ -27,24 +29,38 @@ public final class Constants {
         public final static int kRightBackMotor = 15;
 
         public final static int kClicksPerRotation = 2048;
-        public final static double kGearRatio = 5.45;
-        public final static double kWheelDiameter = 0.1016;
-        public final static double kMetersPerClick = Math.PI * kWheelDiameter / kClicksPerRotation / kGearRatio;
+        public final static double kGearRatio = 5.45;               // based on drivetrain design
+        public final static double kWheelDiameterMeter = 0.0990;    // wheels are just under 4"
+        public final static double kMetersPerClick = Math.PI * kWheelDiameterMeter / kClicksPerRotation / kGearRatio;
 
         public final static double kMaxDriveSpeed = 0.6; // speed
 
         public final static double kMinPower = 0.2; // speed
         public final static double kTurnInPlaceThreshold = 0.2;
 
-        public final static double kPDrive = 0.1;
+        public final static double kPDrive = 0.0008;
         public final static double kIDrive = 0.0;
         public final static double kDDrive = 0.0;
-        public final static double kPTurn = 0.1;
+        public final static double kPTurn = 0.0008;
         public final static double kITurn = 0.0;
         public final static double kDTurn = 0.0;
+
+        // Values here are from Characterization Tool
+        public final static double ksVolts_WPI = 0.288;             
+        public final static double kvVoltSecondsPerMeter_WPI = 1.89;
+        public final static double kaVoltSecondsSquaredPerMeter_WPI = 0.411;
+        public final static double kPDriveVel_WPI = 8; // was 15 this seems high....
+        public final static double kMaxSpeedMetersPerSec_WPI = 1.5; // limit for now
+        public final static double kMaxAccelerationMetersPerSec2_WPI = 0.5; // limit for now
+        public final static double kRamseteB_WPI = 2;
+        public final static double kRamseteZeta_WPI = 0.7;
+        public final static boolean kGyroReversed = false;
+        public final static double kTrackWidthMeters = 0.82;
+        public static final DifferentialDriveKinematics kDriveKinematics = new DifferentialDriveKinematics(kTrackWidthMeters);
+
     }
 
-    public final class IntakeConstants {
+    public static final class IntakeConstants {
         public final static int kIntakeMotor = 5;
         public final static int kLeftIntakeMoverMotor = 9; // not inverted in fireware
         public final static int kRightIntakeMoverMotor = 8; // inverted in firmware
@@ -66,7 +82,7 @@ public final class Constants {
         public final static double kPositionTolerance = 0.2;
     }
 
-    public final class IndexerConstants {
+    public static final class IndexerConstants {
         public final static int kLeftIndexerMotor = 7;
         public final static int kRightIndexMotor = 6;
         public final static double kMaxIndexSpeed = 0.7;
@@ -74,7 +90,7 @@ public final class Constants {
 
     }
 
-    public final class LoaderConstants {
+    public static final class LoaderConstants {
         public final static int kLoaderMotor = 2;
         // This speed is used when feeding balls to shooter
         public final static double kFeedLoaderSpeed = 0.6;
@@ -125,7 +141,7 @@ public final class Constants {
 
     }
 
-    public final class HoodConstants {
+    public static final class HoodConstants {
         public final static int kHoodPort = 4;
 
         public final static double kMaxVeloValue = 0.2;
@@ -235,7 +251,7 @@ public final class Constants {
     public final class DashboardConstants {
         public final static boolean kBuddyClimbTelemetry = false;
         public final static boolean kClimberTelemetry = false;
-        public final static boolean kDriveTelemetry = false;
+        public final static boolean kDriveTelemetry = true;
         public final static boolean kHoodPIDTelemetry = true;
         public final static boolean kIndexerTelemetry = false;
         public final static boolean kIntakeArmTelemetry = false;
@@ -243,6 +259,6 @@ public final class Constants {
         public final static boolean kLimelightTelemetry = false;
         public final static boolean kLoaderTelemetry = false;
         public final static boolean kShooterPIDTelemetry = true;
-        public static final boolean kExcessDriveTelemetry = false;
+        public static final boolean kExcessDriveTelemetry = true;
     }
 }

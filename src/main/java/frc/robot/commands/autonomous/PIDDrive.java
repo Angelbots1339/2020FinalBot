@@ -25,6 +25,16 @@ public class PIDDrive extends CommandBase {
     /**
      * Drives backwards and ends after 2 seconds
      */
+    /**
+     * 
+     * @param drive
+     * @param turnSetpoint
+     * @param driveSetpoint
+     * @param turnSupplier returns the current value of turn 
+     * @param driveSupplier returns current drive value
+     * @param timeout
+     */
+    
     public PIDDrive(DriveSubsystem drive, double turnSetpoint, double driveSetpoint, DoubleSupplier turnSupplier,
             DoubleSupplier driveSupplier, double timeout) {
         // Use addRequirements() here to declare subsystem dependencies.
@@ -42,6 +52,7 @@ public class PIDDrive extends CommandBase {
     // Called when the command is initially scheduled.
     @Override
     public void initialize() {
+        m_drive.zeroHeading();
         m_startTime = Timer.getFPGATimestamp();
     }
 
