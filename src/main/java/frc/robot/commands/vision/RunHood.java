@@ -38,11 +38,6 @@ public class RunHood extends CommandBase {
     m_hoodPID.enable();
   }
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-  }
-
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {

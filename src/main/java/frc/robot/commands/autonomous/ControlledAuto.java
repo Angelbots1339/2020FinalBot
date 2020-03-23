@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.commands.ballmovement.ToggleIntakeArms;
+import frc.robot.commands.utils.DriveControl;
 import frc.robot.commands.vision.VisionShoot;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.HoodPIDSubsystem;
@@ -24,15 +25,18 @@ import frc.robot.subsystems.Shooter;
 // https://docs.wpilib.org/en/latest/docs/software/commandbased/convenience-features.html
 
 public class ControlledAuto extends SequentialCommandGroup {
-    /**
-     * Runs VisionShoot, then runs parallel command to drive robot in reverse and
-     * lower intake arm
-     */
-    public ControlledAuto(IntakeArmPID arm, IntakingSystem intaker, Shooter shooter, HoodPIDSubsystem hood,
-            LimelightSubsystem limelight, DriveSubsystem drive) {
-        addCommands(
-                new Timeout(new VisionShoot(intaker, shooter, hood, limelight, drive, false, true), AutoConstants.kVisionTime),
-                new ParallelCommandGroup(new ToggleIntakeArms(arm),
-                        new Timeout(new PIDDrive(drive, 0, -1, drive::getRotation, drive::getForwardMeters), 2)));
-    }
+        /**
+         * Runs VisionShoot, then runs parallel command to drive robot in reverse and
+         * lower intake arm
+         */
+        public ControlledAuto(IntakeArmPID arm, IntakingSystem intaker, Shooter shooter, HoodPIDSubsystem hood,
+                        LimelightSubsystem limelight, DriveSubsystem drive) {
+                addCommands(new Timeout(new VisionShoot(intaker, shooter, hood, limelight, drive, false, true),
+                                AutoConstants.kVisionTime),
+                                new ParallelCommandGroup(new ToggleIntakeArms(arm), new Timeout(
+                                                new PIDDrive(drive, 0, -1,
+                                                                new DriveControl(drive::getRotation,
+                                                                                drive::getForwardMeters)),
+                                                AutoConstants.kPIDReverseTime)));
+        }
 }

@@ -51,10 +51,11 @@ public class BuddyClimbSubsystem extends SubsystemBase {
 
   // Right Servo is correct
   public void toggle() {
-    if (getEngageToggled())
+    if (getEngageToggled()) {
       disengage();
-    else
+    } else {
       engage();
+    }
 
     toggleEngage();
   }

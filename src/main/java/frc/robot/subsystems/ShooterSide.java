@@ -52,7 +52,9 @@ public class ShooterSide extends PIDSubsystem {
 
   @Override
   public void setSetpoint(double setpoint) {
-    if(getController() != null) getController().setTolerance((setpoint-ShooterConstants.kBaseRPM)*ShooterConstants.kShooterToleranceSlope);
+    if (getController() != null) {
+      getController().setTolerance((setpoint - ShooterConstants.kBaseRPM) * ShooterConstants.kShooterToleranceSlope);
+    }
     super.setSetpoint(setpoint);
   }
 
@@ -68,6 +70,7 @@ public class ShooterSide extends PIDSubsystem {
     m_motor.setVoltage(volts);
   }
 
+  @Override
   public void periodic() {
     super.periodic();
     if (DashboardConstants.kShooterPIDTelemetry) {

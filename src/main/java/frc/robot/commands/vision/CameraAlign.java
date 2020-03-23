@@ -17,10 +17,7 @@ public class CameraAlign extends CommandBase {
   private final DriveSubsystem m_driveSubsystem;
   private final LimelightSubsystem m_limeLight;
   private final DriveControl m_driveControl;
-  private double m_turn;
-  public double m_drive;
   private ShootingProfile m_targetProfile;
-  private double driveError;
 
   /**
    * Creates a new Align. Aligns and focuses the camera to aim at target
@@ -38,27 +35,23 @@ public class CameraAlign extends CommandBase {
     m_driveControl = driveControl;
   }
 
-  // Called when the command is initially scheduled.
-  @Override
-  public void initialize() {
-  }
-
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_drive = 0;
-    m_turn = 0;
+    double drive = 0;
+    double turn = 0;
 
     if (m_limeLight.seesTarget()) {
-      m_turn += m_targetProfile.getAngleP() * m_limeLight.getXTargetOffset();
+      turn += m_targetProfile.getAngleP() * m_limeLight.getXTargetOffset();
       if (LimelightConstants.kDistanceAlign) {
-        driveError = m_limeLight.getDistanceToVisionTarget() - m_targetProfile.getDistance();
-        m_drive += driveError * LimelightConstants.kDriveP;
+        double driveError = m_limeLight.getDistanceToVisionTarget() - m_targetProfile.getDistance();
+        drive += driveError * LimelightConstants.kDriveP;
       }
-    } else
-      m_turn += m_driveControl.getTurn();
-    m_drive += m_driveControl.getDrive();
-    m_limeLight.setAligned(m_driveSubsystem.arcadeDrive(m_drive, m_turn, LimelightConstants.kDriveTolerance,
+    } else {
+      turn += m_driveControl.getTurn();
+    }
+    drive += m_driveControl.getDrive();
+    m_limeLight.setAligned(m_driveSubsystem.arcadeDrive(drive, turn, LimelightConstants.kDriveTolerance,
         LimelightConstants.kShootTolerance));
   }
 

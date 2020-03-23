@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Constants.ShooterConstants;
 
 /**
  * Shooter
@@ -9,10 +10,11 @@ public class Shooter {
     ShooterSide m_leftShooter;
     ShooterSide m_rightShooter;
 
-    public Shooter(ShooterSide leftShooter, ShooterSide rightShooter) {
+    public Shooter() {
         super();
-        m_leftShooter = leftShooter;
-        m_rightShooter = rightShooter;
+        
+        m_leftShooter = new ShooterSide(ShooterConstants.kLeftShooter, "Left Shooter", false);
+        m_rightShooter = new ShooterSide(ShooterConstants.kRightShooter, "Right Shooter", true);
     }
 
     public ShooterSide getLeft() {

@@ -8,7 +8,7 @@ import java.util.function.DoubleSupplier;
 public class DriveControl {
     private final DoubleSupplier driveSupplier;
     private final DoubleSupplier turnSupplier;
-    public final static DriveControl empty = new DriveControl(() -> 0, () -> 0);
+    public static final DriveControl empty = new DriveControl(() -> 0, () -> 0);
 
     public DriveControl(DoubleSupplier driveSupplier, DoubleSupplier turnSupplier) {
         this.driveSupplier = driveSupplier;

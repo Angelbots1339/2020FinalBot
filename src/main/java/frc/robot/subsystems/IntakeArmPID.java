@@ -75,6 +75,7 @@ public class IntakeArmPID extends PIDSubsystem {
     return m_controller.atSetpoint();
   }
 
+  @Override
   public void setSetpoint(double setpoint) {
     // Regardless of what's passed in, clamp to the min and max
     setpoint = MathUtil.clamp(setpoint, IntakeConstants.kMinEncoderValue, IntakeConstants.kMaxEncoderValue);
@@ -82,6 +83,7 @@ public class IntakeArmPID extends PIDSubsystem {
     m_setpoint = setpoint;
   }
 
+  @Override
   public void periodic() {
     super.periodic();
     if (DashboardConstants.kIntakeArmTelemetry) {
@@ -92,11 +94,8 @@ public class IntakeArmPID extends PIDSubsystem {
   }
 
   public void toggleSetpoint() {
-    if (getSetpoint() < (IntakeConstants.kMinEncoderValue + IntakeConstants.kMaxEncoderValue) / 2) {
-      setSetpoint(IntakeConstants.kMaxEncoderValue);
-    } else {
-      setSetpoint(IntakeConstants.kMinEncoderValue);
-    }
+    setSetpoint((getSetpoint() < IntakeConstants.kMidEncoderValue) ? IntakeConstants.kMaxEncoderValue
+        : IntakeConstants.kMinEncoderValue);
   }
 
 }

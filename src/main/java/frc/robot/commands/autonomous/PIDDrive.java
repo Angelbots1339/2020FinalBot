@@ -7,18 +7,18 @@
 
 package frc.robot.commands.autonomous;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.commands.utils.DriveControl;
 import frc.robot.subsystems.DriveSubsystem;
 
 //TODO
 public class PIDDrive extends CommandBase {
     private final DriveSubsystem m_drive;
-    PIDController m_turnController, m_driveController;
-    DoubleSupplier m_turnSupplier, m_driveSupplier;
+    PIDController m_turnController;
+    PIDController m_driveController;
+    DriveControl m_currentDrivePosition;
 
     /**
      * Drives backwards and ends after 2 seconds
@@ -33,8 +33,8 @@ public class PIDDrive extends CommandBase {
      * @param timeout
      */
 
-    public PIDDrive(DriveSubsystem drive, double turnSetpoint, double driveSetpoint, DoubleSupplier turnSupplier,
-            DoubleSupplier driveSupplier) {
+    public PIDDrive(DriveSubsystem drive, double turnSetpoint, double driveSetpoint,
+            DriveControl currentDrivePosition) {
         // Use addRequirements() here to declare subsystem dependencies.
         m_drive = drive;
         addRequirements(m_drive);
@@ -42,8 +42,7 @@ public class PIDDrive extends CommandBase {
         m_turnController = new PIDController(DriveConstants.kPTurn, DriveConstants.kITurn, DriveConstants.kDTurn);
         m_turnController.setSetpoint(turnSetpoint);
         m_driveController.setSetpoint(driveSetpoint);
-        m_turnSupplier = turnSupplier;
-        m_driveSupplier = driveSupplier;
+        m_currentDrivePosition = currentDrivePosition;
     }
 
     // Called when the command is initially scheduled.
@@ -55,8 +54,8 @@ public class PIDDrive extends CommandBase {
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        m_drive.arcadeDrive(m_driveController.calculate(m_driveSupplier.getAsDouble()),
-                m_turnController.calculate(m_turnSupplier.getAsDouble()));
+        m_drive.arcadeDrive(m_driveController.calculate(m_currentDrivePosition.getDrive()),
+                m_turnController.calculate(m_currentDrivePosition.getTurn()));
     }
 
     // Called once the command ends or is interrupted.

@@ -27,10 +27,10 @@ public class IntakingSystem {
 
     private int m_count = 0;
 
-    public IntakingSystem(IndexerSubsystem indexer, IntakeSubsystem intake, LoaderPIDSubsystem loader, Shooter shooter) {
-        this.m_indexer = indexer;
-        this.m_intake = intake;
-        this.m_loader = loader;
+    public IntakingSystem(Shooter shooter) {
+        this.m_indexer = new IndexerSubsystem();
+        this.m_intake = new IntakeSubsystem();
+        this.m_loader = new LoaderPIDSubsystem();
 
         m_topEmitter = new DigitalInput(SensorConstants.kTopEmitter);
         m_topReceiver = new DigitalInput(SensorConstants.kTopReciever);
@@ -43,17 +43,16 @@ public class IntakingSystem {
         m_bottomRightEmitter = new DigitalInput(SensorConstants.kBottomEmitter);
         m_bottomRightReceiver = new DigitalInput(SensorConstants.kBottomReciever);
 
-        Trigger bottomTrigger = new Trigger(() -> isBottomBroken());
-        bottomTrigger.and(new Trigger(() -> loader.get() >= 0)).whenActive(() -> m_count++);
+        Trigger bottomTrigger = new Trigger(this::isBottomBroken);
+        Trigger loaderIntaking = new Trigger(m_loader::isIntaking);
+        bottomTrigger.and(loaderIntaking).whenActive(() -> m_count++);
 
-        Trigger releaseBalls = bottomTrigger.and(new Trigger(() -> loader.get() < 0));
+        Trigger releaseBalls = bottomTrigger.and(loaderIntaking.negate());
         releaseBalls.whenActive(() -> m_count--);
-        releaseBalls.and(new Trigger(() -> getCount() >= 5)).whenInactive(() ->
-        m_count--);
 
-        Trigger topTrigger = new Trigger(() -> isTopBeamBroken());
-        topTrigger.and(new Trigger(() -> shooter.atSetpoint())).whenActive(() -> m_count--);
-        releaseBalls.and(new Trigger(() -> getCount() >= 5)).whenInactive(() ->
+        Trigger topTrigger = new Trigger(this::isTopBeamBroken);
+        topTrigger.and(new Trigger(shooter::atSetpoint)).whenActive(() -> m_count--);
+        releaseBalls.and(new Trigger(() -> getCount() >= LoaderConstants.kMaxBalls)).whenInactive(() ->
         m_count--);
     }
 

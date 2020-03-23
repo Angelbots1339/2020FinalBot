@@ -51,8 +51,9 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void run() {
-    if (m_enabled)
+    if (m_enabled) {
       setSpeed(-ClimberConstants.kClimberSpeed);
+    }
   }
 
   @Override
@@ -70,7 +71,8 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public void runInverted() {
-    if (m_enabled)
+    if (m_enabled) {
       setSpeed(ClimberConstants.kClimberResetSpeed);
+    }
   }
 }

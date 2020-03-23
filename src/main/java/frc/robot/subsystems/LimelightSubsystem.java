@@ -13,7 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DashboardConstants;
 import frc.robot.Constants.LimelightConstants;
-import frc.robot.commands.vision.ShootingProfile;;
+import frc.robot.commands.vision.ShootingProfile;
 
 public class LimelightSubsystem extends SubsystemBase {
 
@@ -21,7 +21,7 @@ public class LimelightSubsystem extends SubsystemBase {
   private LedMode mLedMode = LedMode.PIPELINE;
   private boolean m_isAligned = true;
   private boolean m_isAligning = false;
-  private ShootingProfile m_latestTargetProfile = new ShootingProfile(3, 0, 0, 0, 0, 0);
+  private ShootingProfile m_latestTargetProfile = new ShootingProfile(0, 0, 0, 0, 0, 0);
   private boolean hasSeenTarget = false;
   private double m_defaultDistance = LimelightConstants.kDefaultDistance;
 
@@ -48,7 +48,7 @@ public class LimelightSubsystem extends SubsystemBase {
   }
 
   public boolean seesTarget() {
-    return mNetworkTable.getEntry("tv").getDouble(0) == 1.0;
+    return (int) mNetworkTable.getEntry("tv").getDouble(0) == 1;
   }
 
   public double getXTargetOffset() {
@@ -64,8 +64,9 @@ public class LimelightSubsystem extends SubsystemBase {
   }
 
   public double getDistanceToVisionTarget() {
-    if (!hasSeenTarget)
+    if (!hasSeenTarget) {
       return m_defaultDistance;
+    }
     return LimelightConstants.kLimelightToTargetHeight / Math.tan(Math.toRadians(
         getYTargetOffset() + LimelightConstants.kLimeLightTilt + LimelightConstants.kPanningOffest[getPipeline()]));
   }
@@ -81,26 +82,15 @@ public class LimelightSubsystem extends SubsystemBase {
   @Override
   @SuppressWarnings("unused")
   public void periodic() {
-    if (!LimelightConstants.kAutoColorVision) {
-      if (!isAligning()) {
-        if (LimelightConstants.kAutoZoom)
-          setPipeline(getDistanceToVisionTarget() > LimelightConstants.k2XZoomCutoff
-              ? getDistanceToVisionTarget() > LimelightConstants.k3XZoomCutoff ? 2 : 1
-              : 0);
-        else
-          setPipeline(0);
-      }
-      if (!seesTarget())
-        setPipeline(0);
-    } else {
-      setPipeline(LimelightConstants.kColorPipeline);
+    updatePipeline();
+
+    if (seesTarget()) {
+      hasSeenTarget = true;
     }
 
-    if (seesTarget())
-      hasSeenTarget = true;
-
-    if (LimelightConstants.kAutoLight)
+    if (LimelightConstants.kAutoLight) {
       setLed(isAligning() ? LedMode.PIPELINE : LedMode.OFF);
+    }
 
     if (DashboardConstants.kLimelightTelemetry) {
       SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Pipeline Latency(ms)", getLatency());
@@ -110,6 +100,35 @@ public class LimelightSubsystem extends SubsystemBase {
     SmartDashboard.putString("profile", m_latestTargetProfile.toString());
     SmartDashboard.putBoolean(LimelightConstants.kLimeTable + ": Has Target", seesTarget());
     SmartDashboard.putNumber(LimelightConstants.kLimeTable + ": Dist", getDistanceToVisionTarget());
+  }
+
+  private void updatePipeline() {
+    if (LimelightConstants.kAutoColorVision) {
+      setPipeline(LimelightConstants.kColorPipeline);
+    } else {
+      if (!isAligning()) {
+        if (LimelightConstants.kAutoZoom) {
+          autoZoom();
+        } else {
+          setPipeline(0);
+        }
+      }
+    }
+  }
+
+  private void autoZoom() {
+    if (!seesTarget()) {
+      setPipeline(0);
+    } else {
+      int pipeline = 0;
+      if (getDistanceToVisionTarget() > LimelightConstants.k2XZoomCutoff) {
+        pipeline++;
+      }
+      if (getDistanceToVisionTarget() > LimelightConstants.k3XZoomCutoff) {
+        pipeline++;
+      }
+      setPipeline(pipeline);
+    }
   }
 
   public void setAligned(boolean isAligned) {

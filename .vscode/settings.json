@@ -12,5 +12,139 @@
     "**/.settings": true,
     "**/.factorypath": true,
     "**/*~": true
-  }
+  },
+  "sonarlint.rules": {
+    "java:S1698": {
+        "level": "on"
+    },
+    "java:S134": {
+        "level": "on"
+    },
+    "java:S116": {
+        "level": "off"
+    },
+    "java:S115": {
+        "level": "off"
+    },
+    "java:S2386": {
+        "level": "off"
+    },
+    "java:S1148": {
+        "level": "off"
+    },
+    "java:S3973": {
+        "level": "off"
+    },
+    "java:S2162": {
+        "level": "on"
+    },
+    "java:S1850": {
+        "level": "on"
+    },
+    "java:S2096": {
+        "level": "on"
+    },
+    "java:S1696": {
+        "level": "on"
+    },
+    "java:S1695": {
+        "level": "on"
+    },
+    "java:S3553": {
+        "level": "on"
+    },
+    "java:S2325": {
+        "level": "on"
+    },
+    "java:S4266": {
+        "level": "on"
+    },
+    "java:S1821": {
+        "level": "on"
+    },
+    "java:S1694": {
+        "level": "on"
+    },
+    "java:S1188": {
+        "level": "on"
+    },
+    "java:S1258": {
+        "level": "off"
+    },
+    "java:S3030": {
+        "level": "on"
+    },
+    "java:S2141": {
+        "level": "on"
+    },
+    "java:S2974": {
+        "level": "on"
+    },
+    "java:S121": {
+        "level": "on"
+    },
+    "java:S3254": {
+        "level": "on"
+    },
+    "java:S4551": {
+        "level": "on"
+    },
+    "java:S888": {
+        "level": "on"
+    },
+    "java:S1067": {
+        "level": "on"
+    },
+    "java:S1939": {
+        "level": "on"
+    },
+    "java:S2309": {
+        "level": "on"
+    },
+    "java:S1244": {
+        "level": "on"
+    },
+    "java:S881": {
+        "level": "on"
+    },
+    "java:S2694": {
+        "level": "on"
+    },
+    "java:S5612": {
+        "level": "on"
+    },
+    "java:S864": {
+        "level": "on"
+    },
+    "java:S109": {
+        "level": "on"
+    },
+    "java:S3242": {
+        "level": "on"
+    },
+    "java:S2197": {
+        "level": "on"
+    },
+    "java:S3047": {
+        "level": "on"
+    },
+    "java:S4248": {
+        "level": "on"
+    },
+    "java:S1697": {
+        "level": "on"
+    },
+    "java:S122": {
+        "level": "on"
+    },
+    "java:S2959": {
+        "level": "on"
+    },
+    "java:S1145": {
+        "level": "on"
+    },
+    "java:S1941": {
+        "level": "on"
+    }
+}
 }

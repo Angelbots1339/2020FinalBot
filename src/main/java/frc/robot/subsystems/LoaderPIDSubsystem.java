@@ -37,7 +37,7 @@ public class LoaderPIDSubsystem extends PIDSubsystem {
 
     m_encoder = new CANEncoder(m_loader);
     m_encoder.setPosition(0);
-    m_encoder.setVelocityConversionFactor(0.2083);
+    m_encoder.setVelocityConversionFactor(LoaderConstants.kVelocityConversionFactor);
 
     getController().setTolerance(LoaderConstants.kLoaderToleranceRPM);
     setSetpoint(LoaderConstants.kLoaderSetpoint);
@@ -67,10 +67,7 @@ public class LoaderPIDSubsystem extends PIDSubsystem {
     return m_controller.atSetpoint();
   }
 
-  public void setSetpoint(double setpoint) {
-    super.setSetpoint(setpoint);
-  }
-
+  @Override
   public void periodic() {
     super.periodic();
 
@@ -86,4 +83,7 @@ public class LoaderPIDSubsystem extends PIDSubsystem {
     return m_loader.get();
   }
 
+  public boolean isIntaking() {
+    return get() >= 0;
+  }
 }

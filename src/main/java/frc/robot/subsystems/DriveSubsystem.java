@@ -12,8 +12,11 @@ import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Utils;
+import frc.robot.Constants.AngleConstants;
 import frc.robot.Constants.DashboardConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.MotorConstants;
 import frc.robot.commands.utils.DriveControl;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -67,7 +70,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @return heading in degress, -180 to 180
    */
   private double getHeading() {
-    return Math.IEEEremainder(m_gyro.getAngle(), 360) * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+    return Math.IEEEremainder(m_gyro.getAngle(), AngleConstants.kFullTurn) * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
 
   /**
@@ -162,7 +165,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public double getLeftMeters() {
     return DriveConstants.kMetersPerClick
-        * (m_leftFront.getSelectedSensorPosition() + m_leftBack.getSelectedSensorPosition()) / 2;
+        * Utils.average(m_leftFront.getSelectedSensorPosition(), m_leftBack.getSelectedSensorPosition());
   }
 
   /**
@@ -173,11 +176,11 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public double getRightMeters() {
     return DriveConstants.kMetersPerClick * -1
-        * (m_rightFront.getSelectedSensorPosition() + m_rightBack.getSelectedSensorPosition()) / 2;
+        * Utils.average(m_rightFront.getSelectedSensorPosition(), m_rightBack.getSelectedSensorPosition());
   }
 
   public double getForwardMeters() {
-    return (getLeftMeters() + getRightMeters()) / 2;
+    return Utils.average(getLeftMeters(), getRightMeters());
   }
 
   /**
@@ -186,11 +189,11 @@ public class DriveSubsystem extends SubsystemBase {
    * @return
    */
   public double getLeftVelocityMeters() {
-    return DriveConstants.kMetersPerClick * m_leftFront.getSelectedSensorVelocity() / 0.100;
+    return DriveConstants.kMetersPerClick * m_leftFront.getSelectedSensorVelocity() / MotorConstants.kFalconUpdateTime;
   }
 
   public double getRightVelocityMeters() {
-    return DriveConstants.kMetersPerClick * -1 * m_rightFront.getSelectedSensorVelocity() / 0.100;
+    return DriveConstants.kMetersPerClick * -1 * m_rightFront.getSelectedSensorVelocity() / MotorConstants.kFalconUpdateTime;
   }
 
   /**
@@ -233,6 +236,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_leftFront.setSelectedSensorPosition(0);
   }
 
+  @Override
   public void periodic() {
     m_odometry.update(Rotation2d.fromDegrees(getHeading()), getLeftMeters(), getRightMeters());
 

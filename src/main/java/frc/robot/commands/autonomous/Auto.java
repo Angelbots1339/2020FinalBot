@@ -32,11 +32,9 @@ public class Auto extends SequentialCommandGroup {
   public Auto(IntakeArmPID arm, IntakingSystem intaker, Shooter shooter, HoodPIDSubsystem hood,
       LimelightSubsystem limelight, DriveSubsystem drive) {
     addCommands(
-        new Timeout(
-            new VisionShoot(intaker, shooter, hood, limelight, drive, false, true),
-            AutoConstants.kVisionTime),
+        new Timeout(new VisionShoot(intaker, shooter, hood, limelight, drive, false, true), AutoConstants.kVisionTime),
         new ParallelCommandGroup(new ToggleIntakeArms(arm),
             new Timeout(new RunCommand(() -> drive.arcadeDrive(-AutoConstants.kReverseSpeed, 0), drive),
-                AutoConstants.kReverseTime).andThen(() -> drive.stop(), drive)));
+                AutoConstants.kReverseTime).andThen(drive::stop, drive)));
   }
 }

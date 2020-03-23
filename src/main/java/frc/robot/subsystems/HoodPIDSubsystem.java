@@ -57,12 +57,14 @@ public class HoodPIDSubsystem extends PIDSubsystem {
     return m_controller.atSetpoint();
   }
 
+  @Override
   public void setSetpoint(double setpoint) {
     // Regardless of what's passed in, clamp to the min and max
     setpoint = MathUtil.clamp(setpoint, HoodConstants.kMinEncoderValue, HoodConstants.kmaxEncoderValue);
     super.setSetpoint(setpoint);
   }
 
+  @Override
   public void periodic() {
     super.periodic();
     if (m_hood.getOutputCurrent() > HoodConstants.kMinResistedVoltage) {
