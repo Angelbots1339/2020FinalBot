@@ -61,7 +61,7 @@ public class RobotContainer {
         XboxController m_driverController = new XboxController(OIconstants.kDriverControllerPort);
         XboxController m_testController = OIconstants.kTestControllerEnabled
                         ? new XboxController(OIconstants.kTestControllerPort)
-                        : null;
+                        : new XboxController(OIconstants.kDriverControllerPort);
 
         private final DriveControl m_driveControl = new DriveControl(() -> -m_driverController.getY(Hand.kLeft),
                         () -> m_driverController.getX(Hand.kRight));
@@ -111,6 +111,7 @@ public class RobotContainer {
                                         .whenReleased(m_climber::stop, m_climber);
 
                 }
+                
                 new JoystickButton(m_testController, Button.kA.value).whileHeld(new PIDDrive(m_drive, AngleConstants.kQuarterTurn, 0,
                                 new DriveControl(m_drive::getRotation, m_drive::getForwardMeters)));
                 new JoystickButton(m_testController, Button.kX.value).whileHeld(new PIDDrive(m_drive, -AngleConstants.kQuarterTurn, 0,
